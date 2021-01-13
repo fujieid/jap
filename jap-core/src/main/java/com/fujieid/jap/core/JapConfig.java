@@ -13,7 +13,7 @@ public class JapConfig {
     /**
      * Save login state in session, defaults to {@code true}
      */
-    private boolean session;
+    private boolean session = true;
 
     /**
      * After successful login, redirect to {@code successRedirect}. Default is `/`
@@ -34,6 +34,11 @@ public class JapConfig {
      * Prompt message after login failed
      */
     private String failureMessage;
+
+    /**
+     * Additional configuration, such as JustAuth Config for social login
+     */
+    private Object options;
 
     public boolean isSession() {
         return session;
@@ -77,6 +82,15 @@ public class JapConfig {
 
     public JapConfig setFailureMessage(String failureMessage) {
         this.failureMessage = failureMessage;
+        return this;
+    }
+
+    public Object getOptions() {
+        return options;
+    }
+
+    public JapConfig setOptions(Object options) {
+        this.options = options;
         return this;
     }
 }
