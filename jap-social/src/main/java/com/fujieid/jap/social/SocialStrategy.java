@@ -86,7 +86,7 @@ public class SocialStrategy extends AbstractJapStrategy {
         AuthCallback authCallback = this.parseRequest(request);
 
         // If it is not a callback request, it must be a request to jump to the authorization link
-        if (!this.isCallback(source, authConfig, authCallback)) {
+        if (!this.isCallback(source, authCallback)) {
             try {
                 response.sendRedirect(authRequest.authorize(socialConfig.getState()));
                 return;
@@ -134,7 +134,7 @@ public class SocialStrategy extends AbstractJapStrategy {
         }
     }
 
-    private boolean isCallback(String source, AuthConfig authConfig, AuthCallback authCallback) {
+    private boolean isCallback(String source, AuthCallback authCallback) {
         if (source.equals(AuthDefaultSource.TWITTER.name()) && ObjectUtil.isNotNull(authCallback.getOauth_token())) {
             return true;
         }
