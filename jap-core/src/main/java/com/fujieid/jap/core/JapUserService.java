@@ -58,7 +58,7 @@ public interface JapUserService {
      * Save the social login user information to the database and return JapUser
      *
      * @param authUser User information obtained through justauth third-party login, type {@code me.zhyd.oauth.model.AuthUser}
-     * @return JapUser Return JapUser, if the save is successful, otherwise return null
+     * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
      */
     default JapUser createAndGetSocialUser(Object authUser) {
         throw new JapUserException("JapUserService#createSocialUser(String) must be overridden by subclass");

@@ -1,5 +1,6 @@
 package com.fujieid.jap.social;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.fujieid.jap.core.*;
@@ -109,8 +110,9 @@ public class SocialStrategy extends AbstractJapStrategy {
      */
     private void login(HttpServletRequest request, HttpServletResponse response, String source, AuthRequest authRequest, AuthCallback authCallback) {
         AuthResponse<AuthUser> authUserAuthResponse = authRequest.login(authCallback);
-        if (!authUserAuthResponse.ok()) {
-            throw new JapUserException("Third party login failed to obtain user information. " + authUserAuthResponse.getMsg());
+        if (!authUserAuthResponse.ok() || ObjectUtil.isNull(authUserAuthResponse.getData())) {
+            throw new JapUserException("Third party login of `" + source + "` cannot obtain user information. "
+                    + authUserAuthResponse.getMsg());
         }
 
         AuthUser socialUser = authUserAuthResponse.getData();
@@ -118,7 +120,7 @@ public class SocialStrategy extends AbstractJapStrategy {
         if (ObjectUtil.isNull(japUser)) {
             japUser = japUserService.createAndGetSocialUser(socialUser);
             if (ObjectUtil.isNull(japUser)) {
-                throw new JapUserException("Failed to save third-party user information.");
+                throw new JapUserException("Unable to save user information of " + source);
             }
         }
 
@@ -164,6 +166,9 @@ public class SocialStrategy extends AbstractJapStrategy {
      */
     private AuthCallback parseRequest(HttpServletRequest request) {
         Map<String, String[]> params = request.getParameterMap();
+        if (CollectionUtil.isEmpty(params)) {
+            return new AuthCallback();
+        }
         JSONObject jsonObject = new JSONObject();
         params.forEach((key, val) -> {
             if (ObjectUtil.isNotNull(val)) {
