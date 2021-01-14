@@ -54,6 +54,7 @@
         <guava.version>RELEASE</guava.version>
         <javax.servlet.version>4.0.1</javax.servlet.version>
         <justauth.version>1.15.9</justauth.version>
+        <jose4j.version>0.7.1</jose4j.version>
     </properties>
 
     <dependencies>

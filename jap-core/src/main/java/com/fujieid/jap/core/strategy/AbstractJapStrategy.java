@@ -65,6 +65,19 @@ public abstract class AbstractJapStrategy implements JapStrategy {
         return false;
     }
 
+    protected void loginSuccess(JapUser japUser, HttpServletRequest request, HttpServletResponse response) {
+        if (japConfig.isSession()) {
+            HttpSession session = request.getSession();
+            japUser.setPassword(null);
+            session.setAttribute(JapConst.SESSION_USER_KEY, japUser);
+        }
+        try {
+            response.sendRedirect(japConfig.getSuccessRedirect());
+        } catch (IOException e) {
+            throw new JapException("JAP failed to redirect via HttpServletResponse.", e);
+        }
+    }
+
     /**
      * Verify that the AuthenticateConfig is of the specified class type
      *

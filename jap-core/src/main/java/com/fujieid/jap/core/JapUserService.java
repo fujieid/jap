@@ -1,5 +1,6 @@
 package com.fujieid.jap.core;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fujieid.jap.core.exception.JapUserException;
 
 /**
@@ -13,17 +14,9 @@ import com.fujieid.jap.core.exception.JapUserException;
 public interface JapUserService {
 
     /**
-     * Get user info by userid.
-     *
-     * @param userId User id of the business system
-     * @return JapUser
-     */
-    default JapUser getById(String userId) {
-        throw new JapUserException("JapUserService#getById(String) must be overridden by subclass");
-    }
-
-    /**
      * Get user info by username.
+     * <p>
+     * It is suitable for the {@code jap-simple} module
      *
      * @param username username of the business system
      * @return JapUser
@@ -33,18 +26,9 @@ public interface JapUserService {
     }
 
     /**
-     * Get user information in the current system by social platform and social user id
-     *
-     * @param platform social platform，refer to {@code me.zhyd.oauth.config.AuthSource#getName()}
-     * @param uid      social user id
-     * @return JapUser
-     */
-    default JapUser getByPlatformAndUid(String platform, String uid) {
-        throw new JapUserException("JapUserService#getByPlatformAndUid(String, String) must be overridden by subclass");
-    }
-
-    /**
      * Verify that the password entered by the user matches
+     * <p>
+     * It is suitable for the {@code jap-simple} module
      *
      * @param password The password in the HTML-based login form
      * @param user     User information that is queried by the user name in the HTML form
@@ -55,13 +39,40 @@ public interface JapUserService {
     }
 
     /**
-     * Save the social login user information to the database and return JapUser
+     * Get user information in the current system by social platform and social user id
+     * <p>
+     * It is suitable for the {@code jap-social} module
      *
-     * @param authUser User information obtained through justauth third-party login, type {@code me.zhyd.oauth.model.AuthUser}
+     * @param platform social platform，refer to {@code me.zhyd.oauth.config.AuthSource#getName()}
+     * @param uid      social user id
+     * @return JapUser
+     */
+    default JapUser getByPlatformAndUid(String platform, String uid) {
+        throw new JapUserException("JapUserService#getByPlatformAndUid(String, String) must be overridden by subclass");
+    }
+
+    /**
+     * Save the social login user information to the database and return JapUser
+     * <p>
+     * It is suitable for the {@code jap-social} module
+     *
+     * @param userInfo User information obtained through justauth third-party login, type {@code me.zhyd.oauth.model.AuthUser}
      * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
      */
-    default JapUser createAndGetSocialUser(Object authUser) {
-        throw new JapUserException("JapUserService#createSocialUser(String) must be overridden by subclass");
+    default JapUser createAndGetSocialUser(Object userInfo) {
+        throw new JapUserException("JapUserService#createSocialUser(AuthUser) must be overridden by subclass");
+    }
+
+    /**
+     * Save the oauth login user information to the database and return JapUser
+     * <p>
+     * It is suitable for the {@code jap-oauth2} module
+     *
+     * @param userInfo The basic user information returned by the OAuth platform
+     * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
+     */
+    default JapUser createAndGetOauth2User(JSONObject userInfo) {
+        throw new JapUserException("JapUserService#createAndGetOauth2User(JSONObject) must be overridden by subclass");
     }
 
 }

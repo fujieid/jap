@@ -2,6 +2,7 @@ package com.fujieid.jap.social;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.fujieid.jap.core.*;
 import com.fujieid.jap.core.exception.JapException;
@@ -124,16 +125,7 @@ public class SocialStrategy extends AbstractJapStrategy {
             }
         }
 
-        if (japConfig.isSession()) {
-            HttpSession session = request.getSession();
-            japUser.setPassword(null);
-            session.setAttribute(JapConst.SESSION_USER_KEY, japUser);
-        }
-        try {
-            response.sendRedirect(japConfig.getSuccessRedirect());
-        } catch (IOException e) {
-            throw new JapException("JAP failed to redirect via HttpServletResponse.", e);
-        }
+        this.loginSuccess(japUser, request, response);
     }
 
     /**
@@ -155,7 +147,7 @@ public class SocialStrategy extends AbstractJapStrategy {
         } else if (source.equals(AuthDefaultSource.HUAWEI.name())) {
             code = authCallback.getAuthorization_code();
         }
-        return !StringUtils.isEmpty(code);
+        return !StrUtil.isEmpty(code);
     }
 
     /**
