@@ -1,6 +1,5 @@
 package com.fujieid.jap.social;
 
-import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.fujieid.jap.core.*;
@@ -104,7 +103,7 @@ public class SocialStrategy extends AbstractJapStrategy {
      *
      * @param request      Third party callback request
      * @param response     current response
-     * @param source       Identification of the third party platform specified by the user
+     * @param source       Third party platform name
      * @param authRequest  AuthRequest of justauth
      * @param authCallback Parse the parameters obtained by the third party callback request
      */
@@ -135,6 +134,15 @@ public class SocialStrategy extends AbstractJapStrategy {
         }
     }
 
+    /**
+     * Whether it is the callback request after the authorization of the third-party platform is completed,
+     * the judgment basis is as follows:
+     * - Code is not empty
+     *
+     * @param source       Third party platform name
+     * @param authCallback Parameters resolved by callback request
+     * @return When true is returned, the current request is a callback request
+     */
     private boolean isCallback(String source, AuthCallback authCallback) {
         if (source.equals(AuthDefaultSource.TWITTER.name()) && ObjectUtil.isNotNull(authCallback.getOauth_token())) {
             return true;
