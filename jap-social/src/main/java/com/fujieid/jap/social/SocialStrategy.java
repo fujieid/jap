@@ -65,20 +65,21 @@ public class SocialStrategy extends AbstractJapStrategy {
 
     @Override
     public void authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
-        if (!ClassUtil.isAssignable(config.getClass(), SocialConfig.class)) {
-            throw new JapSocialException("Social#Unsupported config parameter, please use SocialConfig, a subclass of JapConfig");
-        }
 
         if (this.checkSession(request, response)) {
             return;
         }
 
+        // Get the AuthConfig of JustAuth
+        if (ObjectUtil.isNull(japConfig.getOptions()) || !(japConfig.getOptions() instanceof AuthConfig)) {
+            throw new JapSocialException("Options in JapConfig is required and must be of type AuthConfig");
+        }
+        AuthConfig authConfig = (AuthConfig) japConfig.getOptions();
+
         // Convert AuthenticateConfig to SocialConfig
+        this.checkAuthenticateConfig(config, SocialConfig.class);
         SocialConfig socialConfig = (SocialConfig) config;
         String source = socialConfig.getPlatform();
-
-        // Get the AuthConfig of JustAuth
-        AuthConfig authConfig = (AuthConfig) japConfig.getOptions();
 
         // Instantiate the AuthRequest of JustAuth
         AuthRequest authRequest = JustAuthRequestContext.getRequest(source, socialConfig, authConfig, authStateCache);
