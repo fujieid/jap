@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/jap-core/src/main/java/com/fujieid/jap/core/context/
+/jap-simple/src/main/java/com/fujieid/jap/simple/SimpleAuthentication.java
+/jap-simple/src/main/java/com/fujieid/jap/simple/SimpleCallback.java
