@@ -9,7 +9,7 @@
 		<img src="https://img.shields.io/badge/Maven%20Central-1.0.0-blue" ></img>
 	</a>
 	<a target="_blank" href="https://gitee.com/yadong.zhang/JustAuth/blob/master/LICENSE">
-		<img src="https://img.shields.io/apm/l/vim-mode.svg?color=yellow" ></img>
+		<img src="https://img.shields.io/badge/license-LGPL%203.0-red" ></img>
 	</a>
 	<a target="_blank" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">
 		<img src="https://img.shields.io/badge/JDK-1.8+-green.svg" ></img>
@@ -21,7 +21,7 @@
 		<img src="https://img.shields.io/badge/Docs-latest-blueviolet.svg" ></img>
 	</a>
     <a target="_blank" href='https://gitee.com/fujieid/jap/stargazers'>
-      <img src="https://gitee.com/fujieid/jap/badge/star.svg" alt='star'></img>
+      <img src="https://gitee.com/yadong.zhang/JustAuth/badge/star.svg?theme=gvp" alt='star'></img>
     </a>
 </p>
 <p align="center">
