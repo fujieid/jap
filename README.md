@@ -1,3 +1,36 @@
+<p align="center">
+	<img src="https://images.gitee.com/uploads/images/2021/0115/230947_5eb9e00d_784199.png" width="300">
+</p>
+<p align="center">
+	<strong>Just auth into any app</strong>
+</p>
+<p align="center">
+	<a target="_blank" href="https://search.maven.org/artifact/me.zhyd.oauth/JustAuth/1.15.9/jar">
+		<img src="https://img.shields.io/badge/Maven%20Central-1.0.0-blue" ></img>
+	</a>
+	<a target="_blank" href="https://gitee.com/yadong.zhang/JustAuth/blob/master/LICENSE">
+		<img src="https://img.shields.io/apm/l/vim-mode.svg?color=yellow" ></img>
+	</a>
+	<a target="_blank" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">
+		<img src="https://img.shields.io/badge/JDK-1.8+-green.svg" ></img>
+	</a>
+	<a target="_blank" href="https://apidoc.gitee.com/yadong.zhang/JustAuth/" title="API文档">
+		<img src="https://img.shields.io/badge/Api%20Docs-1.0.0-orange" ></img>
+	</a>
+	<a target="_blank" href="https://justauth.wiki" title="参考文档">
+		<img src="https://img.shields.io/badge/Docs-latest-blueviolet.svg" ></img>
+	</a>
+    <a target="_blank" href='https://gitee.com/fujieid/jap/stargazers'>
+      <img src="https://gitee.com/fujieid/jap/badge/star.svg" alt='star'></img>
+    </a>
+</p>
+<p align="center">
+	<strong>开源地址：</strong> <a target="_blank" href='https://gitee.com/fujieid/jap'>Gitee</a> | <a target="_blank" href='https://gitee.com/fujieid/jap'>Github</a>
+</p>
+<p align="center">
+	<strong>官方网站：</strong> <a target="_blank" href='https://www.justauth.plus'>https://justauth.plus</a>
+</p>
+
 ## JAP 是什么？
 
 JAP 是**一款开源的认证中间件**，基于模块化设计，并且与业务高度解耦，使用起来非常灵活，开发者可以毫不费力地将 JAP 集成到任何 web 应用程序中，就像集成 JA 一样，简单方便。
