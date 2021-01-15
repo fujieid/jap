@@ -95,7 +95,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
             throw new JapOauth2Exception("Oauth2Strategy failed to get userinfo with accessToken." +
                     userinfo.getString("error_description") + " " + userinfoResponse);
         }
-        JapUser japUser = this.japUserService.createAndGetOauth2User(userinfo);
+        JapUser japUser = this.japUserService.createAndGetOauth2User(oAuthConfig.getPlatform(), userinfo);
         if (ObjectUtil.isNull(japUser)) {
             throw new JapUserException("Unable to save user information");
         }

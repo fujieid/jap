@@ -68,10 +68,11 @@ public interface JapUserService {
      * <p>
      * It is suitable for the {@code jap-oauth2} module
      *
+     * @param platform oauth2 platform name
      * @param userInfo The basic user information returned by the OAuth platform
      * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
      */
-    default JapUser createAndGetOauth2User(JSONObject userInfo) {
+    default JapUser createAndGetOauth2User(String platform, JSONObject userInfo) {
         throw new JapUserException("JapUserService#createAndGetOauth2User(JSONObject) must be overridden by subclass");
     }
 
