@@ -41,22 +41,29 @@ public class SimpleStrategy extends AbstractJapStrategy {
         this.checkAuthenticateConfig(config, SimpleConfig.class);
         SimpleConfig simpleConfig = (SimpleConfig) config;
 
-        String username = request.getParameter(simpleConfig.getUsernameField());
-        String password = request.getParameter(simpleConfig.getPasswordField());
-        if (null == username || null == password) {
-            throw new JapUserException("Missing credentials");
-        }
+        UsernamePasswordCredential credential = this.doResolveCredential(request, simpleConfig);
 
-        JapUser user = japUserService.getByName(username);
+        JapUser user = japUserService.getByName(credential.getUsername());
         if (null == user) {
             throw new JapUserException("The user does not exist.");
         }
 
-        boolean valid = japUserService.validPassword(password, user);
+        boolean valid = japUserService.validPassword(credential.getPassword(), user);
         if (!valid) {
             throw new JapUserException("Passwords don't match.");
         }
 
         this.loginSuccess(user, request, response);
+    }
+
+    private UsernamePasswordCredential doResolveCredential(HttpServletRequest request, SimpleConfig simpleConfig) {
+        String username = request.getParameter(simpleConfig.getUsernameField());
+        String password = request.getParameter(simpleConfig.getPasswordField());
+        if (null == username || null == password) {
+            throw new JapUserException("Missing credentials");
+        }
+        return new UsernamePasswordCredential()
+                .setUsername(username)
+                .setPassword(password);
     }
 }
