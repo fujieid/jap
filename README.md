@@ -82,3 +82,7 @@ JAP 要做的是为所有需要身份认证的应用提供一套标准的解决�
 - `mica` SpringBoot 微服务高效开发工具集: [https://github.com/lets-mica/mica](https://github.com/lets-mica/mica)
 - `pig` 宇宙最强微服务认证授权脚手架(架构师必备): [https://gitee.com/log4j/pig](https://gitee.com/log4j/pig)
 - `SpringBlade` 完整的线上解决方案（企业开发必备）: https://gitee.com/smallc/SpringBlade
+
+## 加入社群
+
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0119/163659_98474921_784199.png "屏幕截图.png")
