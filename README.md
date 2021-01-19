@@ -21,7 +21,7 @@
 		<img src="https://img.shields.io/badge/Docs-latest-blueviolet.svg" ></img>
 	</a>
     <a target="_blank" href='https://gitee.com/fujieid/jap/stargazers'>
-      <img src="https://gitee.com/yadong.zhang/JustAuth/badge/star.svg?theme=gvp" alt='star'></img>
+      <img src="https://gitee.com/fujieid/jap/badge/star.svg" alt='star'></img>
     </a>
 </p>
 <p align="center">
