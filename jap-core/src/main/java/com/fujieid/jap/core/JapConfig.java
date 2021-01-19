@@ -11,11 +11,6 @@ package com.fujieid.jap.core;
 public class JapConfig {
 
     /**
-     * Save login state in session, defaults to {@code true}
-     */
-    private boolean session = true;
-
-    /**
      * After successful login, redirect to {@code successRedirect}. Default is `/`
      */
     private String successRedirect = "/";
@@ -24,6 +19,11 @@ public class JapConfig {
      * Prompt message after successful login
      */
     private String successMessage;
+
+    /**
+     * After logout, redirect to {@code logoutRedirect}. Default is `/`
+     */
+    private String logoutRedirect = "/";
 
     /**
      * After failed login, redirect to {@code failureRedirect}. Default is `/error`
@@ -39,15 +39,6 @@ public class JapConfig {
      * Additional configuration, such as JustAuth Config for social login
      */
     private Object options;
-
-    public boolean isSession() {
-        return session;
-    }
-
-    public JapConfig setSession(boolean session) {
-        this.session = session;
-        return this;
-    }
 
     public String getSuccessRedirect() {
         return successRedirect;
@@ -82,6 +73,15 @@ public class JapConfig {
 
     public JapConfig setFailureMessage(String failureMessage) {
         this.failureMessage = failureMessage;
+        return this;
+    }
+
+    public String getLogoutRedirect() {
+        return logoutRedirect;
+    }
+
+    public JapConfig setLogoutRedirect(String logoutRedirect) {
+        this.logoutRedirect = logoutRedirect;
         return this;
     }
 

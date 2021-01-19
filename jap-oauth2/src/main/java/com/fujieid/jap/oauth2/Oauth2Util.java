@@ -3,6 +3,7 @@ package com.fujieid.jap.oauth2;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import org.jose4j.base64url.Base64Url;
 
 /**

@@ -1,4 +1,4 @@
-package com.fujieid.jap.oauth2;
+package com.fujieid.jap.oauth2.pkce;
 
 /**
  * Encryption method of pkce challenge code

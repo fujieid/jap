@@ -1,5 +1,6 @@
 package com.fujieid.jap.oauth2;
 
+import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import org.junit.Assert;
 import org.junit.Test;
 

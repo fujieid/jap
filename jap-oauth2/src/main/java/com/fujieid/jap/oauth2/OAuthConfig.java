@@ -1,6 +1,7 @@
 package com.fujieid.jap.oauth2;
 
 import com.fujieid.jap.core.AuthenticateConfig;
+import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 
 /**
  * Configuration file of oauth2 module

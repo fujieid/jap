@@ -1,7 +1,5 @@
 package com.fujieid.jap.oauth2;
 
-import cn.hutool.cache.CacheUtil;
-import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -15,7 +13,12 @@ import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.core.exception.JapUserException;
+import com.fujieid.jap.core.store.JapUserStore;
+import com.fujieid.jap.core.store.SessionJapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
+import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
+import com.fujieid.jap.oauth2.pkce.PkceParams;
+import com.fujieid.jap.oauth2.pkce.PkceUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
@@ -25,7 +28,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The OAuth 2.0 authentication strategy authenticates requests using the OAuth 2.0 framework.
@@ -42,8 +44,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class Oauth2Strategy extends AbstractJapStrategy {
 
-    private static TimedCache<String, String> timedCache = CacheUtil.newTimedCache(TimeUnit.MINUTES.toMillis(5));
-
     /**
      * `Strategy` constructor.
      *
@@ -51,9 +51,18 @@ public class Oauth2Strategy extends AbstractJapStrategy {
      * @param japConfig      japConfig
      */
     public Oauth2Strategy(JapUserService japUserService, JapConfig japConfig) {
-        super(japUserService, japConfig);
+        super(japUserService, new SessionJapUserStore(), japConfig);
     }
 
+    /**
+     * `Strategy` constructor.
+     *
+     * @param japUserService japUserService
+     * @param japConfig      japConfig
+     */
+    public Oauth2Strategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
+        super(japUserService, japUserStore, japConfig);
+    }
 
     /**
      * Authenticate request by delegating to a service provider using OAuth 2.0.
@@ -88,7 +97,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
 
     }
 
-    private JapUser getUserInfo(OAuthConfig oAuthConfig, String accessToken) {
+    protected JapUser getUserInfo(OAuthConfig oAuthConfig, String accessToken) {
         String userinfoResponse = HttpUtil.post(oAuthConfig.getUserinfoUrl(), ImmutableMap.of("access_token", accessToken));
         JSONObject userinfo = JSONObject.parseObject(userinfoResponse);
         if (userinfo.containsKey("error") && StrUtil.isNotBlank(userinfo.getString("error"))) {
@@ -102,7 +111,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         return japUser;
     }
 
-    private String getAccessToken(HttpServletRequest request, OAuthConfig oAuthConfig) {
+    protected String getAccessToken(HttpServletRequest request, OAuthConfig oAuthConfig) {
         String code = request.getParameter("code");
         Map<String, Object> params = Maps.newHashMap();
         params.put("grant_type", oAuthConfig.getGrantType());
@@ -114,7 +123,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         }
         // pkce 仅适用于授权码模式
         if (Oauth2ResponseType.code == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
-            params.put("code_verifier", timedCache.get("codeVerifier"));
+            params.put(PkceParams.CODE_VERIFIER, PkceUtil.getCacheCodeVerifier());
         }
         String tokenResponse = HttpUtil.post(oAuthConfig.getTokenUrl(), params);
         JSONObject accessToken = JSONObject.parseObject(tokenResponse);
@@ -137,7 +146,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         return accessToken.getString("access_token");
     }
 
-    private void redirectToAuthorizationEndPoint(HttpServletResponse response, OAuthConfig oAuthConfig) {
+    protected void redirectToAuthorizationEndPoint(HttpServletResponse response, OAuthConfig oAuthConfig) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("response_type", oAuthConfig.getResponseType());
         params.put("client_id", oAuthConfig.getClientId());
@@ -152,17 +161,8 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         }
         // Pkce is only applicable to authorization code mode
         if (Oauth2ResponseType.code == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
-            PkceCodeChallengeMethod codeChallengeMethod = Optional.ofNullable(oAuthConfig.getCodeChallengeMethod())
-                    .orElse(PkceCodeChallengeMethod.S256);
-            if (PkceCodeChallengeMethod.S256 == oAuthConfig.getCodeChallengeMethod()) {
-                String codeVerifier = Oauth2Util.generateCodeVerifier();
-                String codeChallenge = Oauth2Util.generateCodeChallenge(codeChallengeMethod, codeVerifier);
-                params.put("code_challenge", codeChallenge);
-                params.put("code_challenge_method", codeChallengeMethod);
-                // FIXME 需要考虑分布式环境，例如使用 Redis 缓存
-                timedCache.put("codeVerifier", codeVerifier);
-
-            }
+            PkceUtil.addPkceParameters(Optional.ofNullable(oAuthConfig.getCodeChallengeMethod())
+                    .orElse(PkceCodeChallengeMethod.S256), params);
         }
         String query = URLUtil.buildQuery(params, StandardCharsets.UTF_8);
         try {

@@ -2,13 +2,17 @@ package com.fujieid.jap.core.strategy;
 
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.fujieid.jap.core.*;
+import com.fujieid.jap.core.AuthenticateConfig;
+import com.fujieid.jap.core.JapConfig;
+import com.fujieid.jap.core.JapUser;
+import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.exception.JapSocialException;
+import com.fujieid.jap.core.store.JapUserStore;
+import com.fujieid.jap.core.store.SessionJapUserStore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -27,6 +31,10 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      */
     protected JapUserService japUserService;
     /**
+     * user store
+     */
+    protected JapUserStore japUserStore;
+    /**
      * Jap configuration.
      */
     protected JapConfig japConfig;
@@ -37,8 +45,9 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      * @param japUserService japUserService
      * @param japConfig      japConfig
      */
-    public AbstractJapStrategy(JapUserService japUserService, JapConfig japConfig) {
+    public AbstractJapStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
         this.japUserService = japUserService;
+        this.japUserStore = null == japUserStore ? new SessionJapUserStore() : japUserStore;
         this.japConfig = japConfig;
     }
 
@@ -50,27 +59,20 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      * @return boolean
      */
     protected boolean checkSession(HttpServletRequest request, HttpServletResponse response) {
-        if (japConfig.isSession()) {
-            HttpSession session = request.getSession();
-            JapUser sessionUser = (JapUser) session.getAttribute(JapConst.SESSION_USER_KEY);
-            if (null != sessionUser) {
-                try {
-                    response.sendRedirect(japConfig.getSuccessRedirect());
-                    return true;
-                } catch (IOException e) {
-                    throw new JapException("JAP failed to redirect via HttpServletResponse.", e);
-                }
+        JapUser sessionUser = japUserStore.get(request, response);
+        if (null != sessionUser) {
+            try {
+                response.sendRedirect(japConfig.getSuccessRedirect());
+                return true;
+            } catch (IOException e) {
+                throw new JapException("JAP failed to redirect via HttpServletResponse.", e);
             }
         }
         return false;
     }
 
     protected void loginSuccess(JapUser japUser, HttpServletRequest request, HttpServletResponse response) {
-        if (japConfig.isSession()) {
-            HttpSession session = request.getSession();
-            japUser.setPassword(null);
-            session.setAttribute(JapConst.SESSION_USER_KEY, japUser);
-        }
+        japUserStore.save(request, japUser);
         try {
             response.sendRedirect(japConfig.getSuccessRedirect());
         } catch (IOException e) {

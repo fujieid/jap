@@ -4,10 +4,15 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.fujieid.jap.core.*;
+import com.fujieid.jap.core.AuthenticateConfig;
+import com.fujieid.jap.core.JapConfig;
+import com.fujieid.jap.core.JapUser;
+import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.exception.JapSocialException;
 import com.fujieid.jap.core.exception.JapUserException;
+import com.fujieid.jap.core.store.JapUserStore;
+import com.fujieid.jap.core.store.SessionJapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import me.zhyd.oauth.cache.AuthStateCache;
 import me.zhyd.oauth.config.AuthConfig;
@@ -16,11 +21,9 @@ import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthRequest;
-import me.zhyd.oauth.utils.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
@@ -43,12 +46,23 @@ public class SocialStrategy extends AbstractJapStrategy {
     private AuthStateCache authStateCache;
 
     /**
-     * Initialization strategy
+     * `Strategy` constructor.
      *
-     * @param japUserService Required, implement user operations
+     * @param japUserService japUserService
+     * @param japConfig      japConfig
      */
     public SocialStrategy(JapUserService japUserService, JapConfig japConfig) {
-        super(japUserService, japConfig);
+        super(japUserService, new SessionJapUserStore(), japConfig);
+    }
+
+    /**
+     * `Strategy` constructor.
+     *
+     * @param japUserService japUserService
+     * @param japConfig      japConfig
+     */
+    public SocialStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
+        super(japUserService, japUserStore, japConfig);
     }
 
     /**
@@ -59,8 +73,8 @@ public class SocialStrategy extends AbstractJapStrategy {
      * @param japUserService Required, implement user operations
      * @param authStateCache Optional, custom cache implementation class
      */
-    public SocialStrategy(JapUserService japUserService, JapConfig japConfig, AuthStateCache authStateCache) {
-        this(japUserService, japConfig);
+    public SocialStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig, AuthStateCache authStateCache) {
+        this(japUserService, japUserStore, japConfig);
         this.authStateCache = authStateCache;
     }
 
@@ -110,13 +124,13 @@ public class SocialStrategy extends AbstractJapStrategy {
      * @param authCallback Parse the parameters obtained by the third party callback request
      */
     private void login(HttpServletRequest request, HttpServletResponse response, String source, AuthRequest authRequest, AuthCallback authCallback) {
-        AuthResponse<AuthUser> authUserAuthResponse = authRequest.login(authCallback);
+        AuthResponse<?> authUserAuthResponse = authRequest.login(authCallback);
         if (!authUserAuthResponse.ok() || ObjectUtil.isNull(authUserAuthResponse.getData())) {
             throw new JapUserException("Third party login of `" + source + "` cannot obtain user information. "
                     + authUserAuthResponse.getMsg());
         }
 
-        AuthUser socialUser = authUserAuthResponse.getData();
+        AuthUser socialUser = (AuthUser) authUserAuthResponse.getData();
         JapUser japUser = japUserService.getByPlatformAndUid(source, socialUser.getUuid());
         if (ObjectUtil.isNull(japUser)) {
             japUser = japUserService.createAndGetSocialUser(socialUser);

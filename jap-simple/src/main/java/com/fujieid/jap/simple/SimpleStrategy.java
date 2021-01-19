@@ -5,6 +5,8 @@ import com.fujieid.jap.core.JapConfig;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.exception.JapUserException;
+import com.fujieid.jap.core.store.JapUserStore;
+import com.fujieid.jap.core.store.SessionJapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,12 +24,23 @@ import javax.servlet.http.HttpServletResponse;
 public class SimpleStrategy extends AbstractJapStrategy {
 
     /**
-     * Initialization strategy
+     * `Strategy` constructor.
      *
-     * @param japUserService Required, implement user operations
+     * @param japUserService japUserService
+     * @param japConfig      japConfig
      */
     public SimpleStrategy(JapUserService japUserService, JapConfig japConfig) {
-        super(japUserService, japConfig);
+        super(japUserService, new SessionJapUserStore(), japConfig);
+    }
+
+    /**
+     * `Strategy` constructor.
+     *
+     * @param japUserService japUserService
+     * @param japConfig      japConfig
+     */
+    public SimpleStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
+        super(japUserService, japUserStore, japConfig);
     }
 
     @Override
