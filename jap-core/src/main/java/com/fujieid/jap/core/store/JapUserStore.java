@@ -34,18 +34,20 @@ public interface JapUserStore {
     /**
      * Login completed, save user information to the cache
      *
-     * @param request current request
-     * @param japUser User information after successful login
+     * @param request  current request
+     * @param response current response
+     * @param japUser  User information after successful login
      * @return JapUser
      */
-    JapUser save(HttpServletRequest request, JapUser japUser);
+    JapUser save(HttpServletRequest request, HttpServletResponse response, JapUser japUser);
 
     /**
      * Clear user information from cache
      *
-     * @param request current request
+     * @param request  current request
+     * @param response current response
      */
-    void remove(HttpServletRequest request);
+    void remove(HttpServletRequest request, HttpServletResponse response);
 
     /**
      * Get the login user information from the cache, return {@code JapUser} if it exists,

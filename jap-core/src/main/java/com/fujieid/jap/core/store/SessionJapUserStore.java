@@ -33,12 +33,13 @@ public class SessionJapUserStore implements JapUserStore {
     /**
      * Login completed, save user information to the cache
      *
-     * @param request current request
-     * @param japUser User information after successful login
+     * @param request  current request
+     * @param response current response
+     * @param japUser  User information after successful login
      * @return JapUser
      */
     @Override
-    public JapUser save(HttpServletRequest request, JapUser japUser) {
+    public JapUser save(HttpServletRequest request, HttpServletResponse response, JapUser japUser) {
         HttpSession session = request.getSession();
         japUser.setPassword(null);
         session.setAttribute(JapConst.SESSION_USER_KEY, japUser);
@@ -48,10 +49,11 @@ public class SessionJapUserStore implements JapUserStore {
     /**
      * Clear user information from cache
      *
-     * @param request current request
+     * @param request  current request
+     * @param response current response
      */
     @Override
-    public void remove(HttpServletRequest request) {
+    public void remove(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         session.removeAttribute(JapConst.SESSION_USER_KEY);
     }

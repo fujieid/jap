@@ -87,7 +87,7 @@ public abstract class AbstractJapStrategy implements JapStrategy {
     }
 
     protected void loginSuccess(JapUser japUser, HttpServletRequest request, HttpServletResponse response) {
-        japUserStore.save(request, japUser);
+        japUserStore.save(request, response, japUser);
         try {
             response.sendRedirect(japConfig.getSuccessRedirect());
         } catch (IOException e) {
