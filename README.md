@@ -23,15 +23,18 @@
     <a target="_blank" href='https://gitee.com/fujieid/jap/stargazers'>
       <img src="https://gitee.com/fujieid/jap/badge/star.svg" alt='star'></img>
     </a>
+    <a target="_blank" href='https://github.com/fujieid/jap/stargazers'>
+      <img src="https://img.shields.io/github/stars/fujieid/jap?style=social" alt='star'></img>
+    </a>
 </p>
 <p align="center">
-	<strong>开源地址：</strong> <a target="_blank" href='https://gitee.com/fujieid/jap'>Gitee</a> | <a target="_blank" href='https://gitee.com/fujieid/jap'>Github</a>
+	<strong>开源地址：</strong> <a target="_blank" href='https://gitee.com/fujieid/jap'>Gitee</a> | <a target="_blank" href='https://github.com/fujieid/jap'>Github</a>
 </p>
 <p align="center">
 	<strong>官方网站：</strong> <a target="_blank" href='https://jap.fujieid.com'>https://jap.fujieid.com</a>
 </p>
 
-## JAP 是什么？
+## :art: JAP 是什么？
 
 JAP 是**一款开源的认证中间件**，基于模块化设计，并且与业务高度解耦，使用起来非常灵活，开发者可以毫不费力地将 JAP 集成到任何 web 应用程序中，就像集成 JA 一样，简单方便。
 
@@ -44,7 +47,7 @@ JAP 要做的是为所有需要身份认证的应用提供一套标准的解决�
 
 **ps：我们要让开发者可以基于 JAP 开发出自己的 IAM 或者 IDaaS 系统。**
 
-## JAP 有什么特点？
+## :sparkles: JAP 有什么特点？
 
 - 单点登录：一处登录，处处通行
 - 开箱即用：API 设计趋近于白话，类似并参考 JustAuth
@@ -57,7 +60,7 @@ JAP 要做的是为所有需要身份认证的应用提供一套标准的解决�
 - 统一标准：一切内置实现或者自定义的实现，都基于标准的策略
 - 多语言支持：Java、Python、Go、Node等
 
-## 适用于哪些场景？
+## :memo: 适用于哪些场景？
 
 - 新项目立项，你们需要研发一套包含登录、认证的系统
 - 现有登录模块为自研，但是新一轮的技术规划中，你们想将登录认证模块重构，以更加灵活的架构适应后面的新需求，比如：集成 MFA 登录、集成 OAuth 登录等
@@ -75,14 +78,30 @@ JAP 要做的是为所有需要身份认证的应用提供一套标准的解决�
 - 你们企业希望联合其现有的企业用户目录，以允许员工使用其现有的企业凭据登录各种内部和第三方应用程序。
 - ...
 
+## :monocle_face: JAP 常见问题有哪些？
 
-## 开源推荐
+### JAP 不支持具体的业务操作吗？
+
+JAP 针对用户、应用等业务数据，只提供标准的业务接口，不提供数据库层面的支持。JAP 要做的是为广大开发者提供一套技术标准，既然是标准，那就不能依赖于任何和具体业务相关的逻辑。不管你们的系统是用的 MySQL、Oracle、SQLlite、Redis、MongoDB 还是其他的，JAP 通通不关心。JAP 对外提供标准接口，业务端只需要按需实现 JAP 的接口即可，这种设计能在最大程度上增加它的灵活性，使它不受限于某一具体的数据库实现方案。
+
+### JAP 可以用到企业级项目吗？
+
+当然，JAP 的价值就在于：**方便开发者无缝对接任何第三方应用或者自有系统，提高开发效率，减少代码维护成本**。所以对于企业来说，这是一个降本增效的功能。JAP 基于模块化开发，并且不侵入业务系统，可以十分方便的集成到企业内部各个系统或者统一的登录认证网关中。
+
+### JAP 可以商用吗？
+
+JAP 基于 LGPL 3.0 协议。商用分为以下两种情况：
+
+- LGPL **允许商业软件通过类库引用(link)方式使用**而不需要开源商业软件的代码。这使得**采用 LGPL 协议的开源代码可以被商业软件作为类库引用并发布和销售**。
+- 如果修改 LGPL 协议的代码或者衍生，则所有修改的代码，涉及修改部分的额外代码和衍生的代码都必须采用 LGPL 协议。因此 LGPL 协议的开源代码**不适合通过修改和衍生的方式做二次开发的商业软件采用**。
+
+## :rocket: 开源推荐
 - `JustAuth` 开箱即用的整合第三方登录的开源组件: [https://github.com/justauth/JustAuth](https://github.com/justauth/JustAuth)
 - `spring-boot-demo` 深度学习并实战 spring boot 的项目: [https://github.com/xkcoding/spring-boot-demo](https://github.com/xkcoding/spring-boot-demo)
 - `mica` SpringBoot 微服务高效开发工具集: [https://github.com/lets-mica/mica](https://github.com/lets-mica/mica)
 - `pig` 宇宙最强微服务认证授权脚手架(架构师必备): [https://gitee.com/log4j/pig](https://gitee.com/log4j/pig)
 - `SpringBlade` 完整的线上解决方案（企业开发必备）: https://gitee.com/smallc/SpringBlade
 
-## 加入社群
+## :construction_worker: 加入社群
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0119/163659_98474921_784199.png "屏幕截图.png")
