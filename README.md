@@ -5,8 +5,8 @@
 	<strong>Just auth into any app</strong>
 </p>
 <p align="center">
-	<a target="_blank" href="https://search.maven.org/artifact/me.zhyd.oauth/JustAuth/1.15.9/jar">
-		<img src="https://img.shields.io/badge/Maven%20Central-1.0.0-blue" ></img>
+	<a target="_blank" href="https://gitee.com/fujieid/jap">
+		<img src="https://img.shields.io/badge/Maven%20Central-未发布到中央仓库-blue" ></img>
 	</a>
 	<a target="_blank" href="https://gitee.com/yadong.zhang/JustAuth/blob/master/LICENSE">
 		<img src="https://img.shields.io/badge/license-LGPL%203.0-red" ></img>
@@ -14,10 +14,10 @@
 	<a target="_blank" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">
 		<img src="https://img.shields.io/badge/JDK-1.8+-green.svg" ></img>
 	</a>
-	<a target="_blank" href="https://apidoc.gitee.com/yadong.zhang/JustAuth/" title="API文档">
-		<img src="https://img.shields.io/badge/Api%20Docs-1.0.0-orange" ></img>
+	<a target="_blank" href="https://gitee.com/fujieid/jap" title="API文档">
+		<img src="https://img.shields.io/badge/Api%20Docs-未发布-orange" ></img>
 	</a>
-	<a target="_blank" href="https://justauth.wiki" title="参考文档">
+	<a target="_blank" href="https://jap.fujieid.com" title="开发文档">
 		<img src="https://img.shields.io/badge/Docs-latest-blueviolet.svg" ></img>
 	</a>
     <a target="_blank" href='https://gitee.com/fujieid/jap/stargazers'>
