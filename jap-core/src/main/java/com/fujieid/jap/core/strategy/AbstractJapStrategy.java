@@ -24,7 +24,9 @@ import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.exception.JapSocialException;
 import com.fujieid.jap.core.store.JapUserStore;
+import com.fujieid.jap.core.store.JapUserStoreContextHolder;
 import com.fujieid.jap.core.store.SessionJapUserStore;
+import com.fujieid.jap.core.store.SsoJapUserStore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,10 +62,23 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      * @param japUserService japUserService
      * @param japConfig      japConfig
      */
+    public AbstractJapStrategy(JapUserService japUserService, JapConfig japConfig) {
+        this(japUserService, japConfig.isSso() ? new SsoJapUserStore(japUserService, japConfig.getSsoConfig()) : new SessionJapUserStore(), japConfig);
+    }
+
+    /**
+     * `Strategy` constructor.
+     *
+     * @param japUserService japUserService
+     * @param japUserStore   Jap User storage mode, default is session storage
+     * @param japConfig      japConfig
+     */
     public AbstractJapStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
         this.japUserService = japUserService;
-        this.japUserStore = null == japUserStore ? new SessionJapUserStore() : japUserStore;
+        this.japUserStore = japUserStore;
         this.japConfig = japConfig;
+
+        JapUserStoreContextHolder.enable(this.japUserStore);
     }
 
     /**

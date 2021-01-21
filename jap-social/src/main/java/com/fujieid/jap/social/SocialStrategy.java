@@ -27,7 +27,6 @@ import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.exception.JapSocialException;
 import com.fujieid.jap.core.exception.JapUserException;
 import com.fujieid.jap.core.store.JapUserStore;
-import com.fujieid.jap.core.store.SessionJapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import me.zhyd.oauth.cache.AuthStateCache;
 import me.zhyd.oauth.config.AuthConfig;
@@ -67,7 +66,7 @@ public class SocialStrategy extends AbstractJapStrategy {
      * @param japConfig      japConfig
      */
     public SocialStrategy(JapUserService japUserService, JapConfig japConfig) {
-        super(japUserService, new SessionJapUserStore(), japConfig);
+        super(japUserService, japConfig);
     }
 
     /**
@@ -142,7 +141,7 @@ public class SocialStrategy extends AbstractJapStrategy {
         AuthResponse<?> authUserAuthResponse = authRequest.login(authCallback);
         if (!authUserAuthResponse.ok() || ObjectUtil.isNull(authUserAuthResponse.getData())) {
             throw new JapUserException("Third party login of `" + source + "` cannot obtain user information. "
-                    + authUserAuthResponse.getMsg());
+                + authUserAuthResponse.getMsg());
         }
 
         AuthUser socialUser = (AuthUser) authUserAuthResponse.getData();

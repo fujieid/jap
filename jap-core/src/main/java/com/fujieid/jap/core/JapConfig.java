@@ -15,6 +15,8 @@
  */
 package com.fujieid.jap.core;
 
+import com.fujieid.jap.sso.config.JapSsoConfig;
+
 /**
  * Jap configuration.
  *
@@ -24,6 +26,26 @@ package com.fujieid.jap.core;
  * @since 1.0.0
  */
 public class JapConfig {
+
+    /**
+     * Login Url. Default is `/login`
+     */
+    private String loginUrl = "/login";
+
+    /**
+     * Logout Url. Default is `/logout`
+     */
+    private String logoutUrl = "/logout";
+
+    /**
+     * Enable sso, is not enabled by default
+     */
+    private boolean sso;
+
+    /**
+     * SSO config
+     */
+    private JapSsoConfig ssoConfig;
 
     /**
      * After successful login, redirect to {@code successRedirect}. Default is `/`
@@ -54,6 +76,42 @@ public class JapConfig {
      * Additional configuration, such as JustAuth Config for social login
      */
     private Object options;
+
+    public String getLoginUrl() {
+        return loginUrl;
+    }
+
+    public JapConfig setLoginUrl(String loginUrl) {
+        this.loginUrl = loginUrl;
+        return this;
+    }
+
+    public String getLogoutUrl() {
+        return logoutUrl;
+    }
+
+    public JapConfig setLogoutUrl(String logoutUrl) {
+        this.logoutUrl = logoutUrl;
+        return this;
+    }
+
+    public boolean isSso() {
+        return sso;
+    }
+
+    public JapConfig setSso(boolean sso) {
+        this.sso = sso;
+        return this;
+    }
+
+    public JapSsoConfig getSsoConfig() {
+        return ssoConfig;
+    }
+
+    public JapConfig setSsoConfig(JapSsoConfig ssoConfig) {
+        this.ssoConfig = ssoConfig;
+        return this;
+    }
 
     public String getSuccessRedirect() {
         return successRedirect;

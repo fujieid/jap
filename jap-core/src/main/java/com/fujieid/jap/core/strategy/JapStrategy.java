@@ -41,15 +41,4 @@ public interface JapStrategy {
     default void authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
         throw new JapStrategyException("JapStrategy#authenticate must be overridden by subclass");
     }
-
-    /**
-     * This function must be overridden by subclasses.  In abstract form, it always throws an exception.
-     *
-     * @param config   Authenticate Config
-     * @param request  The request to authenticate
-     * @param response The response to authenticate
-     */
-    default void logout(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
-        throw new JapStrategyException("JapStrategy#logout must be overridden by subclass");
-    }
 }

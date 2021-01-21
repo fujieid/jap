@@ -66,7 +66,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
      * @param japConfig      japConfig
      */
     public Oauth2Strategy(JapUserService japUserService, JapConfig japConfig) {
-        super(japUserService, new SessionJapUserStore(), japConfig);
+        super(japUserService, japConfig);
     }
 
     /**

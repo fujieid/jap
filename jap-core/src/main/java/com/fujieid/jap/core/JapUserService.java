@@ -29,6 +29,16 @@ import com.fujieid.jap.core.exception.JapUserException;
 public interface JapUserService {
 
     /**
+     * Get user info by userid.
+     *
+     * @param userId userId of the business system
+     * @return JapUser
+     */
+    default JapUser getById(String userId) {
+        throw new JapUserException("JapUserService#getById(String) must be overridden by subclass");
+    }
+
+    /**
      * Get user info by username.
      * <p>
      * It is suitable for the {@code jap-simple} module

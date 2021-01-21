@@ -2,30 +2,30 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>jap</artifactId>
-        <groupId>com.fujieid</groupId>
-        <version>1.0.0</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>jap-social</artifactId>
+  <parent>
+    <groupId>com.fujieid</groupId>
+    <artifactId>jap</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-    <name>jap-social</name>
-    <description>
-        Integrate justauth to realize the authorized login of the third-party platform,
-        and support the automatic creation of login account
-    </description>
+  <artifactId>jap-social</artifactId>
+  <name>jap-social</name>
+  <description>
+    Integrate justauth to realize the authorized login of the third-party platform,
+    and support the automatic creation of login account
+  </description>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.fujieid</groupId>
-            <artifactId>jap-core</artifactId>
-            <version>${jap.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>me.zhyd.oauth</groupId>
-            <artifactId>JustAuth</artifactId>
-            <version>${justauth.version}</version>
-        </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>com.fujieid</groupId>
+      <artifactId>jap-core</artifactId>
+      <version>${jap.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>me.zhyd.oauth</groupId>
+      <artifactId>JustAuth</artifactId>
+      <version>${justauth.version}</version>
+    </dependency>
+  </dependencies>
 </project>

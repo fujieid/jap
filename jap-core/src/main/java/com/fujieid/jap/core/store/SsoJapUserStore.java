@@ -15,21 +15,38 @@
  */
 package com.fujieid.jap.core.store;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.fujieid.jap.core.JapConst;
+import cn.hutool.core.util.StrUtil;
 import com.fujieid.jap.core.JapUser;
+import com.fujieid.jap.core.JapUserService;
+import com.fujieid.jap.sso.JapSsoHelper;
+import com.fujieid.jap.sso.config.JapSsoConfig;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
+ * Operation on users in SSO mode (cookie)
+ *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
  * @date 2021/1/18 19:03
  * @since 1.0.0
  */
-public class SessionJapUserStore implements JapUserStore {
+public class SsoJapUserStore extends SessionJapUserStore {
+
+    /**
+     * Abstract the user-related function interface, which is implemented by the caller business system.
+     */
+    protected JapUserService japUserService;
+    /**
+     * Jap Sso configuration.
+     */
+    protected JapSsoConfig japSsoConfig;
+
+    public SsoJapUserStore(JapUserService japUserService, JapSsoConfig japSsoConfig) {
+        this.japUserService = japUserService;
+        this.japSsoConfig = japSsoConfig;
+    }
 
     /**
      * Login completed, save user information to the cache
@@ -41,10 +58,8 @@ public class SessionJapUserStore implements JapUserStore {
      */
     @Override
     public JapUser save(HttpServletRequest request, HttpServletResponse response, JapUser japUser) {
-        HttpSession session = request.getSession();
-        JapUser newUser = BeanUtil.copyProperties(japUser, JapUser.class);
-        newUser.setPassword(null);
-        session.setAttribute(JapConst.SESSION_USER_KEY, japUser);
+        super.save(request, response, japUser);
+        JapSsoHelper.login(japUser.getUserId(), japUser.getUsername(), this.japSsoConfig, request, response);
         return japUser;
     }
 
@@ -56,8 +71,8 @@ public class SessionJapUserStore implements JapUserStore {
      */
     @Override
     public void remove(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        session.removeAttribute(JapConst.SESSION_USER_KEY);
+        super.remove(request, response);
+        JapSsoHelper.logout(request, response);
     }
 
     /**
@@ -70,7 +85,25 @@ public class SessionJapUserStore implements JapUserStore {
      */
     @Override
     public JapUser get(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        return (JapUser) session.getAttribute(JapConst.SESSION_USER_KEY);
+        String userId = JapSsoHelper.checkLogin(request);
+        if (StrUtil.isBlank(userId)) {
+            // The cookie has expired. Clear session content
+            super.remove(request, response);
+            return null;
+        }
+        JapUser sessionUser = super.get(request, response);
+        // The cookie is not invalid, but the user in the session is invalid.
+        // retrieve the user information and save it to the session
+        if (null == sessionUser) {
+            sessionUser = this.japUserService.getById(userId);
+            // Back-to-back operation to prevent anomalies
+            if (null == sessionUser) {
+                return null;
+            }
+            // Save user information into session
+            super.save(request, response, sessionUser);
+            return sessionUser;
+        }
+        return sessionUser;
     }
 }

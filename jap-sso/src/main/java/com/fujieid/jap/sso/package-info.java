@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 /**
+ * Single sign on module, based on cookie to achieve single sign on function,
+ * support the same domain and cross domain single sign on
+ *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @date 2021/1/18 12:17
  * @version 1.0.0
