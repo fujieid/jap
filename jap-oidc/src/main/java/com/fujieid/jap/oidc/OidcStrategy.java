@@ -49,7 +49,7 @@ public class OidcStrategy extends Oauth2Strategy {
      * @param japConfig      japConfig
      */
     public OidcStrategy(JapUserService japUserService, JapConfig japConfig) {
-        super(japUserService, new SessionJapUserStore(), japConfig);
+        super(japUserService, japConfig);
     }
 
     /**

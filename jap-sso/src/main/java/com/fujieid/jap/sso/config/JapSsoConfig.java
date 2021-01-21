@@ -34,6 +34,10 @@ public class JapSsoConfig {
      */
     private String cookieDomain;
     /**
+     * The validity of the cookie
+     */
+    private int cookieMaxAge = Integer.MAX_VALUE;
+    /**
      * Parameter name of callback url after successful login
      */
     private String paramReturnUrl = "returnUrl";
@@ -83,6 +87,15 @@ public class JapSsoConfig {
 
     public JapSsoConfig setLoginUrl(String loginUrl) {
         this.loginUrl = loginUrl;
+        return this;
+    }
+
+    public int getCookieMaxAge() {
+        return cookieMaxAge;
+    }
+
+    public JapSsoConfig setCookieMaxAge(int cookieMaxAge) {
+        this.cookieMaxAge = cookieMaxAge;
         return this;
     }
 

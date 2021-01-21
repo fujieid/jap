@@ -16,11 +16,14 @@
 package com.fujieid.jap.oidc;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import com.alibaba.fastjson.JSONObject;
 import com.fujieid.jap.core.exception.OidcException;
+import com.xkcoding.json.JsonUtil;
+
+import java.util.Map;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -45,17 +48,17 @@ public class OidcUtil {
         String discoveryUrl = issuer.concat(DISCOVERY_URL);
 
         HttpResponse httpResponse = HttpRequest.get(discoveryUrl).execute();
-        JSONObject jsonObject = JSONObject.parseObject(httpResponse.body());
-        if (CollectionUtil.isEmpty(jsonObject)) {
+        Map<String, Object> oidcDiscoveryInfo = JsonUtil.toBean(httpResponse.body(), Map.class);
+        if (CollectionUtil.isEmpty(oidcDiscoveryInfo)) {
             throw new OidcException("Unable to parse IDP service discovery configuration information.");
         }
         return new OidcDiscoveryDto()
-                .setIssuer(jsonObject.getString(OidcDiscoveryParams.ISSUER))
-                .setAuthorizationEndpoint(jsonObject.getString(OidcDiscoveryParams.AUTHORIZATION_ENDPOINT))
-                .setTokenEndpoint(jsonObject.getString(OidcDiscoveryParams.TOKEN_ENDPOINT))
-                .setUserinfoEndpoint(jsonObject.getString(OidcDiscoveryParams.USERINFO_ENDPOINT))
-                .setEndSessionEndpoint(jsonObject.getString(OidcDiscoveryParams.END_SESSION_ENDPOINT))
-                .setJwksUri(jsonObject.getString(OidcDiscoveryParams.JWKS_URI));
+            .setIssuer(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.ISSUER)))
+            .setAuthorizationEndpoint(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.AUTHORIZATION_ENDPOINT)))
+            .setTokenEndpoint(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.TOKEN_ENDPOINT)))
+            .setUserinfoEndpoint(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.USERINFO_ENDPOINT)))
+            .setEndSessionEndpoint(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.END_SESSION_ENDPOINT)))
+            .setJwksUri(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.JWKS_URI)));
     }
 
 

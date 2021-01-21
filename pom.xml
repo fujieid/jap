@@ -51,7 +51,6 @@
 
     <jap.version>1.0.0</jap.version>
     <junit.version>4.13.1</junit.version>
-    <fastjson.version>1.2.73</fastjson.version>
     <hutool.version>5.5.7</hutool.version>
     <guava.version>RELEASE</guava.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
@@ -60,6 +59,7 @@
     <slf4j-api.version>1.7.30</slf4j-api.version>
     <jedis.version>3.2.0</jedis.version>
     <kisso.version>3.7.6</kisso.version>
+    <simple-json.version>0.0.1</simple-json.version>
   </properties>
 
   <dependencies>
@@ -68,11 +68,6 @@
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>fastjson</artifactId>
-      <version>${fastjson.version}</version>
     </dependency>
 
     <dependency>
@@ -96,6 +91,18 @@
     <dependency>
       <groupId>cn.hutool</groupId>
       <artifactId>hutool-cache</artifactId>
+      <version>${hutool.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-http</artifactId>
+      <version>${hutool.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-crypto</artifactId>
       <version>${hutool.version}</version>
     </dependency>
 

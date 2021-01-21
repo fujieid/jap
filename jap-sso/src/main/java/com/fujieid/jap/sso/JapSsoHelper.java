@@ -36,8 +36,8 @@ public class JapSsoHelper {
     /**
      * Write user information into cookie after successful login
      *
-     * @param userId       当前登录用户的id
-     * @param username     当前登录用户的name
+     * @param userId       The ID of the current login user
+     * @param username     The name of the current login user
      * @param japSsoConfig sso config
      * @param request      current request
      * @param response     current response
@@ -52,6 +52,7 @@ public class JapSsoHelper {
         ssoConfig.setParamReturnUrl(japSsoConfig.getParamReturnUrl());
         ssoConfig.setLoginUrl(japSsoConfig.getLoginUrl());
         ssoConfig.setLogoutUrl(japSsoConfig.getLogoutUrl());
+        ssoConfig.setCookieMaxAge(japSsoConfig.getCookieMaxAge());
         SSOHelper.setSsoConfig(ssoConfig);
         // set jap cookie
         SSOHelper.setCookie(request, response,

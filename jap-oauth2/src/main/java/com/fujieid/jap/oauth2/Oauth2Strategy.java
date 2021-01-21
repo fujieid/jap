@@ -20,7 +20,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.fujieid.jap.core.AuthenticateConfig;
 import com.fujieid.jap.core.JapConfig;
 import com.fujieid.jap.core.JapUser;
@@ -29,13 +28,13 @@ import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.core.exception.JapUserException;
 import com.fujieid.jap.core.store.JapUserStore;
-import com.fujieid.jap.core.store.SessionJapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import com.fujieid.jap.oauth2.pkce.PkceParams;
 import com.fujieid.jap.oauth2.pkce.PkceUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.xkcoding.json.JsonUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -114,10 +113,10 @@ public class Oauth2Strategy extends AbstractJapStrategy {
 
     protected JapUser getUserInfo(OAuthConfig oAuthConfig, String accessToken) {
         String userinfoResponse = HttpUtil.post(oAuthConfig.getUserinfoUrl(), ImmutableMap.of("access_token", accessToken));
-        JSONObject userinfo = JSONObject.parseObject(userinfoResponse);
-        if (userinfo.containsKey("error") && StrUtil.isNotBlank(userinfo.getString("error"))) {
+        Map<String, Object> userinfo = JsonUtil.toBean(userinfoResponse, Map.class);
+        if (userinfo.containsKey("error") && ObjectUtil.isNotEmpty(userinfo.get("error"))) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get userinfo with accessToken." +
-                    userinfo.getString("error_description") + " " + userinfoResponse);
+                userinfo.get("error_description") + " " + userinfoResponse);
         }
         JapUser japUser = this.japUserService.createAndGetOauth2User(oAuthConfig.getPlatform(), userinfo);
         if (ObjectUtil.isNull(japUser)) {
@@ -141,10 +140,10 @@ public class Oauth2Strategy extends AbstractJapStrategy {
             params.put(PkceParams.CODE_VERIFIER, PkceUtil.getCacheCodeVerifier());
         }
         String tokenResponse = HttpUtil.post(oAuthConfig.getTokenUrl(), params);
-        JSONObject accessToken = JSONObject.parseObject(tokenResponse);
-        if (accessToken.containsKey("error") && StrUtil.isNotBlank(accessToken.getString("error"))) {
+        Map<String, Object> accessToken = JsonUtil.toBean(tokenResponse, Map.class);
+        if (accessToken.containsKey("error") && ObjectUtil.isNotEmpty(accessToken.get("error"))) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." +
-                    accessToken.getString("error_description") + " " + tokenResponse);
+                accessToken.get("error_description") + " " + tokenResponse);
         }
         if (!accessToken.containsKey("access_token")) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenResponse);
@@ -158,7 +157,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
                "example_parameter":"example_value"
              }
              */
-        return accessToken.getString("access_token");
+        return (String) accessToken.get("access_token");
     }
 
     protected void redirectToAuthorizationEndPoint(HttpServletResponse response, OAuthConfig oAuthConfig) {
@@ -177,7 +176,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         // Pkce is only applicable to authorization code mode
         if (Oauth2ResponseType.code == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
             PkceUtil.addPkceParameters(Optional.ofNullable(oAuthConfig.getCodeChallengeMethod())
-                    .orElse(PkceCodeChallengeMethod.S256), params);
+                .orElse(PkceCodeChallengeMethod.S256), params);
         }
         String query = URLUtil.buildQuery(params, StandardCharsets.UTF_8);
         try {

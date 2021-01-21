@@ -15,8 +15,9 @@
  */
 package com.fujieid.jap.core;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fujieid.jap.core.exception.JapUserException;
+
+import java.util.Map;
 
 /**
  * Abstract the user-related function interface, which is implemented by the caller business system.
@@ -97,7 +98,7 @@ public interface JapUserService {
      * @param userInfo The basic user information returned by the OAuth platform
      * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
      */
-    default JapUser createAndGetOauth2User(String platform, JSONObject userInfo) {
+    default JapUser createAndGetOauth2User(String platform, Map<String, Object> userInfo) {
         throw new JapUserException("JapUserService#createAndGetOauth2User(JSONObject) must be overridden by subclass");
     }
 
