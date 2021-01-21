@@ -60,6 +60,7 @@
     <jedis.version>3.2.0</jedis.version>
     <kisso.version>3.7.6</kisso.version>
     <simple-json.version>0.0.1</simple-json.version>
+    <simple-http.version>1.0.3</simple-http.version>
   </properties>
 
   <dependencies>
@@ -91,12 +92,6 @@
     <dependency>
       <groupId>cn.hutool</groupId>
       <artifactId>hutool-cache</artifactId>
-      <version>${hutool.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-http</artifactId>
       <version>${hutool.version}</version>
     </dependency>
 

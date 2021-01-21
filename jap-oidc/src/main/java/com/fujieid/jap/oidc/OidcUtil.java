@@ -18,9 +18,8 @@ package com.fujieid.jap.oidc;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
 import com.fujieid.jap.core.exception.OidcException;
+import com.xkcoding.http.HttpUtil;
 import com.xkcoding.json.JsonUtil;
 
 import java.util.Map;
@@ -47,8 +46,8 @@ public class OidcUtil {
         }
         String discoveryUrl = issuer.concat(DISCOVERY_URL);
 
-        HttpResponse httpResponse = HttpRequest.get(discoveryUrl).execute();
-        Map<String, Object> oidcDiscoveryInfo = JsonUtil.toBean(httpResponse.body(), Map.class);
+        String response = HttpUtil.get(discoveryUrl);
+        Map<String, Object> oidcDiscoveryInfo = JsonUtil.toBean(response, Map.class);
         if (CollectionUtil.isEmpty(oidcDiscoveryInfo)) {
             throw new OidcException("Unable to parse IDP service discovery configuration information.");
         }

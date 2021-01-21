@@ -92,9 +92,15 @@ public class SsoJapUserStore extends SessionJapUserStore {
             return null;
         }
         JapUser sessionUser = super.get(request, response);
-        // The cookie is not invalid, but the user in the session is invalid.
-        // retrieve the user information and save it to the session
-        if (null == sessionUser) {
+
+        /*
+          1. The cookie is not invalid, but the user in the session is invalid.
+            retrieve the user information and save it to the session
+          2. The user information in the session is inconsistent with the user information in the cookie,
+            which indicates that an endpoint logs out and then logs in again.
+            At this time, the session needs to be updated
+         */
+        if (null == sessionUser || !sessionUser.getUserId().equals(userId)) {
             sessionUser = this.japUserService.getById(userId);
             // Back-to-back operation to prevent anomalies
             if (null == sessionUser) {

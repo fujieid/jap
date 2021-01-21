@@ -19,7 +19,6 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
-import cn.hutool.http.HttpUtil;
 import com.fujieid.jap.core.AuthenticateConfig;
 import com.fujieid.jap.core.JapConfig;
 import com.fujieid.jap.core.JapUser;
@@ -34,6 +33,7 @@ import com.fujieid.jap.oauth2.pkce.PkceParams;
 import com.fujieid.jap.oauth2.pkce.PkceUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.xkcoding.http.HttpUtil;
 import com.xkcoding.json.JsonUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -112,7 +112,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
     }
 
     protected JapUser getUserInfo(OAuthConfig oAuthConfig, String accessToken) {
-        String userinfoResponse = HttpUtil.post(oAuthConfig.getUserinfoUrl(), ImmutableMap.of("access_token", accessToken));
+        String userinfoResponse = HttpUtil.post(oAuthConfig.getUserinfoUrl(), ImmutableMap.of("access_token", accessToken), false);
         Map<String, Object> userinfo = JsonUtil.toBean(userinfoResponse, Map.class);
         if (userinfo.containsKey("error") && ObjectUtil.isNotEmpty(userinfo.get("error"))) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get userinfo with accessToken." +
@@ -127,8 +127,8 @@ public class Oauth2Strategy extends AbstractJapStrategy {
 
     protected String getAccessToken(HttpServletRequest request, OAuthConfig oAuthConfig) {
         String code = request.getParameter("code");
-        Map<String, Object> params = Maps.newHashMap();
-        params.put("grant_type", oAuthConfig.getGrantType());
+        Map<String, String> params = Maps.newHashMap();
+        params.put("grant_type", oAuthConfig.getGrantType().name());
         params.put("code", code);
         params.put("client_id", oAuthConfig.getClientId());
         params.put("client_secret", oAuthConfig.getClientSecret());
@@ -139,7 +139,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         if (Oauth2ResponseType.code == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
             params.put(PkceParams.CODE_VERIFIER, PkceUtil.getCacheCodeVerifier());
         }
-        String tokenResponse = HttpUtil.post(oAuthConfig.getTokenUrl(), params);
+        String tokenResponse = HttpUtil.post(oAuthConfig.getTokenUrl(), params, false);
         Map<String, Object> accessToken = JsonUtil.toBean(tokenResponse, Map.class);
         if (accessToken.containsKey("error") && ObjectUtil.isNotEmpty(accessToken.get("error"))) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." +
