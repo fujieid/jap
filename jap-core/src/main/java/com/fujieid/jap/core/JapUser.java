@@ -15,6 +15,8 @@
  */
 package com.fujieid.jap.core;
 
+import java.io.Serializable;
+
 /**
  * For the user information saved in the JAP system, the developer needs to convert the user information in the
  * business system into JapUser.
@@ -24,8 +26,9 @@ package com.fujieid.jap.core;
  * @date 2021/1/11 14:48
  * @since 1.0.0
  */
-public class JapUser {
+public class JapUser implements Serializable {
 
+    private static final long serialVersionUID = 775471329827032075L;
     /**
      * The id of the user in the developer's business system
      */
