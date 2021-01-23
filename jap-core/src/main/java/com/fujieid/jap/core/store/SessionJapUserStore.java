@@ -44,7 +44,7 @@ public class SessionJapUserStore implements JapUserStore {
         HttpSession session = request.getSession();
         JapUser newUser = BeanUtil.copyProperties(japUser, JapUser.class);
         newUser.setPassword(null);
-        session.setAttribute(JapConst.SESSION_USER_KEY, japUser);
+        session.setAttribute(JapConst.SESSION_USER_KEY, newUser);
         return japUser;
     }
 
