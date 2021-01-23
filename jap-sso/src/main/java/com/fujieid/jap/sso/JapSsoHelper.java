@@ -55,7 +55,7 @@ public class JapSsoHelper {
                 .setIssuer(username)
                 .setIp(request)
                 .setUserAgent(request),
-            false
+            true
         );
     }
 
