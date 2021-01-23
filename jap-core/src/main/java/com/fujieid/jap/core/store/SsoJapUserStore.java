@@ -58,8 +58,8 @@ public class SsoJapUserStore extends SessionJapUserStore {
      */
     @Override
     public JapUser save(HttpServletRequest request, HttpServletResponse response, JapUser japUser) {
-        super.save(request, response, japUser);
         JapSsoHelper.login(japUser.getUserId(), japUser.getUsername(), this.japSsoConfig, request, response);
+        super.save(request, response, japUser);
         return japUser;
     }
 
