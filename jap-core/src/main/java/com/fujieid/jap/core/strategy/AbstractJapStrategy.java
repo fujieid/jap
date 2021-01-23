@@ -27,6 +27,7 @@ import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.store.JapUserStoreContextHolder;
 import com.fujieid.jap.core.store.SessionJapUserStore;
 import com.fujieid.jap.core.store.SsoJapUserStore;
+import com.fujieid.jap.sso.JapSsoHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -77,6 +78,11 @@ public abstract class AbstractJapStrategy implements JapStrategy {
         this.japUserService = japUserService;
         this.japUserStore = japUserStore;
         this.japConfig = japConfig;
+
+        if (japConfig.isSso()) {
+            // init Kisso config
+            JapSsoHelper.initKissoConfig(japConfig.getSsoConfig());
+        }
 
         JapUserStoreContextHolder.enable(this.japUserStore);
     }
