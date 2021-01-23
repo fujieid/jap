@@ -18,6 +18,7 @@ package com.fujieid.jap.sso;
 import com.baomidou.kisso.SSOConfig;
 import com.baomidou.kisso.SSOHelper;
 import com.baomidou.kisso.security.token.SSOToken;
+import com.baomidou.kisso.service.ConfigurableAbstractKissoService;
 import com.fujieid.jap.sso.config.JapSsoConfig;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,23 +47,44 @@ public class JapSsoHelper {
         // Initialize Jap SSO config to prevent NPE
         japSsoConfig = null == japSsoConfig ? new JapSsoConfig() : japSsoConfig;
         // Reset kisso config
-        SSOConfig ssoConfig = SSOHelper.getSsoConfig();
+        resetKissoConfig(japSsoConfig);
+        // set jap cookie
+        KiSsoHelper.setCookie(request, response,
+            new SSOToken()
+                .setId(userId)
+                .setIssuer(username)
+                .setIp(request)
+                .setUserAgent(request),
+            false
+        );
+    }
+
+    /**
+     * init kisso config
+     * @param japSsoConfig  sso config
+     */
+    public static void initKissoConfig(JapSsoConfig japSsoConfig) {
+        // init kisso config
+        SSOConfig ssoConfig = resetKissoConfig(japSsoConfig);
+        KiSsoHelper.setKissoService(new JapConfigurableAbstractKissoService(ssoConfig));
+    }
+
+    /**
+     * reset kisso config
+     * @param japSsoConfig  sso config
+     * @return kisso config
+     */
+    private static SSOConfig resetKissoConfig(JapSsoConfig japSsoConfig) {
+        // Reset kisso config
+        SSOConfig ssoConfig = KiSsoHelper.getSsoConfig();
         ssoConfig.setCookieDomain(japSsoConfig.getCookieDomain());
         ssoConfig.setCookieName(japSsoConfig.getCookieName());
         ssoConfig.setParamReturnUrl(japSsoConfig.getParamReturnUrl());
         ssoConfig.setLoginUrl(japSsoConfig.getLoginUrl());
         ssoConfig.setLogoutUrl(japSsoConfig.getLogoutUrl());
         ssoConfig.setCookieMaxAge(japSsoConfig.getCookieMaxAge());
-        SSOHelper.setSsoConfig(ssoConfig);
-        // set jap cookie
-        SSOHelper.setCookie(request, response,
-            new SSOToken()
-                .setId(userId)
-                .setIssuer(username)
-                .setIp(request)
-                .setUserAgent(request),
-            true
-        );
+        KiSsoHelper.setSsoConfig(ssoConfig);
+        return ssoConfig;
     }
 
     /**
@@ -72,7 +94,7 @@ public class JapSsoHelper {
      * @return The ID of the current login user
      */
     public static String checkLogin(HttpServletRequest request) {
-        SSOToken ssoToken = SSOHelper.getSSOToken(request);
+        SSOToken ssoToken = KiSsoHelper.getSSOToken(request);
         return null == ssoToken ? null : ssoToken.getId();
     }
 
@@ -83,6 +105,35 @@ public class JapSsoHelper {
      * @param response current response
      */
     public static void logout(HttpServletRequest request, HttpServletResponse response) {
-        SSOHelper.clearLogin(request, response);
+        KiSsoHelper.clearLogin(request, response);
     }
+
+    /**
+     * Kisso Single sign-on service abstract implementation class
+     * @author YongWu zheng
+     * @date 2021-01-23 13:50
+     * @since 1.0.0
+     */
+    static class JapConfigurableAbstractKissoService extends ConfigurableAbstractKissoService {
+
+        public JapConfigurableAbstractKissoService(SSOConfig ssoConfig) {
+            super();
+            config = ssoConfig;
+        }
+    }
+
+    /**
+     * kisso SSO helper
+     * @author YongWu zheng
+     * @date 2021-01-23 14:10
+     * @since 1.0.0
+     */
+    static class KiSsoHelper extends SSOHelper {
+
+        public static void setKissoService(JapConfigurableAbstractKissoService japKissoService) {
+            kissoService = japKissoService;
+        }
+    }
+
+
 }
