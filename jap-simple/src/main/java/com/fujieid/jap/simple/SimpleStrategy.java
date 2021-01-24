@@ -15,12 +15,13 @@
  */
 package com.fujieid.jap.simple;
 
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.fujieid.jap.core.AuthenticateConfig;
 import com.fujieid.jap.core.JapConfig;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.JapUserService;
-import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.exception.JapUserException;
 import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
@@ -28,7 +29,6 @@ import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * The local authentication strategy authenticates requests based on the credentials submitted through an HTML-based
@@ -63,14 +63,13 @@ public class SimpleStrategy extends AbstractJapStrategy {
 
     @Override
     public void authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
-
-        if (this.checkSession(request, response)) {
-            return;
-        }
-
         // Convert AuthenticateConfig to SimpleConfig
         this.checkAuthenticateConfig(config, SimpleConfig.class);
         SimpleConfig simpleConfig = (SimpleConfig) config;
+
+        if (this.checkSessionAndCookie(simpleConfig, request, response)) {
+            return;
+        }
 
         UsernamePasswordCredential credential = this.doResolveCredential(request, simpleConfig);
         JapUser user = japUserService.getByName(credential.getUsername());
@@ -83,35 +82,65 @@ public class SimpleStrategy extends AbstractJapStrategy {
             throw new JapUserException("Passwords don't match.");
         }
 
+        this.loginSuccess(simpleConfig, credential, user, request, response);
+    }
+
+    /**
+     * 登录成功
+     *
+     * @param simpleConfig
+     * @param credential
+     * @param user
+     * @param request
+     * @param response
+     */
+    protected void loginSuccess(SimpleConfig simpleConfig, UsernamePasswordCredential credential, JapUser user, HttpServletRequest request, HttpServletResponse response) {
         if (simpleConfig.isEnableRememberMe() && credential.isRememberMe()) {
             // add cookie
-            this.addRememberMeCookie(user, simpleConfig, request, response);
+            ServletUtil.addCookie(response,
+                simpleConfig.getRememberMeCookieKey(),
+                this.encodeCookieValue(user, simpleConfig),
+                simpleConfig.getRememberMeCookieExpire(),
+                this.getRequestPath(request),
+                ObjectUtil.isNotEmpty(simpleConfig.getRememberMeCookieDomain()) ? simpleConfig.getRememberMeCookieDomain() : null
+            );
         }
-
         this.loginSuccess(user, request, response);
     }
 
     /**
-     * math cookie
+     * check session and cookie
      *
-     * @param simpleConfig config
-     * @param request      The request to authenticate
+     * @param simpleConfig
+     * @param request
+     * @param response
      * @return
      */
-    protected String matchRememberMeCookie(SimpleConfig simpleConfig, HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-
-        if ((cookies == null) || (cookies.length == 0)) {
-            return null;
+    protected boolean checkSessionAndCookie(SimpleConfig simpleConfig, HttpServletRequest request, HttpServletResponse response) {
+        if (this.checkSession(request, response)) {
+            return true;
+        }
+        if (!simpleConfig.isEnableRememberMe()) {
+            return false;
         }
 
-        for (Cookie cookie : cookies) {
-            if (ObjectUtil.equal(simpleConfig.getRememberMeCookieKey(), cookie.getName())) {
-                return cookie.getValue();
-            }
+        Cookie cookie = ServletUtil.getCookie(request, simpleConfig.getRememberMeCookieKey());
+        if (ObjectUtil.isNull(cookie)) {
+            return false;
         }
 
-        return null;
+        UsernamePasswordCredential credential = this.decodeCookieValue(simpleConfig, cookie.getValue());
+        if (ObjectUtil.isNull(credential)) {
+            return false;
+        }
+
+        JapUser user = japUserService.getByName(credential.getUsername());
+        if (null == user) {
+            throw new JapUserException("The user does not exist.");
+        }
+        // redirect login successful
+        this.loginSuccess(user, request, response);
+        return true;
     }
 
     /**
@@ -122,74 +151,14 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @return
      */
     protected UsernamePasswordCredential decodeCookieValue(SimpleConfig simpleConfig, String cookieValue) {
-        SimpleConfig.RememberMeDetails decode = simpleConfig.decode(cookieValue);
-        if (ObjectUtil.isNotNull(decode)) {
+        RememberMeDetails details = RememberMeDetailsUtils.decode(simpleConfig, cookieValue);
+        if (ObjectUtil.isNotNull(details)) {
             // return no longer password and remember me
             return new UsernamePasswordCredential()
-                .setUsername(decode.getUsername());
+                .setUsername(details.getUsername());
         }
         return null;
     }
-
-    /**
-     * authenticate cookie
-     *
-     * @param config   config
-     * @param request  The request to authenticate
-     * @param response The response to authenticate
-     */
-    public void authenticateCookie(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
-        if (this.checkSession(request, response)) {
-            return;
-        }
-
-        // Convert AuthenticateConfig to SimpleConfig
-        this.checkAuthenticateConfig(config, SimpleConfig.class);
-        SimpleConfig simpleConfig = (SimpleConfig) config;
-        String cookieValue = this.matchRememberMeCookie(simpleConfig, request);
-
-        if (ObjectUtil.isNotNull(cookieValue)) {
-            UsernamePasswordCredential credential = this.decodeCookieValue(simpleConfig, cookieValue);
-            if (ObjectUtil.isNotNull(cookieValue)) {
-                JapUser user = japUserService.getByName(credential.getUsername());
-                if (null == user) {
-                    throw new JapUserException("The user does not exist.");
-                }
-                // redirect login successful
-                this.loginSuccess(user, request, response);
-                return;
-            }
-        }
-
-        // redirect login url
-        try {
-            response.sendRedirect(japConfig.getLoginUrl());
-        } catch (IOException e) {
-            throw new JapException("JAP failed to redirect via HttpServletResponse.", e);
-        }
-    }
-
-    /**
-     * add RememberMe Cookie
-     *
-     * @param user
-     * @param simpleConfig
-     * @param request
-     * @param response
-     */
-    protected void addRememberMeCookie(JapUser user, SimpleConfig simpleConfig, HttpServletRequest request, HttpServletResponse response) {
-        String cookieValue = this.encodeCookieValue(user, simpleConfig);
-        Cookie cookie = new Cookie(simpleConfig.getRememberMeCookieKey(), cookieValue);
-        cookie.setMaxAge(simpleConfig.getRememberMeCookieExpire());
-        cookie.setPath(this.getRequestPath(request));
-        cookie.setSecure(request.isSecure());
-        // Custom domain name
-        if (ObjectUtil.isNotEmpty(simpleConfig.getRememberMeCookieDomain())) {
-            cookie.setDomain(simpleConfig.getRememberMeCookieDomain());
-        }
-        response.addCookie(cookie);
-    }
-
 
     /**
      * Clear the cookie to log out of use
@@ -199,14 +168,11 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @param response
      */
     public void cancelRememberMeCookie(SimpleConfig simpleConfig, HttpServletRequest request, HttpServletResponse response) {
-        Cookie cookie = new Cookie(simpleConfig.getRememberMeCookieKey(), null);
-        cookie.setMaxAge(0);
-        cookie.setPath(this.getRequestPath(request));
-        // Custom domain name
-        if (ObjectUtil.isNotEmpty(simpleConfig.getRememberMeCookieDomain())) {
-            cookie.setDomain(simpleConfig.getRememberMeCookieDomain());
-        }
-        response.addCookie(cookie);
+        ServletUtil.addCookie(response,
+            simpleConfig.getRememberMeCookieKey(),
+            null, 0,
+            this.getRequestPath(request),
+            ObjectUtil.isNotEmpty(simpleConfig.getRememberMeCookieDomain()) ? simpleConfig.getRememberMeCookieDomain() : null);
     }
 
     /**
@@ -217,7 +183,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @return
      */
     protected String encodeCookieValue(JapUser user, SimpleConfig simpleConfig) {
-        return simpleConfig.encode(user.getUsername(), user.getPassword()).getEncodeValue();
+        return RememberMeDetailsUtils.encode(simpleConfig, user.getUsername()).getEncodeValue();
     }
 
     /**
@@ -237,26 +203,12 @@ public class SimpleStrategy extends AbstractJapStrategy {
         if (null == username || null == password) {
             throw new JapUserException("Missing credentials");
         }
-        boolean rememberMe = this.rememberRequest(request, simpleConfig);
         return new UsernamePasswordCredential()
             .setUsername(username)
             .setPassword(password)
-            .setRememberMe(rememberMe);
-    }
-
-    /**
-     * Retrieve Remember me from the request
-     *
-     * @param request
-     * @param simpleConfig
-     * @return
-     */
-    protected boolean rememberRequest(HttpServletRequest request, SimpleConfig simpleConfig) {
-        String rememberParameter = request.getParameter(simpleConfig.getRememberMeField());
-        if (rememberParameter != null) {
-            return rememberParameter.equalsIgnoreCase("true") || rememberParameter.equalsIgnoreCase("on")
-                || rememberParameter.equalsIgnoreCase("yes") || rememberParameter.equals("1");
-        }
-        return false;
+            .setRememberMe(
+                BooleanUtil.toBoolean(
+                    request.getParameter(simpleConfig.getRememberMeField()))
+            );
     }
 }

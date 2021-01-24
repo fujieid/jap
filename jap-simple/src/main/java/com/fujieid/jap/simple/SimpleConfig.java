@@ -15,13 +15,12 @@
  */
 package com.fujieid.jap.simple;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import com.fujieid.jap.core.AuthenticateConfig;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+
+import static com.fujieid.jap.core.JapConst.DEFAULT_CREDENTIAL_ENCRYPT_SALT;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -30,26 +29,6 @@ import java.util.Base64;
  * @since 1.0.0
  */
 public class SimpleConfig extends AuthenticateConfig {
-
-    /**
-     * Credential encryption algorithm: MD5 encryption
-     */
-    private final MD5 credentialEncrypt;
-
-    /**
-     * Default salt. Default salt is not recommended
-     */
-    private static final byte[] DEFAULT_CREDENTIAL_ENCRYPT_SALT = "jap:123456".getBytes(StandardCharsets.UTF_8);
-
-    /**
-     * default delimiter
-     */
-    private static final char DEFAULT_DELIMITER = ':';
-
-    /**
-     * Whether to enable remember me
-     */
-    private final boolean enableRememberMe;
 
     /**
      * Get the user name from request through {@code request.getParameter(`usernameField`)}, which defaults to "username"
@@ -61,22 +40,32 @@ public class SimpleConfig extends AuthenticateConfig {
     private String passwordField = "password";
 
     /**
+     * Credential encryption algorithm: MD5 encryption
+     */
+    private final MD5 credentialEncrypt;
+
+    /**
+     * Whether to enable remember me
+     */
+    private final boolean enableRememberMe;
+
+    /**
      * Get the remember-me from request through {@code request.getParameter(`rememberMeField`)}, which defaults to "remember-me"
      */
     private String rememberMeField = "remember-me";
 
     /**
-     * By default, remember me cookie key
+     * Default remember me cookie key
      */
     private String rememberMeCookieKey = "_jap_remember_me";
 
     /**
-     * remember me cookie expire, unit: second, default 60*60*24*30[month]
+     * Remember me cookie expire, unit: second, default 60*60*24*30[month]
      */
     private Integer rememberMeCookieExpire = 2592000;
 
     /**
-     * remember me cookie domain
+     * Remember me cookie domain
      */
     private String rememberMeCookieDomain;
 
@@ -84,17 +73,9 @@ public class SimpleConfig extends AuthenticateConfig {
      * Generate the MD5 algorithm using the default key
      */
     public SimpleConfig() {
+        // disabled
         this.enableRememberMe = false;
         this.credentialEncrypt = new MD5(DEFAULT_CREDENTIAL_ENCRYPT_SALT);
-    }
-
-    /**
-     * Whether enable RememberMe
-     *
-     * @return
-     */
-    public boolean isEnableRememberMe() {
-        return enableRememberMe;
     }
 
     /**
@@ -135,164 +116,47 @@ public class SimpleConfig extends AuthenticateConfig {
         return this;
     }
 
+    public boolean isEnableRememberMe() {
+        return enableRememberMe;
+    }
+
+    public MD5 getCredentialEncrypt() {
+        return credentialEncrypt;
+    }
+
     public String getRememberMeField() {
         return rememberMeField;
     }
 
-    public void setRememberMeField(String rememberMeField) {
+    public SimpleConfig setRememberMeField(String rememberMeField) {
         this.rememberMeField = rememberMeField;
+        return this;
     }
 
     public String getRememberMeCookieKey() {
         return rememberMeCookieKey;
     }
 
-    public void setRememberMeCookieKey(String rememberMeCookieKey) {
+    public SimpleConfig setRememberMeCookieKey(String rememberMeCookieKey) {
         this.rememberMeCookieKey = rememberMeCookieKey;
+        return this;
     }
 
     public Integer getRememberMeCookieExpire() {
         return rememberMeCookieExpire;
     }
 
-    public void setRememberMeCookieExpire(Integer rememberMeCookieExpire) {
+    public SimpleConfig setRememberMeCookieExpire(Integer rememberMeCookieExpire) {
         this.rememberMeCookieExpire = rememberMeCookieExpire;
+        return this;
     }
 
     public String getRememberMeCookieDomain() {
         return rememberMeCookieDomain;
     }
 
-    public void setRememberMeCookieDomain(String rememberMeCookieDomain) {
+    public SimpleConfig setRememberMeCookieDomain(String rememberMeCookieDomain) {
         this.rememberMeCookieDomain = rememberMeCookieDomain;
+        return this;
     }
-
-    /**
-     * encode
-     *
-     * @param username username
-     * @param password password [keep]
-     * @return
-     */
-    public RememberMeDetails encode(String username, String password) {
-        return RememberMeDetails.encodeInstance(this, username);
-    }
-
-    /**
-     * decode
-     *
-     * @param cookieValue
-     * @return
-     */
-    public RememberMeDetails decode(String cookieValue) {
-        return RememberMeDetails.decodeInstance(this, cookieValue);
-    }
-
-    /**
-     * @author harrylee (harryleexyz(a)qq.com)
-     * @version 1.0.0
-     * @date 2021/1/24 14:57
-     * @since 1.0.0
-     */
-    public static class RememberMeDetails {
-
-        /**
-         * username
-         */
-        private String username;
-
-        /**
-         * expiry time
-         */
-        private long expiryTime;
-        /**
-         * encode value
-         */
-        private String encodeValue;
-
-        public String getUsername() {
-            return username;
-        }
-
-        public long getExpiryTime() {
-            return expiryTime;
-        }
-
-        public String getEncodeValue() {
-            return encodeValue;
-        }
-
-        private SimpleConfig simpleConfig;
-
-        private RememberMeDetails() {
-        }
-
-        /**
-         * Encrypted acquisition instance.
-         *
-         * @param simpleConfig config
-         * @param username     username
-         * @return
-         */
-        public static RememberMeDetails encodeInstance(SimpleConfig simpleConfig, String username) {
-            RememberMeDetails rememberMeDetails = new RememberMeDetails();
-            rememberMeDetails.username = username;
-            long expiryTime = System.currentTimeMillis() + simpleConfig.getRememberMeCookieExpire();
-            rememberMeDetails.expiryTime = expiryTime;
-            // username:tokenExpiryTime
-            String md5Data = username + DEFAULT_DELIMITER + expiryTime;
-            String md5Key = simpleConfig.credentialEncrypt.digestHex16(md5Data);
-            // username:tokenExpiryTime:key
-            String base64Data = md5Data + DEFAULT_DELIMITER + md5Key;
-            rememberMeDetails.encodeValue = new String(Base64.getEncoder().encode(base64Data.getBytes(StandardCharsets.UTF_8)));
-            return rememberMeDetails;
-        }
-
-        /**
-         * Decryption acquisition instance.
-         *
-         * @param simpleConfig config
-         * @param cookieValue  cookie value
-         * @return
-         */
-        public static RememberMeDetails decodeInstance(SimpleConfig simpleConfig, String cookieValue) {
-            if (!simpleConfig.enableRememberMe) {
-                return null;
-            }
-            RememberMeDetails rememberMeDetails = new RememberMeDetails();
-            rememberMeDetails.encodeValue = cookieValue;
-            String base64DecodeValue;
-            try {
-                base64DecodeValue = new String(Base64.getDecoder().decode(cookieValue.getBytes(StandardCharsets.UTF_8)));
-            } catch (RuntimeException e) {
-                return null;
-            }
-            String[] base64DecodeValueSplitArray = StrUtil.splitToArray(base64DecodeValue, DEFAULT_DELIMITER);
-            // Check and validate keys
-            if (base64DecodeValueSplitArray.length > 2) {
-                String username = base64DecodeValueSplitArray[0];
-                long expiryTime;
-                try {
-                    expiryTime = Long.parseLong(base64DecodeValueSplitArray[1]);
-                } catch (RuntimeException e) {
-                    return null;
-                }
-                // overdue
-                if (expiryTime < System.currentTimeMillis()) {
-                    return null;
-                }
-                // username:tokenExpiryTime
-                String md5Data = username + DEFAULT_DELIMITER + expiryTime;
-                String md5Key = simpleConfig.credentialEncrypt.digestHex16(md5Data);
-                // Check pass returns
-                if (ObjectUtil.equal(md5Key, base64DecodeValueSplitArray[2])) {
-                    rememberMeDetails.username = username;
-                    rememberMeDetails.expiryTime = expiryTime;
-                    return rememberMeDetails;
-                }
-            }
-            return null;
-        }
-    }
-
 }

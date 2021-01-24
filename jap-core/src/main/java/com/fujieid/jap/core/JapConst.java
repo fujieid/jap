@@ -15,6 +15,8 @@
  */
 package com.fujieid.jap.core;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * JAP constant
  *
@@ -26,4 +28,15 @@ package com.fujieid.jap.core;
 public interface JapConst {
 
     String SESSION_USER_KEY = "_jap:session:user";
+
+
+    /**
+     * Default salt. Default salt is not recommended
+     */
+    byte[] DEFAULT_CREDENTIAL_ENCRYPT_SALT = "jap:123456".getBytes(StandardCharsets.UTF_8);
+
+    /**
+     * default delimiter
+     */
+    char DEFAULT_DELIMITER = ':';
 }
