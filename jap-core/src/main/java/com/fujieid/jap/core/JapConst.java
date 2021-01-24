@@ -29,7 +29,6 @@ public interface JapConst {
 
     String SESSION_USER_KEY = "_jap:session:user";
 
-
     /**
      * Default salt. Default salt is not recommended
      */
