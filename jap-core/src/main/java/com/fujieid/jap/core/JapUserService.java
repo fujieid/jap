@@ -94,12 +94,14 @@ public interface JapUserService {
      * <p>
      * It is suitable for the {@code jap-oauth2} module
      *
-     * @param platform oauth2 platform name
-     * @param userInfo The basic user information returned by the OAuth platform
+     * @param platform  oauth2 platform name
+     * @param userInfo  The basic user information returned by the OAuth platform
+     * @param tokenInfo The token information returned by the OAuth platform, developers can store tokens
+     *                  , type {@code com.fujieid.jap.oauth2.helper.AccessToken}
      * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
      */
-    default JapUser createAndGetOauth2User(String platform, Map<String, Object> userInfo) {
-        throw new JapUserException("JapUserService#createAndGetOauth2User(JSONObject) must be overridden by subclass");
+    default JapUser createAndGetOauth2User(String platform, Map<String, Object> userInfo, Object tokenInfo) {
+        throw new JapUserException("JapUserService#createAndGetOauth2User(String, Map<String, Object>, Object) must be overridden by subclass");
     }
 
 }

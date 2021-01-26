@@ -16,10 +16,16 @@
 package com.fujieid.jap.oauth2;
 
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import org.jose4j.base64url.Base64Url;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * OAuth Strategy Util
@@ -61,5 +67,21 @@ public class Oauth2Util {
         } else {
             return codeVerifier;
         }
+    }
+
+    public static void checkOauthResponse(String responseStr, Map<String, ?> responseMap, String errorMsg) {
+        if (responseMap.containsKey("error") && ObjectUtil.isNotEmpty(responseMap.get("error"))) {
+            throw new JapOauth2Exception(Optional.ofNullable(errorMsg).orElse("") +
+                responseMap.get("error_description") + " " + responseStr);
+        }
+    }
+
+    public static void checkOauthCallbackRequest(HttpServletRequest request, String errorMsg) {
+        String error = request.getParameter("error");
+        if (ObjectUtil.isNotNull(error)) {
+            String errorDescription = request.getParameter("error_description");
+            throw new JapOauth2Exception(Optional.ofNullable(errorMsg).orElse("") + errorDescription);
+        }
+
     }
 }

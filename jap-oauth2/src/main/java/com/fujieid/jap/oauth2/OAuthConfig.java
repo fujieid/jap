@@ -101,6 +101,20 @@ public class OAuthConfig extends AuthenticateConfig {
      */
     private PkceCodeChallengeMethod codeChallengeMethod = PkceCodeChallengeMethod.S256;
 
+    /**
+     * The username in `Resource Owner Password Credentials Grant`
+     *
+     * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">https://tools.ietf.org/html/rfc6749#section-4.3</a>
+     */
+    private String username;
+
+    /**
+     * The password in `Resource Owner Password Credentials Grant`
+     *
+     * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">https://tools.ietf.org/html/rfc6749#section-4.3</a>
+     */
+    private String password;
+
     public String getClientId() {
         return clientId;
     }
@@ -215,6 +229,24 @@ public class OAuthConfig extends AuthenticateConfig {
 
     public OAuthConfig setGrantType(Oauth2GrantType grantType) {
         this.grantType = grantType;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public OAuthConfig setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public OAuthConfig setPassword(String password) {
+        this.password = password;
         return this;
     }
 }

@@ -19,11 +19,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.fujieid.jap.core.AuthenticateConfig;
-import com.fujieid.jap.core.JapConfig;
-import com.fujieid.jap.core.JapUser;
-import com.fujieid.jap.core.JapUserService;
-import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.core.*;
 import com.fujieid.jap.core.exception.JapSocialException;
 import com.fujieid.jap.core.exception.JapUserException;
 import com.fujieid.jap.core.store.JapUserStore;
@@ -38,7 +34,6 @@ import me.zhyd.oauth.request.AuthRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -117,12 +112,10 @@ public class SocialStrategy extends AbstractJapStrategy {
 
         // If it is not a callback request, it must be a request to jump to the authorization link
         if (!this.isCallback(source, authCallback)) {
-            try {
-                response.sendRedirect(authRequest.authorize(socialConfig.getState()));
-                return;
-            } catch (IOException ex) {
-                throw new JapException("JAP failed to redirect to " + source + " authorized endpoint through HttpServletResponse.", ex);
-            }
+            String url = authRequest.authorize(socialConfig.getState());
+            String redirectErrorMsg = "JAP failed to redirect to " + source + " authorized endpoint through HttpServletResponse.";
+            JapUtil.redirect(url, redirectErrorMsg, response);
+            return;
         }
 
         this.login(request, response, source, authRequest, authCallback);

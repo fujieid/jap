@@ -17,11 +17,7 @@ package com.fujieid.jap.core.strategy;
 
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.fujieid.jap.core.AuthenticateConfig;
-import com.fujieid.jap.core.JapConfig;
-import com.fujieid.jap.core.JapUser;
-import com.fujieid.jap.core.JapUserService;
-import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.core.*;
 import com.fujieid.jap.core.exception.JapSocialException;
 import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.store.JapUserStoreContextHolder;
@@ -31,7 +27,6 @@ import com.fujieid.jap.sso.JapSsoHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * General policy handling methods and parameters, policies of other platforms can inherit
@@ -97,23 +92,15 @@ public abstract class AbstractJapStrategy implements JapStrategy {
     protected boolean checkSession(HttpServletRequest request, HttpServletResponse response) {
         JapUser sessionUser = japUserStore.get(request, response);
         if (null != sessionUser) {
-            try {
-                response.sendRedirect(japConfig.getSuccessRedirect());
-                return true;
-            } catch (IOException e) {
-                throw new JapException("JAP failed to redirect via HttpServletResponse.", e);
-            }
+            JapUtil.redirect(japConfig.getSuccessRedirect(), response);
+            return true;
         }
         return false;
     }
 
     protected void loginSuccess(JapUser japUser, HttpServletRequest request, HttpServletResponse response) {
         japUserStore.save(request, response, japUser);
-        try {
-            response.sendRedirect(japConfig.getSuccessRedirect());
-        } catch (IOException e) {
-            throw new JapException("JAP failed to redirect via HttpServletResponse.", e);
-        }
+        JapUtil.redirect(japConfig.getSuccessRedirect(), response);
     }
 
     /**
