@@ -24,6 +24,10 @@ package com.fujieid.jap.oauth2;
 public enum Oauth2ResponseType {
 
     /**
+     * When authorization code mode or implicit authorization mode is not used, ResponseType needs to be set to {@code none}
+     */
+    none,
+    /**
      * Authorization Code Grant
      */
     code,

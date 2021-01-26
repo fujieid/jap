@@ -136,11 +136,12 @@ public class AccessTokenHelper {
         params.put("grant_type", Oauth2GrantType.password.name());
         params.put("username", oAuthConfig.getUsername());
         params.put("password", oAuthConfig.getPassword());
+        params.put("client_id", oAuthConfig.getClientId());
+        params.put("client_secret", oAuthConfig.getClientSecret());
         if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
             params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
         }
-        String query = URLUtil.buildQuery(params, StandardCharsets.UTF_8);
-        String url = oAuthConfig.getTokenUrl().concat("?").concat(query);
+        String url = oAuthConfig.getTokenUrl();
         String tokenResponse = HttpUtil.post(url, params, false);
         Map<String, Object> tokenMap = JsonUtil.toBean(tokenResponse, Map.class);
         Oauth2Util.checkOauthResponse(tokenResponse, tokenMap, "Oauth2Strategy failed to get AccessToken.");
@@ -164,8 +165,7 @@ public class AccessTokenHelper {
         if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
             params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
         }
-        String query = URLUtil.buildQuery(params, StandardCharsets.UTF_8);
-        String url = oAuthConfig.getTokenUrl().concat("?").concat(query);
+        String url = oAuthConfig.getTokenUrl();
 
         String tokenResponse = HttpUtil.post(url, params, false);
         Map<String, Object> tokenMap = JsonUtil.toBean(tokenResponse, Map.class);
