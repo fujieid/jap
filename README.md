@@ -31,7 +31,7 @@
 	<strong>开源地址：</strong> <a target="_blank" href='https://gitee.com/fujieid/jap'>Gitee</a> | <a target="_blank" href='https://github.com/fujieid/jap'>Github</a>
 </p>
 <p align="center">
-	<strong>官方网站：</strong> <a target="_blank" href='https://jap.fujieid.com'>https://jap.fujieid.com</a>
+	<strong>官方网站（Wiki）：</strong> <a target="_blank" href='https://jap.fujieid.com'>https://jap.fujieid.com</a>
 </p>
 
 ## 🎨 JAP 是什么？
