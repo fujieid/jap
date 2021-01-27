@@ -15,6 +15,12 @@ case "$1" in
   'updv')
     docs/bin/updVersion.sh $2
 	;;
+  'pd')
+    docs/bin/push-dev.sh
+	;;
+  'p')
+    docs/bin/push.sh
+	;;
   *)
     help
 esac
