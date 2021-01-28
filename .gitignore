@@ -52,3 +52,4 @@ build/
 /jap-simple/src/main/java/com/fujieid/jap/simple/SimpleAuthentication.java
 /jap-simple/src/main/java/com/fujieid/jap/simple/SimpleCallback.java
 /jap-core/src/main/java/com/fujieid/jap/core/Credential.java
+/docs/bin/deploy.sh
