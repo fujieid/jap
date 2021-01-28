@@ -9,6 +9,7 @@
   <packaging>pom</packaging>
 
   <name>jap</name>
+  <url>https://gitee.com/fujieid/jap</url>
   <description>Just auth for any app</description>
 
   <licenses>
@@ -32,9 +33,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git@gitee.com:fujieid/jap.git</connection>
-    <developerConnection>scm:git@gitee.com:fujieid/jap.git</developerConnection>
-    <url>git@gitee.com:fujieid/jap.git</url>
+    <connection>https://gitee.com/fujieid/jap.git</connection>
+    <developerConnection>https://gitee.com/fujieid/jap.git</developerConnection>
+    <url>https://gitee.com/fujieid/jap</url>
   </scm>
 
   <modules>
