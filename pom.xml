@@ -14,9 +14,14 @@
   <licenses>
     <license>
       <name>LGPL 3.0</name>
-      <url>https://gitee.com</url>
+      <url>https://gitee.com/fujieid/jap/blob/master/LICENSE</url>
     </license>
   </licenses>
+
+  <issueManagement>
+    <system>Gitee Issue</system>
+    <url>https://gitee.com/fujieid/jap/issues</url>
+  </issueManagement>
 
   <developers>
     <developer>
@@ -25,6 +30,12 @@
       <url>https://www.justauth.cn</url>
     </developer>
   </developers>
+
+  <scm>
+    <connection>scm:git@gitee.com:fujieid/jap.git</connection>
+    <developerConnection>scm:git@gitee.com:fujieid/jap.git</developerConnection>
+    <url>git@gitee.com:fujieid/jap.git</url>
+  </scm>
 
   <modules>
     <module>jap-core</module>
