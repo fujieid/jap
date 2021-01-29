@@ -38,7 +38,6 @@ import java.util.Map;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021-01-26 10:44
  * @since 1.0.0
  */
 public class AccessTokenHelper {

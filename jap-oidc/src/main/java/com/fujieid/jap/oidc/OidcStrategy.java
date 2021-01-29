@@ -22,7 +22,6 @@ import com.fujieid.jap.core.JapConfig;
 import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.core.store.JapUserStore;
-import com.fujieid.jap.core.store.SessionJapUserStore;
 import com.fujieid.jap.oauth2.OAuthConfig;
 import com.fujieid.jap.oauth2.Oauth2Strategy;
 
@@ -36,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/18 16:27
  * @see <a href="https://openid.net/specs/openid-connect-core-1_0.html" target="_blank">OpenID Connect Core 1.0 incorporating errata set 1</a>
  * @since 1.0.0
  */
@@ -56,6 +54,7 @@ public class OidcStrategy extends Oauth2Strategy {
      * `Strategy` constructor.
      *
      * @param japUserService japUserService
+     * @param japUserStore   japUserStore
      * @param japConfig      japConfig
      */
     public OidcStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
@@ -81,8 +80,8 @@ public class OidcStrategy extends Oauth2Strategy {
         OidcDiscoveryDto discoveryDto = OidcUtil.getOidcDiscovery(issuer);
 
         oidcConfig.setAuthorizationUrl(discoveryDto.getAuthorizationEndpoint())
-                .setTokenUrl(discoveryDto.getTokenEndpoint())
-                .setUserinfoUrl(discoveryDto.getUserinfoEndpoint());
+            .setTokenUrl(discoveryDto.getTokenEndpoint())
+            .setUserinfoUrl(discoveryDto.getUserinfoEndpoint());
 
         OAuthConfig oAuthConfig = BeanUtil.copyProperties(oidcConfig, OAuthConfig.class);
         super.authenticate(oAuthConfig, request, response);

@@ -30,7 +30,7 @@ import java.util.Set;
 
 /**
  * Processing JustAuth Request
- * <p></p>
+ *
  * <p>1. {@link JustAuthRequestContext#register(String, AuthRequest)}, manual registration and automatic registration</p>
  * <p>2. {@link JustAuthRequestContext#loadRequest(String[], String[])}, automatic registration</p>
  * <p>3. {@link JustAuthRequestContext#getRequest(String, SocialConfig, AuthConfig, AuthStateCache)}, obtaining the actual AuthRequest</p>
@@ -38,7 +38,6 @@ import java.util.Set;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/12 12:43
  * @since 1.0.0
  */
 public class JustAuthRequestContext {

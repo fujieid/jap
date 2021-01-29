@@ -20,7 +20,6 @@ package com.fujieid.jap.oauth2.helper;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021-01-25 22:06
  * @since 1.0.0
  */
 public class AccessToken {

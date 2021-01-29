@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021-01-21 10:25
  * @since 1.0.0
  */
 public class JapUserStoreContextHolder {

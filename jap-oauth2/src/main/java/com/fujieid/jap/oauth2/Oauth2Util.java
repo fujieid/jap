@@ -32,7 +32,6 @@ import java.util.Optional;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/14 15:38
  * @since 1.0.0
  */
 public class Oauth2Util {

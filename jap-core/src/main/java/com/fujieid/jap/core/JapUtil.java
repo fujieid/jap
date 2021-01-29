@@ -26,7 +26,6 @@ import java.io.IOException;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021-01-25 21:16
  * @since 1.0.0
  */
 public class JapUtil {

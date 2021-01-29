@@ -24,7 +24,6 @@ import java.io.Serializable;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2020/10/26 14:47
  * @see <a href="https://openid.net/specs/openid-connect-discovery-1_0.html" target="_blank">OpenID Connect Discovery 1.0 incorporating errata set 1</a>
  * @see <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata" target="_blank">3.  OpenID Provider Metadata</a>
  * @since 1.0.0

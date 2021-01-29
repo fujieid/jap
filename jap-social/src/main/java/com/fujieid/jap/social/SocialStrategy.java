@@ -47,7 +47,6 @@ import java.util.Map;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/12 12:08
  * @since 1.0.0
  */
 public class SocialStrategy extends AbstractJapStrategy {
@@ -68,6 +67,7 @@ public class SocialStrategy extends AbstractJapStrategy {
      * `Strategy` constructor.
      *
      * @param japUserService japUserService
+     * @param japUserStore   japUserStore
      * @param japConfig      japConfig
      */
     public SocialStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
@@ -80,6 +80,8 @@ public class SocialStrategy extends AbstractJapStrategy {
      * please refer to: https://justauth.wiki/features/customize-the-state-cache.html
      *
      * @param japUserService Required, implement user operations
+     * @param japUserStore   Required
+     * @param japConfig      Required, jap config
      * @param authStateCache Optional, custom cache implementation class
      */
     public SocialStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig, AuthStateCache authStateCache) {

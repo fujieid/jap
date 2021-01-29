@@ -18,7 +18,6 @@ package com.fujieid.jap.simple;
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/17 15:21
  * @since 1.0.0
  */
 public class UsernamePasswordCredential {

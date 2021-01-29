@@ -23,7 +23,6 @@ import java.io.Serializable;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/11 14:48
  * @since 1.0.0
  */
 public class JapUser implements Serializable {

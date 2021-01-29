@@ -22,7 +22,6 @@
  * which can dock with any platform supporting OAuth 2.0 standard protocol
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
- * @date 2021/1/14 11:05
  * @version 1.0.0
  * @see <a href="https://tools.ietf.org/html/rfc6749" target="_blank">https://tools.ietf.org/html/rfc6749</a>
  * @since 1.0.0

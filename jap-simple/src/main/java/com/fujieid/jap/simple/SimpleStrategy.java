@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/11 17:53
  * @since 1.0.0
  */
 public class SimpleStrategy extends AbstractJapStrategy {
@@ -55,6 +54,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * `Strategy` constructor.
      *
      * @param japUserService japUserService
+     * @param japUserStore   japUserStore
      * @param japConfig      japConfig
      */
     public SimpleStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {

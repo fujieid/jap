@@ -20,7 +20,6 @@ package com.fujieid.jap.sso.config;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/18 12:17
  * @since 1.0.0
  */
 public class JapSsoConfig {

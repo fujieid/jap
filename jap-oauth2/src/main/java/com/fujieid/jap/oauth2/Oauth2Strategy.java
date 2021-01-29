@@ -49,7 +49,6 @@ import java.util.Optional;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/14 11:30
  * @since 1.0.0
  */
 public class Oauth2Strategy extends AbstractJapStrategy {
@@ -68,6 +67,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
      * `Strategy` constructor.
      *
      * @param japUserService japUserService
+     * @param japUserStore   japUserStore
      * @param japConfig      japConfig
      */
     public Oauth2Strategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {

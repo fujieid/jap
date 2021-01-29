@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/18 19:03
  * @since 1.0.0
  */
 public class SsoJapUserStore extends SessionJapUserStore {

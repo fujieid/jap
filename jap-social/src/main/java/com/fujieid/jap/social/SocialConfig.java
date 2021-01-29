@@ -22,7 +22,6 @@ import com.fujieid.jap.core.AuthenticateConfig;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/12 13:00
  * @since 1.0.0
  */
 public class SocialConfig extends AuthenticateConfig {

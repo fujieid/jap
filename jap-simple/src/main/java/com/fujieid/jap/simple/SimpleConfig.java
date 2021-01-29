@@ -25,7 +25,6 @@ import static com.fujieid.jap.core.JapConst.DEFAULT_CREDENTIAL_ENCRYPT_SALT;
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/11 18:02
  * @since 1.0.0
  */
 public class SimpleConfig extends AuthenticateConfig {

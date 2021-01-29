@@ -18,7 +18,6 @@ package com.fujieid.jap.simple;
 /**
  * @author harrylee (harryleexyz(a)qq.com)
  * @version 1.0.0
- * @date 2021/1/24 18:57
  * @since 1.0.0
  */
 public class RememberMeDetails {

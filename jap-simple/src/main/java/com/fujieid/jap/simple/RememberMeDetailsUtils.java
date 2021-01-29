@@ -26,7 +26,6 @@ import static com.fujieid.jap.core.JapConst.DEFAULT_DELIMITER;
 /**
  * @author harrylee (harryleexyz(a)qq.com)
  * @version 1.0.0
- * @date 2021/1/24 19:12
  * @since 1.0.0
  */
 public class RememberMeDetailsUtils {
@@ -35,7 +34,7 @@ public class RememberMeDetailsUtils {
      *
      * @param simpleConfig config
      * @param username     username
-     * @return
+     * @return RememberMeDetails
      */
     public static RememberMeDetails encode(SimpleConfig simpleConfig, String username) {
         long expiryTime = System.currentTimeMillis() + simpleConfig.getRememberMeCookieExpire();
@@ -55,7 +54,7 @@ public class RememberMeDetailsUtils {
      *
      * @param simpleConfig config
      * @param cookieValue  cookie value
-     * @return
+     * @return RememberMeDetails
      */
     public static RememberMeDetails decode(SimpleConfig simpleConfig, String cookieValue) {
         if (!simpleConfig.isEnableRememberMe()) {

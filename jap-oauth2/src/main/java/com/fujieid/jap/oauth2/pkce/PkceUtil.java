@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021/1/18 16:52
  * @see <a href="https://tools.ietf.org/html/rfc7636" target="_blank">Proof Key for Code Exchange by OAuth Public Clients</a>
  * @since 1.0.0
  */

@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021-01-20 16:01
  * @since 1.0.0
  */
 public class JapSsoHelper {
@@ -114,7 +113,6 @@ public class JapSsoHelper {
      * Kisso Single sign-on service abstract implementation class
      *
      * @author YongWu zheng
-     * @date 2021-01-23 13:50
      * @since 1.0.0
      */
     static class JapConfigurableAbstractKissoService extends ConfigurableAbstractKissoService {
@@ -129,7 +127,6 @@ public class JapSsoHelper {
      * kisso SSO helper
      *
      * @author YongWu zheng
-     * @date 2021-01-23 14:10
      * @since 1.0.0
      */
     static class KiSsoHelper extends SSOHelper {
