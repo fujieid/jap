@@ -15,7 +15,9 @@
  */
 /**
  * OAuth is a standard protocol that allows users to authorize APIs to access the web and desktop or mobile applications.
+ * <p>
  * Once access is granted, the authorized application can use the API on behalf of the user.
+ * <p>
  * OAuth has also become a popular delegation authentication mechanism.
  * <p>
  * Based on OAuth 2.0 protocol (rfc6749), Jap implements OAuth 2.0 server and OAuth 2.0 client,

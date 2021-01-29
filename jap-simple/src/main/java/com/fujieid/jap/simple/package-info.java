@@ -15,9 +15,13 @@
  */
 /**
  * {@code jap-simple} is an enhanced module for common account password login. It can realize the following functions:
+ * <p>
  * - Account password login
+ * <p>
  * - API login
+ * <p>
  * - Remember me
+ * <p>
  * - SSO
  * <p>
  * Developers can use {@code jap-simple} to replace the login function in the system
