@@ -14,7 +14,7 @@
 	<a target="_blank" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">
 		<img src="https://img.shields.io/badge/JDK-1.8+-green.svg" ></img>
 	</a>
-	<a target="_blank" href="https://gitee.com/fujieid/jap" title="API文档">
+	<a target="_blank" href="https://apidoc.gitee.com/fujieid/jap" title="API文档">
 		<img src="https://img.shields.io/badge/Api%20Docs-1.0.0%20alpha-orange" ></img>
 	</a>
 	<a target="_blank" href="https://jap.fujieid.com" title="开发文档">
