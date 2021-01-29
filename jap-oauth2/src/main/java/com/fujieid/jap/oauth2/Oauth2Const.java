@@ -24,4 +24,5 @@ package com.fujieid.jap.oauth2;
  */
 public interface Oauth2Const {
     String SCOPE_SEPARATOR = " ";
+    String STATE_CACHE_KEY = "_jap:state:";
 }

@@ -114,6 +114,16 @@ public class OAuthConfig extends AuthenticateConfig {
      */
     private String password;
 
+    /**
+     * In pkce mode, the expiration time of codeverifier, in milliseconds, default is 3 minutes
+     */
+    private long codeVerifierTimeout = 180000;
+
+    /**
+     * When {@code verifyState} is true, it will check whether the state in authorization request is consistent with that in callback request
+     */
+    private boolean verifyState = true;
+
     public String getClientId() {
         return clientId;
     }
@@ -246,6 +256,24 @@ public class OAuthConfig extends AuthenticateConfig {
 
     public OAuthConfig setPassword(String password) {
         this.password = password;
+        return this;
+    }
+
+    public long getCodeVerifierTimeout() {
+        return codeVerifierTimeout;
+    }
+
+    public OAuthConfig setCodeVerifierTimeout(long codeVerifierTimeout) {
+        this.codeVerifierTimeout = codeVerifierTimeout;
+        return this;
+    }
+
+    public boolean isVerifyState() {
+        return verifyState;
+    }
+
+    public OAuthConfig setVerifyState(boolean verifyState) {
+        this.verifyState = verifyState;
         return this;
     }
 }

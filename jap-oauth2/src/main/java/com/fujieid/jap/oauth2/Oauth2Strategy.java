@@ -15,19 +15,16 @@
  */
 package com.fujieid.jap.oauth2;
 
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.URLUtil;
+import cn.hutool.core.util.*;
 import com.fujieid.jap.core.*;
+import com.fujieid.jap.core.cache.JapCache;
+import com.fujieid.jap.core.cache.JapCacheContextHolder;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.core.exception.JapUserException;
-import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
-import com.fujieid.jap.oauth2.helper.AccessToken;
-import com.fujieid.jap.oauth2.helper.AccessTokenHelper;
-import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
-import com.fujieid.jap.oauth2.pkce.PkceUtil;
+import com.fujieid.jap.oauth2.pkce.PkceHelper;
+import com.fujieid.jap.oauth2.token.AccessToken;
+import com.fujieid.jap.oauth2.token.AccessTokenHelper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.xkcoding.http.HttpUtil;
@@ -37,7 +34,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * The OAuth 2.0 authentication strategy authenticates requests using the OAuth 2.0 framework.
@@ -67,11 +63,11 @@ public class Oauth2Strategy extends AbstractJapStrategy {
      * `Strategy` constructor.
      *
      * @param japUserService japUserService
-     * @param japUserStore   japUserStore
      * @param japConfig      japConfig
+     * @param japCache       japCache
      */
-    public Oauth2Strategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
-        super(japUserService, japUserStore, japConfig);
+    public Oauth2Strategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache) {
+        super(japUserService, japConfig, japCache);
     }
 
     /**
@@ -156,13 +152,15 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
             params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
         }
-        if (StrUtil.isNotBlank(oAuthConfig.getState())) {
-            params.put("state", oAuthConfig.getState());
+        String state = oAuthConfig.getState();
+        if (StrUtil.isBlank(state)) {
+            state = RandomUtil.randomString(6);
         }
+        params.put("state", oAuthConfig.getState());
+        JapCacheContextHolder.getCache().set(Oauth2Const.STATE_CACHE_KEY.concat(oAuthConfig.getClientId()), state);
         // Pkce is only applicable to authorization code mode
         if (Oauth2ResponseType.code == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
-            PkceUtil.addPkceParameters(Optional.ofNullable(oAuthConfig.getCodeChallengeMethod())
-                .orElse(PkceCodeChallengeMethod.S256), params);
+            params.putAll(PkceHelper.generatePkceParameters(oAuthConfig));
         }
         String query = URLUtil.buildQuery(params, StandardCharsets.UTF_8);
         return oAuthConfig.getAuthorizationUrl().concat("?").concat(query);

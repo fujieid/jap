@@ -18,6 +18,9 @@ package com.fujieid.jap.core.strategy;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.fujieid.jap.core.*;
+import com.fujieid.jap.core.cache.JapCache;
+import com.fujieid.jap.core.cache.JapCacheContextHolder;
+import com.fujieid.jap.core.cache.JapLocalCache;
 import com.fujieid.jap.core.exception.JapSocialException;
 import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.store.JapUserStoreContextHolder;
@@ -47,6 +50,10 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      */
     protected JapUserStore japUserStore;
     /**
+     * jap cache
+     */
+    protected JapCache japCache;
+    /**
      * Jap configuration.
      */
     protected JapConfig japConfig;
@@ -58,27 +65,28 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      * @param japConfig      japConfig
      */
     public AbstractJapStrategy(JapUserService japUserService, JapConfig japConfig) {
-        this(japUserService, japConfig.isSso() ? new SsoJapUserStore(japUserService, japConfig.getSsoConfig()) : new SessionJapUserStore(), japConfig);
+        this(japUserService, japConfig, new JapLocalCache());
     }
 
     /**
      * `Strategy` constructor.
      *
      * @param japUserService japUserService
-     * @param japUserStore   Jap User storage mode, default is session storage
+     * @param japCache       Jap cache
      * @param japConfig      japConfig
      */
-    public AbstractJapStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
+    public AbstractJapStrategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache) {
         this.japUserService = japUserService;
-        this.japUserStore = japUserStore;
+        this.japCache = japCache;
         this.japConfig = japConfig;
-
+        this.japUserStore = japConfig.isSso() ? new SsoJapUserStore(japUserService, japConfig.getSsoConfig()) : new SessionJapUserStore();
         if (japConfig.isSso()) {
             // init Kisso config
             JapSsoHelper.initKissoConfig(japConfig.getSsoConfig());
         }
 
         JapUserStoreContextHolder.enable(this.japUserStore);
+        JapCacheContextHolder.enable(this.japCache);
     }
 
     /**

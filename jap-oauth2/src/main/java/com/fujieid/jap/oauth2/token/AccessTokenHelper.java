@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fujieid.jap.oauth2.helper;
+package com.fujieid.jap.oauth2.token;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -21,8 +21,8 @@ import cn.hutool.core.util.StrUtil;
 import com.fujieid.jap.core.JapUtil;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.*;
+import com.fujieid.jap.oauth2.pkce.PkceHelper;
 import com.fujieid.jap.oauth2.pkce.PkceParams;
-import com.fujieid.jap.oauth2.pkce.PkceUtil;
 import com.google.common.collect.Maps;
 import com.xkcoding.http.HttpUtil;
 import com.xkcoding.json.JsonUtil;
@@ -73,6 +73,9 @@ public class AccessTokenHelper {
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.1" target="_blank">4.1.  Authorization Code Grant</a>
      */
     private static AccessToken getAccessTokenOfAuthorizationCodeMode(HttpServletRequest request, OAuthConfig oAuthConfig) {
+        String state = request.getParameter("state");
+        Oauth2Util.checkState(state, oAuthConfig.getClientId(), oAuthConfig.isVerifyState());
+
         String code = request.getParameter("code");
         Map<String, String> params = Maps.newHashMap();
         params.put("grant_type", Oauth2GrantType.authorization_code.name());
@@ -84,7 +87,7 @@ public class AccessTokenHelper {
         }
         // Pkce is only applicable to authorization code mode
         if (Oauth2ResponseType.code == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
-            params.put(PkceParams.CODE_VERIFIER, PkceUtil.getCacheCodeVerifier());
+            params.put(PkceParams.CODE_VERIFIER, PkceHelper.getCacheCodeVerifier(oAuthConfig.getClientId()));
         }
 
         String tokenResponse = HttpUtil.post(oAuthConfig.getTokenUrl(), params, false);

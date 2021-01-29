@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fujieid.jap.oauth2.helper;
+package com.fujieid.jap.oauth2.token;
 
 /**
  * AccessToken entity class in OAuth 2.0 authorization process

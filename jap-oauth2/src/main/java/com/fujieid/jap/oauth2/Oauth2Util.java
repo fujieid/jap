@@ -19,11 +19,13 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.fujieid.jap.core.cache.JapCacheContextHolder;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import org.jose4j.base64url.Base64Url;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
 
@@ -80,6 +82,16 @@ public class Oauth2Util {
         if (ObjectUtil.isNotNull(error)) {
             String errorDescription = request.getParameter("error_description");
             throw new JapOauth2Exception(Optional.ofNullable(errorMsg).orElse("") + errorDescription);
+        }
+    }
+
+    public static void checkState(String state, String clientId, boolean verifyState) {
+        if (!verifyState) {
+            return;
+        }
+        Serializable cacheState = JapCacheContextHolder.getCache().get(Oauth2Const.STATE_CACHE_KEY.concat(clientId));
+        if (null == cacheState || !cacheState.equals(state)) {
+            throw new JapOauth2Exception("Illegal state.");
         }
 
     }
