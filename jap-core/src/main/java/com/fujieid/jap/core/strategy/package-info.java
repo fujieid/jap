@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 /**
- * Integrate justauth to realize the authorized login of the third-party platform,
- * and support the automatic creation of login account.
- * <p>
- * {@code jap-social} can adapt to all the third-party social platforms supported by justauth to realize fast login.
+ * The standard strategy of JAP. {@link com.fujieid.jap.core.strategy.JapStrategy} Provide standard interface,
+ * {@link com.fujieid.jap.core.strategy.AbstractJapStrategy} Provide some common business methods.
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @see <a href="https://gitee.com/yadong.zhang/JustAuth" target="_blank"></a>
  * @since 1.0.0
  */
-package com.fujieid.jap.social;
+package com.fujieid.jap.core.strategy;

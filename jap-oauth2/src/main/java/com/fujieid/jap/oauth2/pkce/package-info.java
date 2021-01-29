@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 /**
- * Integrate justauth to realize the authorized login of the third-party platform,
- * and support the automatic creation of login account.
- * <p>
- * {@code jap-social} can adapt to all the third-party social platforms supported by justauth to realize fast login.
+ * Provides tool classes for pkce (proof key for code exchange by OAuth public client)
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @see <a href="https://gitee.com/yadong.zhang/JustAuth" target="_blank"></a>
+ * @see <a href="https://tools.ietf.org/html/rfc7636#section-6.1" target="_blank">6.1.  OAuth Parameters Registry</a>
  * @since 1.0.0
  */
-package com.fujieid.jap.social;
+package com.fujieid.jap.oauth2.pkce;

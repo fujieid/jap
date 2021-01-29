@@ -18,7 +18,6 @@ package com.fujieid.jap.oauth2.helper;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.URLUtil;
 import com.fujieid.jap.core.JapUtil;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.*;
@@ -29,7 +28,6 @@ import com.xkcoding.http.HttpUtil;
 import com.xkcoding.json.JsonUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**

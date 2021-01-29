@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 /**
- * Integrate justauth to realize the authorized login of the third-party platform,
- * and support the automatic creation of login account.
+ * {@code jap-simple} is an enhanced module for common account password login. It can realize the following functions:
+ * - Account password login
+ * - API login
+ * - Remember me
+ * - SSO
  * <p>
- * {@code jap-social} can adapt to all the third-party social platforms supported by justauth to realize fast login.
+ * Developers can use {@code jap-simple} to replace the login function in the system
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @see <a href="https://gitee.com/yadong.zhang/JustAuth" target="_blank"></a>
  * @since 1.0.0
  */
-package com.fujieid.jap.social;
+package com.fujieid.jap.simple;
