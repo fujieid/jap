@@ -20,6 +20,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.fujieid.jap.core.*;
+import com.fujieid.jap.core.cache.JapCache;
 import com.fujieid.jap.core.exception.JapSocialException;
 import com.fujieid.jap.core.exception.JapUserException;
 import com.fujieid.jap.core.store.JapUserStore;
@@ -67,11 +68,11 @@ public class SocialStrategy extends AbstractJapStrategy {
      * `Strategy` constructor.
      *
      * @param japUserService japUserService
-     * @param japUserStore   japUserStore
      * @param japConfig      japConfig
+     * @param japCache       japCache
      */
-    public SocialStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
-        super(japUserService, japUserStore, japConfig);
+    public SocialStrategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache) {
+        super(japUserService, japConfig, japCache);
     }
 
     /**
@@ -80,12 +81,11 @@ public class SocialStrategy extends AbstractJapStrategy {
      * please refer to: https://justauth.wiki/features/customize-the-state-cache.html
      *
      * @param japUserService Required, implement user operations
-     * @param japUserStore   Required
      * @param japConfig      Required, jap config
      * @param authStateCache Optional, custom cache implementation class
      */
-    public SocialStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig, AuthStateCache authStateCache) {
-        this(japUserService, japUserStore, japConfig);
+    public SocialStrategy(JapUserService japUserService, JapConfig japConfig, AuthStateCache authStateCache) {
+        this(japUserService, japConfig);
         this.authStateCache = authStateCache;
     }
 

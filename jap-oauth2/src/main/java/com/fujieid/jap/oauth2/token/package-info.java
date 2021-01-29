@@ -16,7 +16,7 @@
 /**
  * To provide processing methods for business in OAuth authorization process, the usage is as follows:
  * <p>
- * {@link com.fujieid.jap.oauth2.helper.AccessTokenHelper#getToken(HttpServletRequest, OAuthConfig)}
+ * {@link com.fujieid.jap.oauth2.token.AccessTokenHelper#getToken(HttpServletRequest, OAuthConfig)}
  * According to the parameters in {@link com.fujieid.jap.oauth2.OAuthConfig}, determine which authorization mode token data to obtain
  * <p>
  * For OAuth's grant type, the following private methods are provided:
@@ -34,7 +34,7 @@
  * @see <a href="https://tools.ietf.org/html/rfc7636#section-6.1" target="_blank">6.1.  OAuth Parameters Registry</a>
  * @since 1.0.0
  */
-package com.fujieid.jap.oauth2.helper;
+package com.fujieid.jap.oauth2.token;
 
 import com.fujieid.jap.oauth2.OAuthConfig;
 

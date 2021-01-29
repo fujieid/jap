@@ -20,8 +20,8 @@ import cn.hutool.core.util.ObjectUtil;
 import com.fujieid.jap.core.AuthenticateConfig;
 import com.fujieid.jap.core.JapConfig;
 import com.fujieid.jap.core.JapUserService;
+import com.fujieid.jap.core.cache.JapCache;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
-import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.oauth2.OAuthConfig;
 import com.fujieid.jap.oauth2.Oauth2Strategy;
 
@@ -54,11 +54,11 @@ public class OidcStrategy extends Oauth2Strategy {
      * `Strategy` constructor.
      *
      * @param japUserService japUserService
-     * @param japUserStore   japUserStore
      * @param japConfig      japConfig
+     * @param japCache       japCache
      */
-    public OidcStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
-        super(japUserService, japUserStore, japConfig);
+    public OidcStrategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache) {
+        super(japUserService, japConfig, japCache);
     }
 
     /**

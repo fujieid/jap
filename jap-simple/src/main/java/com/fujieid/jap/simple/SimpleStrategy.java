@@ -22,8 +22,8 @@ import com.fujieid.jap.core.AuthenticateConfig;
 import com.fujieid.jap.core.JapConfig;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.JapUserService;
+import com.fujieid.jap.core.cache.JapCache;
 import com.fujieid.jap.core.exception.JapUserException;
-import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 
 import javax.servlet.http.Cookie;
@@ -54,11 +54,11 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * `Strategy` constructor.
      *
      * @param japUserService japUserService
-     * @param japUserStore   japUserStore
      * @param japConfig      japConfig
+     * @param japCache       japCache
      */
-    public SimpleStrategy(JapUserService japUserService, JapUserStore japUserStore, JapConfig japConfig) {
-        super(japUserService, japUserStore, japConfig);
+    public SimpleStrategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache) {
+        super(japUserService, japConfig, japCache);
     }
 
     @Override
