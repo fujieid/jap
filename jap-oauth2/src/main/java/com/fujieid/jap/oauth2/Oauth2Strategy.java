@@ -29,6 +29,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.xkcoding.http.HttpUtil;
 import com.xkcoding.json.JsonUtil;
+import com.xkcoding.json.util.Kv;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -110,7 +111,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
     private JapUser getUserInfo(OAuthConfig oAuthConfig, AccessToken accessToken) {
         String userinfoResponse = HttpUtil.post(oAuthConfig.getUserinfoUrl(),
             ImmutableMap.of("access_token", accessToken.getAccessToken()), false);
-        Map<String, Object> userinfo = JsonUtil.toBean(userinfoResponse, Map.class);
+        Kv userinfo = JsonUtil.parseKv(userinfoResponse);
 
         Oauth2Util.checkOauthResponse(userinfoResponse, userinfo, "Oauth2Strategy failed to get userinfo with accessToken.");
 

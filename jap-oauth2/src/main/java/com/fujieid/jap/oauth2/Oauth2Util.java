@@ -22,11 +22,11 @@ import cn.hutool.crypto.SecureUtil;
 import com.fujieid.jap.core.cache.JapCacheContextHolder;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
+import com.xkcoding.json.util.Kv;
 import org.jose4j.base64url.Base64Url;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -70,10 +70,10 @@ public class Oauth2Util {
         }
     }
 
-    public static void checkOauthResponse(String responseStr, Map<String, ?> responseMap, String errorMsg) {
-        if (responseMap.containsKey("error") && ObjectUtil.isNotEmpty(responseMap.get("error"))) {
+    public static void checkOauthResponse(String responseStr, Kv responseKv, String errorMsg) {
+        if (responseKv.containsKey("error") && ObjectUtil.isNotEmpty(responseKv.get("error"))) {
             throw new JapOauth2Exception(Optional.ofNullable(errorMsg).orElse("") +
-                responseMap.get("error_description") + " " + responseStr);
+                responseKv.get("error_description") + " " + responseStr);
         }
     }
 

@@ -26,6 +26,7 @@ import com.fujieid.jap.oauth2.pkce.PkceParams;
 import com.google.common.collect.Maps;
 import com.xkcoding.http.HttpUtil;
 import com.xkcoding.json.JsonUtil;
+import com.xkcoding.json.util.Kv;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -91,14 +92,14 @@ public class AccessTokenHelper {
         }
 
         String tokenResponse = HttpUtil.post(oAuthConfig.getTokenUrl(), params, false);
-        Map<String, Object> tokenMap = JsonUtil.toBean(tokenResponse, Map.class);
-        Oauth2Util.checkOauthResponse(tokenResponse, tokenMap, "Oauth2Strategy failed to get AccessToken.");
+        Kv tokenInfo = JsonUtil.parseKv(tokenResponse);
+        Oauth2Util.checkOauthResponse(tokenResponse, tokenInfo, "Oauth2Strategy failed to get AccessToken.");
 
-        if (!tokenMap.containsKey("access_token")) {
+        if (!tokenInfo.containsKey("access_token")) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenResponse);
         }
 
-        return mapToAccessToken(tokenMap);
+        return mapToAccessToken(tokenInfo);
     }
 
     /**
@@ -143,13 +144,13 @@ public class AccessTokenHelper {
         }
         String url = oAuthConfig.getTokenUrl();
         String tokenResponse = HttpUtil.post(url, params, false);
-        Map<String, Object> tokenMap = JsonUtil.toBean(tokenResponse, Map.class);
-        Oauth2Util.checkOauthResponse(tokenResponse, tokenMap, "Oauth2Strategy failed to get AccessToken.");
+        Kv tokenInfo = JsonUtil.parseKv(tokenResponse);
+        Oauth2Util.checkOauthResponse(tokenResponse, tokenInfo, "Oauth2Strategy failed to get AccessToken.");
 
-        if (!tokenMap.containsKey("access_token")) {
+        if (!tokenInfo.containsKey("access_token")) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenResponse);
         }
-        return mapToAccessToken(tokenMap);
+        return mapToAccessToken(tokenInfo);
     }
 
     /**
@@ -168,29 +169,23 @@ public class AccessTokenHelper {
         String url = oAuthConfig.getTokenUrl();
 
         String tokenResponse = HttpUtil.post(url, params, false);
-        Map<String, Object> tokenMap = JsonUtil.toBean(tokenResponse, Map.class);
-        Oauth2Util.checkOauthResponse(tokenResponse, tokenMap, "Oauth2Strategy failed to get AccessToken.");
+        Kv tokenInfo = JsonUtil.parseKv(tokenResponse);
+        Oauth2Util.checkOauthResponse(tokenResponse, tokenInfo, "Oauth2Strategy failed to get AccessToken.");
 
         if (ObjectUtil.isEmpty(request.getParameter("access_token"))) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken.");
         }
 
-        return mapToAccessToken(tokenMap);
+        return mapToAccessToken(tokenInfo);
     }
 
-    private static AccessToken mapToAccessToken(Map<String, Object> tokenMap) {
-        Object accessToken = tokenMap.get("access_token");
-        Object refreshToken = tokenMap.get("refresh_token");
-        Object idToken = tokenMap.get("id_token");
-        Object tokenType = tokenMap.get("token_type");
-        Object expiresIn = tokenMap.get("expires_in");
-        Object scope = tokenMap.get("scope");
+    private static AccessToken mapToAccessToken(Kv tokenMap) {
         return new AccessToken()
-            .setAccessToken(JapUtil.convertToStr(accessToken))
-            .setRefreshToken(JapUtil.convertToStr(refreshToken))
-            .setIdToken(JapUtil.convertToStr(idToken))
-            .setTokenType(JapUtil.convertToStr(tokenType))
-            .setScope(JapUtil.convertToStr(scope))
-            .setExpiresIn(JapUtil.convertToInt(expiresIn));
+            .setAccessToken(tokenMap.getString("access_token"))
+            .setRefreshToken(tokenMap.getString("refresh_token"))
+            .setIdToken(tokenMap.getString("id_token"))
+            .setTokenType(tokenMap.getString("token_type"))
+            .setScope(tokenMap.getString("scope"))
+            .setExpiresIn(tokenMap.getInteger("expires_in"));
     }
 }

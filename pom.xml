@@ -72,7 +72,7 @@
     <slf4j-api.version>1.7.30</slf4j-api.version>
     <jedis.version>3.2.0</jedis.version>
     <kisso.version>3.7.6</kisso.version>
-    <simple-json.version>0.0.1</simple-json.version>
+    <simple-json.version>0.0.2</simple-json.version>
     <simple-http.version>1.0.3</simple-http.version>
   </properties>
 
