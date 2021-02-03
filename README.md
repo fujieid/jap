@@ -33,8 +33,9 @@
 <p align="center">
 	<strong>官方网站（Wiki）：</strong> <a target="_blank" href='https://jap.fujieid.com'>https://jap.fujieid.com</a>
 </p>
-
-[![Stargazers over time](https://whnb.wang/img/fujieid/jap)](https://whnb.wang/fujieid/jap)
+<p align="center">
+    <img src="https://whnb.wang/img/fujieid/jap">
+</p>
 
 ## 🎨 JAP 是什么？
 
