@@ -34,6 +34,8 @@
 	<strong>官方网站（Wiki）：</strong> <a target="_blank" href='https://jap.fujieid.com'>https://jap.fujieid.com</a>
 </p>
 
+[![Stargazers over time](https://whnb.wang/img/fujieid/jap)](https://whnb.wang/fujieid/jap)
+
 ## 🎨 JAP 是什么？
 
 JAP 是**一款开源的认证中间件**，基于模块化设计，并且与业务高度解耦，使用起来非常灵活，开发者可以毫不费力地将 JAP 集成到任何 web 应用程序中，就像集成 JA 一样，简单方便。
