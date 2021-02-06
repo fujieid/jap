@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>jap</artifactId>
+    <groupId>com.fujieid</groupId>
+    <version>1.0.0-alpha.1</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>jap-mfa</artifactId>
+  <name>jap-mfa</name>
+  <description>
+    Time based one-time password (TOTP), which is suitable for Google authenticator and TOTP authenticator of binary
+    boot
+  </description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.zxing</groupId>
+      <artifactId>core</artifactId>
+      <version>3.3.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.warrenstrange</groupId>
+      <artifactId>googleauth</artifactId>
+      <version>1.4.0</version>
+    </dependency>
+  </dependencies>
+
+</project>

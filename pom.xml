@@ -45,6 +45,7 @@
     <module>jap-oauth2</module>
     <module>jap-sso</module>
     <module>jap-oidc</module>
+    <module>jap-mfa</module>
   </modules>
 
   <properties>
