@@ -57,9 +57,10 @@ JapMfa japMfa = new JapMfa(new JapMfaServiceImpl());
 
 `jap-mfa` 提供了三种创建二维码的方式:
 
-1. 生成 `File` - `File otpQrCodeFile = japMfa.createOtpQrcodeFile(username, issuer);`
-2. 生成图片的 `base64` 字符串（可直接通过 `img` 标签的 `src` 属性显示） - `String otpQrCodeBase64 = japMfa.createOtpQrcodeFileBase64(username, issuer, "qrcode.png", true);`
+1. 生成 `File` - `File otpQrCodeFile = japMfa.getOtpQrcodeFile(username, issuer);`
+2. 生成图片的 `base64` 字符串（可直接通过 `img` 标签的 `src` 属性显示） - `String otpQrCodeBase64 = japMfa.getOtpQrcodeFileBase64(username, issuer, true);`
 3. 生成可直接访问的图片 URL - `String otpQrCodeUrl = japMfa.getOtpQrCodeUrl(username, issuer);`
+4. 直接通过 `HttpServletResponse` 返回图片 - `japMfa.createOtpQrcode(username, issuer, HttpServletResponse);`
 
 其中，`username` 为当前需要绑定的用户名，`issuer` 一般为服务提供者，比如 `Baidu`、`baidu.com`、`JAP` 等等
 
