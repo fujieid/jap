@@ -15,9 +15,6 @@
  */
 package com.fujieid.jap.sso;
 
-import com.warrenstrange.googleauth.ICredentialRepository;
-
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -28,16 +25,16 @@ public class JapMfaTest {
     public static final String issuer = "japissue";
 
     public static void main(String[] args) {
-        JapMfa japMfa = new JapMfa(new CredentialRepositoryImpl());
+        JapMfa japMfa = new JapMfa(new JapMfaServiceImpl());
 
         // 以下三种方式，任选一个测试
         // 1. 生成 file
-//        File file = japMfa.createOtpQrcodeFile(username, issuer);
-//        System.out.println(file);
+//        File otpQrCodeFile = japMfa.createOtpQrcodeFile(username, issuer);
+//        System.out.println(otpQrCodeFile);
 
         // 生成 base64 字符串
-//        String base64 = japMfa.createOtpQrcodeFileBase64(username, issuer, "qrcode.png", true);
-//        System.out.println(base64);
+//        String otpQrCodeBase64 = japMfa.createOtpQrcodeFileBase64(username, issuer, "qrcode.png", true);
+//        System.out.println(otpQrCodeBase64);
 
         // 生成 url 链接
         String otpQrCodeUrl = japMfa.getOtpQrCodeUrl(username, issuer);
@@ -68,23 +65,36 @@ public class JapMfaTest {
         System.out.println("结束...");
     }
 
-    public static class CredentialRepositoryImpl implements ICredentialRepository {
+    public static class JapMfaServiceImpl implements JapMfaService {
 
-        public static String secret = "";
+        public static String secretKey = "";
 
+        /**
+         * 根据帐号查询 secretKey
+         *
+         * @param userName 申请 secretKey 的用户
+         * @return secretKey
+         */
         @Override
         public String getSecretKey(String userName) {
-            //根据帐号查询secretKey
-            return secret;
+            return secretKey;
         }
 
+        /**
+         * 将 secretKey 关联 userName 后进行保存，可以存入数据库也可以存入其他缓存媒介中
+         *
+         * @param userName       用户名
+         * @param secretKey      申请到的 secretKey
+         * @param validationCode 当前计算出的 TOTP 验证码
+         * @param scratchCodes   scratch 码
+         */
         @Override
         public void saveUserCredentials(String userName, String secretKey, int validationCode, List<Integer> scratchCodes) {
-            // secretKey要保存在数据库中
+            // 将 secretKey 关联 userName 后存入数据库（或者缓存中，视业务逻辑为主）
             System.out.println("[saveUserCredentials] userName：" + userName);
             System.out.println("[saveUserCredentials] secretKey：" + secretKey);
             System.out.println("[saveUserCredentials] validationCode：" + validationCode);
-            secret = secretKey;
+            JapMfaServiceImpl.secretKey = secretKey;
         }
     }
 }
