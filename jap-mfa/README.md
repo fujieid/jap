@@ -55,7 +55,7 @@ JapMfa japMfa = new JapMfa(new JapMfaServiceImpl());
 
 ### 4. 生成 TOTP 绑定二维码
 
-`jap-mfa` 提供了三种创建二维码的方式:
+`jap-mfa` 提供了四种创建二维码的方式:
 
 1. 生成 `File` - `File otpQrCodeFile = japMfa.getOtpQrcodeFile(username, issuer);`
 2. 生成图片的 `base64` 字符串（可直接通过 `img` 标签的 `src` 属性显示） - `String otpQrCodeBase64 = japMfa.getOtpQrcodeFileBase64(username, issuer, true);`
