@@ -15,6 +15,7 @@
  */
 package com.fujieid.jap.sso;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -29,11 +30,11 @@ public class JapMfaTest {
 
         // 以下三种方式，任选一个测试
         // 1. 生成 file
-//        File otpQrCodeFile = japMfa.createOtpQrcodeFile(username, issuer);
+//        File otpQrCodeFile = japMfa.getOtpQrcodeFile(username, issuer);
 //        System.out.println(otpQrCodeFile);
 
         // 生成 base64 字符串
-//        String otpQrCodeBase64 = japMfa.createOtpQrcodeFileBase64(username, issuer, "qrcode.png", true);
+//        String otpQrCodeBase64 = japMfa.getOtpQrcodeFileBase64(username, issuer, true);
 //        System.out.println(otpQrCodeBase64);
 
         // 生成 url 链接
