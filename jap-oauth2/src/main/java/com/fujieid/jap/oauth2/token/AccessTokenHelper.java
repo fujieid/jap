@@ -122,7 +122,7 @@ public class AccessTokenHelper {
             .setIdToken(request.getParameter("id_token"))
             .setTokenType(request.getParameter("token_type"))
             .setScope(request.getParameter("scope"))
-            .setExpiresIn(JapUtil.convertToInt(request.getParameter("expires_in")));
+            .setExpiresIn(JapUtil.toInt(request.getParameter("expires_in")));
     }
 
     /**

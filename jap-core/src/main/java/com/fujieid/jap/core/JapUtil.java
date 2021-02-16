@@ -15,7 +15,6 @@
  */
 package com.fujieid.jap.core;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.fujieid.jap.core.exception.JapException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +27,7 @@ import java.io.IOException;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class JapUtil {
+public class JapUtil extends com.xkcoding.json.util.ObjectUtil {
 
     private static final String REDIRECT_ERROR = "JAP failed to redirect via HttpServletResponse.";
 
@@ -42,28 +41,5 @@ public class JapUtil {
         } catch (IOException ex) {
             throw new JapException(errorMessage, ex);
         }
-    }
-
-    public static String convertToStr(Object o) {
-        if (ObjectUtil.isNull(o)) {
-            return null;
-        }
-        if (o instanceof String) {
-            return String.valueOf(o);
-        }
-        return o.toString();
-    }
-
-    public static Integer convertToInt(Object o) {
-        if (ObjectUtil.isNull(o)) {
-            return null;
-        }
-        if (o instanceof String) {
-            return Integer.parseInt(String.valueOf(o));
-        }
-        if (o instanceof Integer) {
-            return (Integer) o;
-        }
-        throw new ClassCastException(o + " cannot be converted to Integer type");
     }
 }
