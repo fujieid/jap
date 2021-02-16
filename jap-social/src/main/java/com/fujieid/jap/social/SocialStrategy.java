@@ -23,7 +23,6 @@ import com.fujieid.jap.core.*;
 import com.fujieid.jap.core.cache.JapCache;
 import com.fujieid.jap.core.exception.JapSocialException;
 import com.fujieid.jap.core.exception.JapUserException;
-import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import me.zhyd.oauth.cache.AuthStateCache;
 import me.zhyd.oauth.config.AuthConfig;
@@ -96,16 +95,16 @@ public class SocialStrategy extends AbstractJapStrategy {
             return;
         }
 
-        // Get the AuthConfig of JustAuth
-        if (ObjectUtil.isNull(japConfig.getOptions()) || !(japConfig.getOptions() instanceof AuthConfig)) {
-            throw new JapSocialException("Options in JapConfig is required and must be of type AuthConfig");
-        }
-        AuthConfig authConfig = (AuthConfig) japConfig.getOptions();
-
         // Convert AuthenticateConfig to SocialConfig
         this.checkAuthenticateConfig(config, SocialConfig.class);
         SocialConfig socialConfig = (SocialConfig) config;
         String source = socialConfig.getPlatform();
+
+        // Get the AuthConfig of JustAuth
+        AuthConfig authConfig = socialConfig.getJustAuthConfig();
+        if (ObjectUtil.isNull(authConfig)) {
+            throw new JapSocialException("AuthConfig in SocialStrategy is required");
+        }
 
         // Instantiate the AuthRequest of JustAuth
         AuthRequest authRequest = JustAuthRequestContext.getRequest(source, socialConfig, authConfig, authStateCache);

@@ -16,6 +16,7 @@
 package com.fujieid.jap.social;
 
 import com.fujieid.jap.core.AuthenticateConfig;
+import me.zhyd.oauth.config.AuthConfig;
 
 /**
  * Configuration file of third-party authorization login module
@@ -38,6 +39,11 @@ public class SocialConfig extends AuthenticateConfig {
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.1.1" target="_blank">https://tools.ietf.org/html/rfc6749#section-4.1.1</a>
      */
     private String state;
+
+    /**
+     * JustAuth Config
+     */
+    private AuthConfig justAuthConfig;
 
     /**
      * Package of {@code AuthRequest} implementation classes
@@ -65,6 +71,15 @@ public class SocialConfig extends AuthenticateConfig {
 
     public SocialConfig setState(String state) {
         this.state = state;
+        return this;
+    }
+
+    public AuthConfig getJustAuthConfig() {
+        return justAuthConfig;
+    }
+
+    public SocialConfig setJustAuthConfig(AuthConfig justAuthConfig) {
+        this.justAuthConfig = justAuthConfig;
         return this;
     }
 

@@ -71,11 +71,6 @@ public class JapConfig {
      */
     private String failureMessage;
 
-    /**
-     * Additional configuration, such as JustAuth Config for social login
-     */
-    private Object options;
-
     public String getLoginUrl() {
         return loginUrl;
     }
@@ -154,15 +149,6 @@ public class JapConfig {
 
     public JapConfig setLogoutRedirect(String logoutRedirect) {
         this.logoutRedirect = logoutRedirect;
-        return this;
-    }
-
-    public Object getOptions() {
-        return options;
-    }
-
-    public JapConfig setOptions(Object options) {
-        this.options = options;
         return this;
     }
 }
