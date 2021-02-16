@@ -85,6 +85,20 @@
       <scope>test</scope>
     </dependency>
 
+    <!--
+    To decouple the JSON class library, developers only need to select the appropriate JSON class library to introduce, as follows:
+        - jackson
+        - fastjson
+        - gson
+        - hutool-json
+    For more information on the use of `simple-json`, please refer to: https://github.com/xkcoding/simple-json
+    -->
+    <dependency>
+      <groupId>com.xkcoding.json</groupId>
+      <artifactId>simple-json</artifactId>
+      <version>${simple-json.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
