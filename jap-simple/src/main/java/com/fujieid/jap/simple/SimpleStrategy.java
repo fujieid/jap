@@ -95,14 +95,15 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @param response     The response to authenticate
      */
     protected void loginSuccess(SimpleConfig simpleConfig, UsernamePasswordCredential credential, JapUser user, HttpServletRequest request, HttpServletResponse response) {
-        if (simpleConfig.isEnableRememberMe() && credential.isRememberMe()) {
+        if (credential.isRememberMe()) {
+            String cookieDomain = ObjectUtil.isNotEmpty(simpleConfig.getRememberMeCookieDomain()) ? simpleConfig.getRememberMeCookieDomain() : null;
             // add cookie
             ServletUtil.addCookie(response,
                 simpleConfig.getRememberMeCookieKey(),
                 this.encodeCookieValue(user, simpleConfig),
                 simpleConfig.getRememberMeCookieExpire(),
-                this.getRequestPath(request),
-                ObjectUtil.isNotEmpty(simpleConfig.getRememberMeCookieDomain()) ? simpleConfig.getRememberMeCookieDomain() : null
+                "/",
+                cookieDomain
             );
         }
         this.loginSuccess(user, request, response);
@@ -120,7 +121,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
         if (this.checkSession(request, response)) {
             return true;
         }
-        if (!simpleConfig.isEnableRememberMe()) {
+        if (!RememberMeUtils.enableRememberMe(request, simpleConfig)) {
             return false;
         }
 
@@ -150,8 +151,8 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @param cookieValue  Cookie value
      * @return Username password credential
      */
-    protected UsernamePasswordCredential decodeCookieValue(SimpleConfig simpleConfig, String cookieValue) {
-        RememberMeDetails details = RememberMeDetailsUtils.decode(simpleConfig, cookieValue);
+    private UsernamePasswordCredential decodeCookieValue(SimpleConfig simpleConfig, String cookieValue) {
+        RememberMeDetails details = RememberMeUtils.decode(simpleConfig, cookieValue);
         if (ObjectUtil.isNotNull(details)) {
             // return no longer password and remember me
             return new UsernamePasswordCredential()
@@ -161,40 +162,14 @@ public class SimpleStrategy extends AbstractJapStrategy {
     }
 
     /**
-     * Clear the cookie to log out of use
-     *
-     * @param simpleConfig Authenticate Config
-     * @param request      The request to authenticate
-     * @param response     The response to authenticate
-     */
-    public void cancelRememberMeCookie(SimpleConfig simpleConfig, HttpServletRequest request, HttpServletResponse response) {
-        ServletUtil.addCookie(response,
-            simpleConfig.getRememberMeCookieKey(),
-            null, 0,
-            this.getRequestPath(request),
-            ObjectUtil.isNotEmpty(simpleConfig.getRememberMeCookieDomain()) ? simpleConfig.getRememberMeCookieDomain() : null);
-    }
-
-    /**
      * The value of the encrypted cookie
      *
      * @param user         Jap user
      * @param simpleConfig Authenticate Config
      * @return Encode cookie value string
      */
-    protected String encodeCookieValue(JapUser user, SimpleConfig simpleConfig) {
-        return RememberMeDetailsUtils.encode(simpleConfig, user.getUsername()).getEncodeValue();
-    }
-
-    /**
-     * Get the request path
-     *
-     * @param request The request to authenticate
-     * @return The request context path
-     */
-    private String getRequestPath(HttpServletRequest request) {
-        String contextPath = request.getContextPath();
-        return contextPath.length() > 0 ? contextPath : "/";
+    private String encodeCookieValue(JapUser user, SimpleConfig simpleConfig) {
+        return RememberMeUtils.encode(simpleConfig, user.getUsername()).getEncodeValue();
     }
 
     /**

@@ -57,6 +57,7 @@ public class SessionJapUserStore implements JapUserStore {
     public void remove(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         session.removeAttribute(JapConst.SESSION_USER_KEY);
+        session.invalidate();
     }
 
     /**

@@ -15,15 +15,11 @@
  */
 package com.fujieid.jap.simple;
 
-import cn.hutool.crypto.digest.MD5;
 import com.fujieid.jap.core.AuthenticateConfig;
-
-import java.nio.charset.StandardCharsets;
-
-import static com.fujieid.jap.core.JapConst.DEFAULT_CREDENTIAL_ENCRYPT_SALT;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
+ * @author harrylee (harryleexyz(a)qq.com)
  * @version 1.0.0
  * @since 1.0.0
  */
@@ -37,21 +33,10 @@ public class SimpleConfig extends AuthenticateConfig {
      * Get the password from request through {@code request.getParameter(`passwordField`)}, which defaults to "password"
      */
     private String passwordField = "password";
-
     /**
-     * Credential encryption algorithm: MD5 encryption
+     * Get the remember-me from request through {@code request.getParameter(`rememberMeField`)}, which defaults to "rememberMe"
      */
-    private final MD5 credentialEncrypt;
-
-    /**
-     * Whether to enable remember me
-     */
-    private final boolean enableRememberMe;
-
-    /**
-     * Get the remember-me from request through {@code request.getParameter(`rememberMeField`)}, which defaults to "remember-me"
-     */
-    private String rememberMeField = "remember-me";
+    private String rememberMeField = "rememberMe";
 
     /**
      * Default remember me cookie key
@@ -69,33 +54,9 @@ public class SimpleConfig extends AuthenticateConfig {
     private String rememberMeCookieDomain;
 
     /**
-     * Generate the MD5 algorithm using the default key
+     * Credential Encrypt Salt
      */
-    public SimpleConfig() {
-        // disabled
-        this.enableRememberMe = false;
-        this.credentialEncrypt = new MD5(DEFAULT_CREDENTIAL_ENCRYPT_SALT);
-    }
-
-    /**
-     * Customize MD5 algorithms
-     *
-     * @param credentialEncrypt MD5 encryption
-     */
-    public SimpleConfig(MD5 credentialEncrypt) {
-        this.enableRememberMe = true;
-        this.credentialEncrypt = credentialEncrypt;
-    }
-
-    /**
-     * Generate an MD5 encryption algorithm based on salt
-     *
-     * @param credentialEncryptSalt String salt
-     */
-    public SimpleConfig(String credentialEncryptSalt) {
-        this.enableRememberMe = true;
-        this.credentialEncrypt = new MD5(credentialEncryptSalt.getBytes(StandardCharsets.UTF_8));
-    }
+    private String credentialEncryptSalt = "_jap:rememberMe";
 
     public String getUsernameField() {
         return usernameField;
@@ -113,14 +74,6 @@ public class SimpleConfig extends AuthenticateConfig {
     public SimpleConfig setPasswordField(String passwordField) {
         this.passwordField = passwordField;
         return this;
-    }
-
-    public boolean isEnableRememberMe() {
-        return enableRememberMe;
-    }
-
-    public MD5 getCredentialEncrypt() {
-        return credentialEncrypt;
     }
 
     public String getRememberMeField() {
@@ -156,6 +109,15 @@ public class SimpleConfig extends AuthenticateConfig {
 
     public SimpleConfig setRememberMeCookieDomain(String rememberMeCookieDomain) {
         this.rememberMeCookieDomain = rememberMeCookieDomain;
+        return this;
+    }
+
+    public String getCredentialEncryptSalt() {
+        return credentialEncryptSalt;
+    }
+
+    public SimpleConfig setCredentialEncryptSalt(String credentialEncryptSalt) {
+        this.credentialEncryptSalt = credentialEncryptSalt;
         return this;
     }
 }

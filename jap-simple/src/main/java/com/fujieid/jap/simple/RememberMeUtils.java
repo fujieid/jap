@@ -15,20 +15,38 @@
  */
 package com.fujieid.jap.simple;
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.digest.MD5;
+import com.fujieid.jap.core.exception.JapException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static com.fujieid.jap.core.JapConst.DEFAULT_DELIMITER;
 
 /**
  * @author harrylee (harryleexyz(a)qq.com)
+ * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
  * @since 1.0.0
  */
-public class RememberMeDetailsUtils {
+public class RememberMeUtils {
+
+    private static String digestHex16(String credentialEncryptSalt, String data) {
+        MD5 md5 = new MD5(credentialEncryptSalt.getBytes(StandardCharsets.UTF_8));
+        return md5.digestHex16(data);
+    }
+
+    /**
+     * Credential encryption algorithm: MD5 encryption
+     */
+    public static boolean enableRememberMe(HttpServletRequest request, SimpleConfig simpleConfig) {
+        return BooleanUtil.toBoolean(request.getParameter(simpleConfig.getRememberMeField()));
+    }
+
     /**
      * Encrypted acquisition instance.
      *
@@ -40,13 +58,13 @@ public class RememberMeDetailsUtils {
         long expiryTime = System.currentTimeMillis() + simpleConfig.getRememberMeCookieExpire();
         // username:tokenExpiryTime
         String md5Data = username + DEFAULT_DELIMITER + expiryTime;
-        String md5Key = simpleConfig.getCredentialEncrypt().digestHex16(md5Data);
+        String md5Key = digestHex16(simpleConfig.getCredentialEncryptSalt(), md5Data);
         // username:tokenExpiryTime:key
         String base64Data = md5Data + DEFAULT_DELIMITER + md5Key;
         return new RememberMeDetails()
             .setUsername(username)
             .setExpiryTime(expiryTime)
-            .setEncodeValue(new String(Base64.getEncoder().encode(base64Data.getBytes(StandardCharsets.UTF_8))));
+            .setEncodeValue(Base64.encode(base64Data));
     }
 
     /**
@@ -57,14 +75,11 @@ public class RememberMeDetailsUtils {
      * @return RememberMeDetails
      */
     public static RememberMeDetails decode(SimpleConfig simpleConfig, String cookieValue) {
-        if (!simpleConfig.isEnableRememberMe()) {
-            return null;
-        }
         String base64DecodeValue;
         try {
-            base64DecodeValue = new String(Base64.getDecoder().decode(cookieValue.getBytes(StandardCharsets.UTF_8)));
+            base64DecodeValue = Base64.decodeStr(cookieValue);
         } catch (RuntimeException e) {
-            return null;
+            throw new JapException("Illegal memberme cookie.");
         }
         String[] base64DecodeValueSplitArray = StrUtil.splitToArray(base64DecodeValue, DEFAULT_DELIMITER);
         // Check and validate keys
@@ -82,7 +97,7 @@ public class RememberMeDetailsUtils {
             }
             // username:tokenExpiryTime
             String md5Data = username + DEFAULT_DELIMITER + expiryTime;
-            String md5Key = simpleConfig.getCredentialEncrypt().digestHex16(md5Data);
+            String md5Key = digestHex16(simpleConfig.getCredentialEncryptSalt(), md5Data);
             // Check pass returns
             if (ObjectUtil.equal(md5Key, base64DecodeValueSplitArray[2])) {
                 return new RememberMeDetails()

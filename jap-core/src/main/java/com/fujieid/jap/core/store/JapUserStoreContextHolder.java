@@ -15,13 +15,17 @@
  */
 package com.fujieid.jap.core.store;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.exception.JapException;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * Store and obtain the {@code JapUserStore}, and provide simple operation for users.
@@ -65,5 +69,19 @@ public class JapUserStoreContextHolder {
             return;
         }
         japUserStore.remove(request, response);
+    }
+
+    public static void logout(HttpServletRequest request, HttpServletResponse response) {
+        removeStoreUser(request, response);
+
+        // 清空所有 cookie 信息
+        Map<String, Cookie> cookieMap = ServletUtil.readCookieMap(request);
+        if (CollectionUtil.isEmpty(cookieMap)) {
+            return;
+        }
+        cookieMap.forEach((key, cookie) -> {
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        });
     }
 }
