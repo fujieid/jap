@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="https://images.gitee.com/uploads/images/2021/0115/230947_5eb9e00d_784199.png" width="300">
+	<img src="https://images.gitee.com/uploads/images/2021/0218/094114_99925b8b_784199.png" width="200">
 </p>
 <p align="center">
 	<strong>Just auth into any app</strong>
