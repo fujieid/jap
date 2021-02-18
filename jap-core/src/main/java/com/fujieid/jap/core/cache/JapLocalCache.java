@@ -17,6 +17,7 @@ package com.fujieid.jap.core.cache;
 
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
+import cn.hutool.core.util.StrUtil;
 
 import java.io.Serializable;
 
@@ -62,6 +63,9 @@ public class JapLocalCache implements JapCache {
      */
     @Override
     public Serializable get(String key) {
+        if (StrUtil.isEmpty(key)) {
+            return null;
+        }
         return LOCAL_CACHE.get(key);
     }
 

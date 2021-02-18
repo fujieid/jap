@@ -91,6 +91,10 @@ public class Oauth2Util {
         if (!verifyState) {
             return;
         }
+        if (StrUtil.isEmpty(state) || StrUtil.isEmpty(clientId)) {
+            throw new JapOauth2Exception("Illegal state.");
+
+        }
         Serializable cacheState = JapCacheContextHolder.getCache().get(Oauth2Const.STATE_CACHE_KEY.concat(clientId));
         if (null == cacheState || !cacheState.equals(state)) {
             throw new JapOauth2Exception("Illegal state.");

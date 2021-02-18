@@ -33,6 +33,9 @@ import java.util.Optional;
  */
 public class PkceHelper {
 
+    private PkceHelper() {
+    }
+
     /**
      * Create the parameters required by PKCE
      *

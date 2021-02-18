@@ -41,6 +41,9 @@ import java.util.Map;
  */
 public class AccessTokenHelper {
 
+    private AccessTokenHelper() {
+    }
+
     /**
      * get access_token
      *
@@ -49,6 +52,9 @@ public class AccessTokenHelper {
      * @return AccessToken
      */
     public static AccessToken getToken(HttpServletRequest request, OAuthConfig oAuthConfig) {
+        if(null == oAuthConfig) {
+            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. OAuthConfig cannot be empty");
+        }
         if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {
             return getAccessTokenOfAuthorizationCodeMode(request, oAuthConfig);
         }
@@ -61,7 +67,7 @@ public class AccessTokenHelper {
         if (oAuthConfig.getGrantType() == Oauth2GrantType.client_credentials) {
             return getAccessTokenOfClientMode(request, oAuthConfig);
         }
-        throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken.");
+        throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. Missing required parameters");
     }
 
 
