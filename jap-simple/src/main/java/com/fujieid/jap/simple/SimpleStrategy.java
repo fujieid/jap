@@ -94,7 +94,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @param request      The request to authenticate
      * @param response     The response to authenticate
      */
-    protected void loginSuccess(SimpleConfig simpleConfig, UsernamePasswordCredential credential, JapUser user, HttpServletRequest request, HttpServletResponse response) {
+    private void loginSuccess(SimpleConfig simpleConfig, UsernamePasswordCredential credential, JapUser user, HttpServletRequest request, HttpServletResponse response) {
         if (credential.isRememberMe()) {
             String cookieDomain = ObjectUtil.isNotEmpty(simpleConfig.getRememberMeCookieDomain()) ? simpleConfig.getRememberMeCookieDomain() : null;
             // add cookie
@@ -117,7 +117,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @param response     The response to authenticate
      * @return true to login success, false to login
      */
-    protected boolean checkSessionAndCookie(SimpleConfig simpleConfig, HttpServletRequest request, HttpServletResponse response) {
+    private boolean checkSessionAndCookie(SimpleConfig simpleConfig, HttpServletRequest request, HttpServletResponse response) {
         if (this.checkSession(request, response)) {
             return true;
         }
