@@ -137,6 +137,7 @@ public class JapMfa {
      *
      * @param username The user name
      * @param issuer   The issuer name. This parameter cannot contain the colon (:) character.
+     * @return File
      */
     public File getOtpQrcodeFile(String username, String issuer) {
         String tempFilePath = mfaConfig.getQrcodeTempPath();
@@ -161,6 +162,7 @@ public class JapMfa {
      * @param username   The user name
      * @param issuer     The issuer name. This parameter cannot contain the colon (:) character.
      * @param deleteFile Delete temporary QR code file
+     * @return String
      */
     public String getOtpQrcodeFileBase64(String username, String issuer, boolean deleteFile) {
         File imgFile = this.getOtpQrcodeFile(username, issuer);

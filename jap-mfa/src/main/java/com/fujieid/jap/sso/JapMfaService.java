@@ -20,7 +20,6 @@ import com.warrenstrange.googleauth.ICredentialRepository;
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
- * @date 2021-02-15 22:02
  * @since 1.0.0
  */
 public interface JapMfaService extends ICredentialRepository {
