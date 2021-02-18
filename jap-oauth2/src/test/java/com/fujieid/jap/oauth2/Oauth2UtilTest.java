@@ -7,9 +7,22 @@ import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import com.xkcoding.json.util.Kv;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class Oauth2UtilTest {
+
+    @Mock
+    private HttpServletRequest httpServletRequestMock;
+
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void generateCodeChallengeCodeChallengeMethodIsS256() {
@@ -45,7 +58,7 @@ public class Oauth2UtilTest {
         kv.put("error_description", "invalid_request_description");
         String responseStr = "responseStr";
         String errorMsg = "errorMsg";
-        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthResponse(responseStr, kv, errorMsg));
+        Oauth2Util.checkOauthResponse(responseStr, kv, errorMsg);
     }
 
     @Test
@@ -55,7 +68,7 @@ public class Oauth2UtilTest {
         kv.put("error_description", "invalid_request_description");
         String responseStr = "responseStr";
         String errorMsg = "errorMsg";
-        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthResponse(responseStr, kv, errorMsg));
+        Oauth2Util.checkOauthResponse(responseStr, kv, errorMsg);
     }
 
     @Test
@@ -122,14 +135,6 @@ public class Oauth2UtilTest {
     }
 
     @Test
-    public void checkStateNoCache() {
-        String state = "xxx";
-        String clientId = "xx";
-        boolean verifyState = true;
-        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkState(state, clientId, verifyState));
-    }
-
-    @Test
     public void checkStateCacheDoesNotExist() {
         String state = "xxx";
         String clientId = "xx";
@@ -141,4 +146,211 @@ public class Oauth2UtilTest {
     }
 
 
+    @Test
+    public void checkOauthConfigNullTokenUrl() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()));
+    }
+
+
+    @Test
+    public void checkOauthConfigHasTokenUrlAndNullGrantType() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")));
+    }
+
+
+    @Test
+    public void checkOauthConfigCodeResponseTypeAndGrantTypeIsNotAuthorizationCode() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.code)
+            .setGrantType(Oauth2GrantType.password)));
+    }
+
+
+    @Test
+    public void checkOauthConfigCodeResponseTypeAndClientSecretIsNullWhenPkceIsNotEnabled() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.code)
+            .setGrantType(Oauth2GrantType.authorization_code)
+            .setClientSecret(null)));
+    }
+
+
+    @Test
+    public void checkOauthConfigCodeResponseTypeAndClientSecretIsEmptyWhenPkceIsNotEnabled() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.code)
+            .setGrantType(Oauth2GrantType.authorization_code)
+            .setClientSecret("")));
+    }
+
+
+    @Test
+    public void checkOauthConfigCodeResponseTypeAndClientSecretIsNullWhenPkceIsEnabled() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.code)
+            .setGrantType(Oauth2GrantType.authorization_code)
+            .setEnablePkce(true)
+            .setClientSecret(null)));
+    }
+
+
+    @Test
+    public void checkOauthConfigCodeResponseTypeAndClientSecretIsEmptyWhenPkceIsEnabled() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.code)
+            .setGrantType(Oauth2GrantType.authorization_code)
+            .setEnablePkce(true)
+            .setClientSecret("")));
+    }
+
+
+    @Test
+    public void checkOauthConfigCodeResponseTypeAndClientSecretIsNotEmptyWhenPkceIsEnabled() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.code)
+            .setGrantType(Oauth2GrantType.authorization_code)
+            .setEnablePkce(true)
+            .setClientSecret("ClientSecret")));
+    }
+
+
+    @Test
+    public void checkOauthConfigTokenResponseTypeAndClientSecretIsEmpty() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.token)
+            .setClientSecret("")));
+    }
+
+
+    @Test
+    public void checkOauthConfigTokenResponseTypeAndClientSecretIsNull() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.token)
+            .setClientSecret(null)));
+    }
+
+
+    @Test
+    public void checkOauthConfigCodeOrTokenResponseTypeAndClientIdIsNull() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.token)
+            .setClientSecret("ClientSecret")
+            .setClientId(null)));
+    }
+
+    @Test
+    public void checkOauthConfigCodeOrTokenResponseTypeAndClientIdIsEmpty() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.token)
+            .setClientSecret("ClientSecret")
+            .setClientId("")));
+    }
+
+    @Test
+    public void checkOauthConfigCodeOrTokenResponseTypeAndAuthorizationUrlIsEmpty() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.token)
+            .setClientSecret("ClientSecret")
+            .setClientId("ClientId")
+            .setAuthorizationUrl("")));
+    }
+
+    @Test
+    public void checkOauthConfigCodeOrTokenResponseTypeAndAuthorizationUrlIsNull() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.token)
+            .setClientSecret("ClientSecret")
+            .setClientId("ClientId")
+            .setAuthorizationUrl(null)));
+    }
+
+    @Test
+    public void checkOauthConfigCodeOrTokenResponseTypeAndUserinfoUrlIsNull() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.token)
+            .setClientSecret("ClientSecret")
+            .setClientId("ClientId")
+            .setAuthorizationUrl("AuthorizationUrl")
+            .setUserinfoUrl(null)));
+    }
+
+    @Test
+    public void checkOauthConfigCodeOrTokenResponseTypeAndUserinfoUrlIsEmpty() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.token)
+            .setClientSecret("ClientSecret")
+            .setClientId("ClientId")
+            .setAuthorizationUrl("AuthorizationUrl")
+            .setUserinfoUrl("")));
+    }
+
+    @Test
+    public void checkOauthConfigCodeOrTokenResponseType() {
+        Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setResponseType(Oauth2ResponseType.token)
+            .setClientSecret("ClientSecret")
+            .setClientId("ClientId")
+            .setAuthorizationUrl("AuthorizationUrl")
+            .setUserinfoUrl("UserinfoUrl"));
+    }
+
+    @Test
+    public void checkOauthConfigClientCredentialsGrantType() {
+        Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setGrantType(Oauth2GrantType.client_credentials));
+    }
+
+    @Test
+    public void checkOauthConfigPasswordGrantTypeAndNullUsernameAndPassword() {
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setGrantType(Oauth2GrantType.password)));
+    }
+
+    @Test
+    public void checkOauthConfigPasswordGrantTypeAndHasUsernameAndPassword() {
+        Oauth2Util.checkOauthConfig(new OAuthConfig()
+            .setTokenUrl("TokenUrl")
+            .setGrantType(Oauth2GrantType.password)
+            .setUsername("username")
+            .setPassword("password"));
+    }
+
+    @Test
+    public void isCallbackCodeResponseType() {
+        boolean res = Oauth2Util.isCallback(httpServletRequestMock, new OAuthConfig()
+            .setResponseType(Oauth2ResponseType.code));
+        Assert.assertFalse(res);
+    }
+
+    @Test
+    public void isCallbackTokenResponseType() {
+        boolean res = Oauth2Util.isCallback(httpServletRequestMock, new OAuthConfig()
+            .setResponseType(Oauth2ResponseType.token));
+        Assert.assertFalse(res);
+    }
+
+    @Test
+    public void isCallbackNoneResponseType() {
+        boolean res = Oauth2Util.isCallback(httpServletRequestMock, new OAuthConfig()
+            .setResponseType(Oauth2ResponseType.none));
+        Assert.assertFalse(res);
+    }
 }
