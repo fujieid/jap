@@ -26,6 +26,7 @@ import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import com.xkcoding.json.util.Kv;
 import org.jose4j.base64url.Base64Url;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Optional;
 
@@ -95,5 +96,95 @@ public class Oauth2Util {
             throw new JapOauth2Exception("Illegal state.");
         }
 
+    }
+
+    /**
+     * Check the validity of oauthconfig.
+     * <p>
+     * 1. For {@code tokenUrl}, this configuration is indispensable for any mode
+     * 2. When responsetype = code:
+     * - {@code authorizationUrl} and {@code userinfoUrl} cannot be null
+     * - {@code clientId} cannot be null
+     * - {@code clientSecret} cannot be null when PKCE is not enabled
+     * 3. When responsetype = token:
+     * - {@code authorizationUrl} and {@code userinfoUrl} cannot be null
+     * - {@code clientId} cannot be null
+     * - {@code clientSecret} cannot be null
+     * 4. When GrantType = password:
+     * - {@code username} and {@code password} cannot be null
+     *
+     * @param oAuthConfig oauth config
+     */
+    public static void checkOauthConfig(OAuthConfig oAuthConfig) {
+        if (StrUtil.isEmpty(oAuthConfig.getTokenUrl())) {
+            throw new JapOauth2Exception("Oauth2Strategy requires a tokenUrl");
+        }
+        // For authorization code mode and implicit authorization mode
+        // refer to: https://tools.ietf.org/html/rfc6749#section-4.1
+        // refer to: https://tools.ietf.org/html/rfc6749#section-4.2
+        if (oAuthConfig.getResponseType() == Oauth2ResponseType.code ||
+            oAuthConfig.getResponseType() == Oauth2ResponseType.token) {
+
+            if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {
+                if (oAuthConfig.getGrantType() != Oauth2GrantType.authorization_code) {
+                    throw new JapOauth2Exception("Invalid grantType `" + oAuthConfig.getGrantType() + "`. " +
+                        "When using authorization code mode, grantType must be `authorization_code`");
+                }
+
+                if (!oAuthConfig.isEnablePkce() && StrUtil.isEmpty(oAuthConfig.getClientSecret())) {
+                    throw new JapOauth2Exception("Oauth2Strategy requires a clientSecret when PKCE is not enabled.");
+                }
+            } else {
+                if (StrUtil.isEmpty(oAuthConfig.getClientSecret())) {
+                    throw new JapOauth2Exception("Oauth2Strategy requires a clientSecret");
+                }
+
+            }
+            if (StrUtil.isEmpty(oAuthConfig.getClientId())) {
+                throw new JapOauth2Exception("Oauth2Strategy requires a clientId");
+            }
+
+            if (StrUtil.isEmpty(oAuthConfig.getAuthorizationUrl())) {
+                throw new JapOauth2Exception("Oauth2Strategy requires a authorizationUrl");
+            }
+
+            if (StrUtil.isEmpty(oAuthConfig.getUserinfoUrl())) {
+                throw new JapOauth2Exception("Oauth2Strategy requires a userinfoUrl");
+            }
+        }
+        // For password mode
+        // refer to: https://tools.ietf.org/html/rfc6749#section-4.3
+        else {
+            if (oAuthConfig.getGrantType() != Oauth2GrantType.password && oAuthConfig.getGrantType() != Oauth2GrantType.client_credentials) {
+                throw new JapOauth2Exception("When the response type is none in the oauth2 strategy, a grant type other " +
+                    "than the authorization code must be used: " + oAuthConfig.getGrantType());
+            }
+            if (oAuthConfig.getGrantType() == Oauth2GrantType.password) {
+                if (!StrUtil.isAllNotEmpty(oAuthConfig.getUsername(), oAuthConfig.getPassword())) {
+                    throw new JapOauth2Exception("Oauth2Strategy requires username and password in password certificate grant");
+                }
+            }
+        }
+    }
+
+    /**
+     * Whether it is the callback request after the authorization of the oauth platform is completed,
+     * the judgment basis is as follows:
+     * - When {@code response_type} is {@code code}, the {@code code} in the request parameter is empty
+     * - When {@code response_type} is {@code token}, the {@code access_token} in the request parameter is empty
+     *
+     * @param request     callback request
+     * @param oAuthConfig OAuthConfig
+     * @return When true is returned, the current request is a callback request
+     */
+    public static boolean isCallback(HttpServletRequest request, OAuthConfig oAuthConfig) {
+        if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {
+            String code = request.getParameter("code");
+            return !StrUtil.isEmpty(code);
+        } else if (oAuthConfig.getResponseType() == Oauth2ResponseType.token) {
+            String accessToken = request.getParameter("access_token");
+            return !StrUtil.isEmpty(accessToken);
+        }
+        return false;
     }
 }

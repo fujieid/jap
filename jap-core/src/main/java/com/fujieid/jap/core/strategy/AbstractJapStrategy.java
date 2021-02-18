@@ -21,7 +21,7 @@ import com.fujieid.jap.core.*;
 import com.fujieid.jap.core.cache.JapCache;
 import com.fujieid.jap.core.cache.JapCacheContextHolder;
 import com.fujieid.jap.core.cache.JapLocalCache;
-import com.fujieid.jap.core.exception.JapSocialException;
+import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.store.JapUserStoreContextHolder;
 import com.fujieid.jap.core.store.SessionJapUserStore;
@@ -118,10 +118,10 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      */
     protected void checkAuthenticateConfig(AuthenticateConfig sourceConfig, Class<?> targetConfigClazz) {
         if (ObjectUtil.isNull(sourceConfig)) {
-            throw new JapSocialException("SocialConfig is required");
+            throw new JapException("AuthenticateConfig is required");
         }
         if (!ClassUtil.isAssignable(sourceConfig.getClass(), targetConfigClazz)) {
-            throw new JapSocialException("Unsupported parameter type, please use " + ClassUtil.getClassName(targetConfigClazz, true) + ", a subclass of AuthenticateConfig");
+            throw new JapException("Unsupported parameter type, please use " + ClassUtil.getClassName(targetConfigClazz, true) + ", a subclass of AuthenticateConfig");
         }
     }
 }
