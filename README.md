@@ -6,7 +6,7 @@
 </p>
 <p align="center">
 	<a target="_blank" href="https://search.maven.org/search?q=jap">
-		<img src="https://img.shields.io/badge/Maven%20Central-1.0.0%20alpha.2-blue" ></img>
+		<img src="https://img.shields.io/badge/Maven%20Central-1.0.0-blue" ></img>
 	</a>
 	<a target="_blank" href="https://gitee.com/yadong.zhang/JustAuth/blob/master/LICENSE">
 		<img src="https://img.shields.io/badge/license-LGPL%203.0-red" ></img>
@@ -15,7 +15,7 @@
 		<img src="https://img.shields.io/badge/JDK-1.8+-green.svg" ></img>
 	</a>
 	<a target="_blank" href="https://apidoc.gitee.com/fujieid/jap" title="API文档">
-		<img src="https://img.shields.io/badge/Api%20Docs-1.0.0%20alpha.2-orange" ></img>
+		<img src="https://img.shields.io/badge/Api%20Docs-1.0.0-orange" ></img>
 	</a>
 	<a target="_blank" href="https://jap.fujieid.com" title="开发文档">
 		<img src="https://img.shields.io/badge/Docs-latest-blueviolet.svg" ></img>

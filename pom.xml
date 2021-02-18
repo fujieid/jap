@@ -5,7 +5,7 @@
 
   <groupId>com.fujieid</groupId>
   <artifactId>jap</artifactId>
-  <version>1.0.0-alpha.2</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
 
   <name>jap</name>
