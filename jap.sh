@@ -4,7 +4,7 @@
 help(){
   echo "--------------------------------------------------------------------------"
   echo ""
-  echo "usage: ./jap.sh [updv]"
+  echo "usage: ./jap.sh [updv] [version]"
   echo ""
   echo "-updv [version num]   Update all jap related versions."
   echo ""
@@ -23,6 +23,9 @@ case "$1" in
 	;;
   'd')
     docs/bin/deploy.sh
+	;;
+  'c')
+    docs/bin/codecov.sh
 	;;
   *)
     help
