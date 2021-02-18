@@ -110,7 +110,8 @@ public class AccessTokenHelper {
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.2" target="_blank">4.2.  Implicit Grant</a>
      */
     private static AccessToken getAccessTokenOfImplicitMode(HttpServletRequest request) {
-        Oauth2Util.checkOauthCallbackRequest(request, "Oauth2Strategy failed to get AccessToken.");
+        Oauth2Util.checkOauthCallbackRequest(request.getParameter("error"), request.getParameter("error_description"),
+            "Oauth2Strategy failed to get AccessToken.");
 
         if (null == request.getParameter("access_token")) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken.");

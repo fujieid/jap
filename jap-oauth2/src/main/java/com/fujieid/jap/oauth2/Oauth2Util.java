@@ -18,6 +18,7 @@ package com.fujieid.jap.oauth2;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.fujieid.jap.core.cache.JapCacheContextHolder;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
@@ -25,7 +26,6 @@ import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import com.xkcoding.json.util.Kv;
 import org.jose4j.base64url.Base64Url;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Optional;
 
@@ -37,6 +37,9 @@ import java.util.Optional;
  * @since 1.0.0
  */
 public class Oauth2Util {
+
+    private Oauth2Util() {
+    }
 
     /**
      * create code_verifier for pkce mode only.
@@ -77,11 +80,9 @@ public class Oauth2Util {
         }
     }
 
-    public static void checkOauthCallbackRequest(HttpServletRequest request, String errorMsg) {
-        String error = request.getParameter("error");
-        if (ObjectUtil.isNotNull(error)) {
-            String errorDescription = request.getParameter("error_description");
-            throw new JapOauth2Exception(Optional.ofNullable(errorMsg).orElse("") + errorDescription);
+    public static void checkOauthCallbackRequest(String requestErrorParam, String requestErrorDescParam, String bizErrorMsg) {
+        if (StrUtil.isNotEmpty(requestErrorParam)) {
+            throw new JapOauth2Exception(Optional.ofNullable(bizErrorMsg).orElse("") + requestErrorDescParam);
         }
     }
 

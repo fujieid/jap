@@ -81,7 +81,8 @@ public class Oauth2Strategy extends AbstractJapStrategy {
     @Override
     public void authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
 
-        Oauth2Util.checkOauthCallbackRequest(request, "Oauth2strategy request failed.");
+        Oauth2Util.checkOauthCallbackRequest(request.getParameter("error"), request.getParameter("error_description"),
+            "Oauth2strategy request failed.");
 
         if (this.checkSession(request, response)) {
             return;
