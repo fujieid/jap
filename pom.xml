@@ -61,8 +61,7 @@
     <maven-gpg-version>1.6</maven-gpg-version>
     <maven.test.skip>false</maven.test.skip>
     <cobertura-version>2.7</cobertura-version>
-    <jacoco-version>0.8.2</jacoco-version>
-    <cobertura.version>2.7</cobertura.version>
+    <jacoco-version>0.8.6</jacoco-version>
 
     <junit.version>4.13.1</junit.version>
     <hutool.version>5.5.7</hutool.version>
