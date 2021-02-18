@@ -64,6 +64,7 @@
     <jacoco-version>0.8.6</jacoco-version>
 
     <junit.version>4.13.1</junit.version>
+    <mockito.version>2.23.4</mockito.version>
     <hutool.version>5.5.7</hutool.version>
     <guava.version>RELEASE</guava.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
@@ -77,12 +78,27 @@
   </properties>
 
   <dependencies>
+    <!-- junit start -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-http</artifactId>
+      <version>${hutool.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- junit end -->
+
 
     <!--
     To decouple the JSON class library, developers only need to select the appropriate JSON class library to introduce, as follows:
