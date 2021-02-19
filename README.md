@@ -17,7 +17,7 @@
 	<a target="_blank" href="https://apidoc.gitee.com/fujieid/jap" title="API文档">
 	  <img src="https://img.shields.io/badge/Api%20Docs-1.0.0-orange" ></img>
 	</a>
-	<a target="_blank" href="https://jap.fujieid.com" title="开发文档">
+	<a target="_blank" href="https://justauth.plus" title="开发文档">
 	  <img src="https://img.shields.io/badge/Docs-latest-blueviolet.svg" ></img>
 	</a>
   <a target="_blank" href="https://codecov.io/gh/fujieid/jap" title="开发codecov档">
@@ -39,7 +39,7 @@
 	<strong>开源地址：</strong> <a target="_blank" href='https://gitee.com/fujieid/jap'>Gitee</a> | <a target="_blank" href='https://github.com/fujieid/jap'>Github</a>
 </p>
 <p align="center">
-	<strong>官方网站（Wiki）：</strong> <a target="_blank" href='https://jap.fujieid.com'>https://jap.fujieid.com</a>
+	<strong>官方网站（Wiki）：</strong> <a target="_blank" href='https://justauth.plus'>https://justauth.plus</a>
 </p>
 <p align="center">
     <a target="_blank" href='https://gitee.com/yadong.zhang/gitee-stargazers'><img src="https://whnb.wang/img/fujieid/jap"></a>
@@ -116,4 +116,4 @@ JAP 基于 LGPL 3.0 协议。商用分为以下两种情况：
 
 ## 🏘️ 加入开发者组织
 
-[参考文章](https://jap.fujieid.com/community/weneed.html)
+[参考文章](https://justauth.plus/community/weneed.html)

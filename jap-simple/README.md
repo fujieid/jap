@@ -4,4 +4,4 @@
 
 ## 使用方法
 
-参考：[帮助文档](https://jap.fujieid.com/quickstart/jap-simple.html)
+参考：[帮助文档](https://justauth.plus/quickstart/jap-simple.html)
