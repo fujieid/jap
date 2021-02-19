@@ -41,9 +41,6 @@
 <p align="center">
 	<strong>官方网站（Wiki）：</strong> <a target="_blank" href='https://justauth.plus'>https://justauth.plus</a>
 </p>
-<p align="center">
-    <a target="_blank" href='https://gitee.com/yadong.zhang/gitee-stargazers'><img src="https://whnb.wang/img/fujieid/jap"></a>
-</p>
 
 ## 🎨 JAP 是什么？
 
@@ -117,3 +114,9 @@ JAP 基于 LGPL 3.0 协议。商用分为以下两种情况：
 ## 🏘️ 加入开发者组织
 
 [参考文章](https://justauth.plus/community/weneed.html)
+
+## 💹 Stars 趋势图
+
+<p align="center">
+    <a target="_blank" href='https://github.com/fujieid/jap'><img src="https://starchart.cc/fujieid/jap.svg"></a>
+</p>
