@@ -11,9 +11,6 @@
 	<a target="_blank" href="https://gitee.com/yadong.zhang/JustAuth/blob/master/LICENSE">
 	  <img src="https://img.shields.io/badge/license-LGPL%203.0-red" ></img>
 	</a>
-	<a target="_blank" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">
-	  <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" ></img>
-	</a>
 	<a target="_blank" href="https://apidoc.gitee.com/fujieid/jap" title="API文档">
 	  <img src="https://img.shields.io/badge/Api%20Docs-1.0.0-orange" ></img>
 	</a>
@@ -25,6 +22,9 @@
 	</a>
   <a target="_blank" href="https://travis-ci.com/fujieid/jap" title="开发codecov档">
 	  <img src="https://travis-ci.com/fujieid/jap.svg?branch=master&status=passed" ></img>
+	</a>
+	<a target="_blank" href="https://gitter.im/fujieid/JAP?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge">
+	  <img src="https://badges.gitter.im/fujieid/JAP.svg" ></img>
 	</a>
 </p>
 <p align="center">
