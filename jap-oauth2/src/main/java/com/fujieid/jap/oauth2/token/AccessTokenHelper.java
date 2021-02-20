@@ -16,7 +16,6 @@
 package com.fujieid.jap.oauth2.token;
 
 import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fujieid.jap.core.JapUtil;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
@@ -52,7 +51,7 @@ public class AccessTokenHelper {
      * @return AccessToken
      */
     public static AccessToken getToken(HttpServletRequest request, OAuthConfig oAuthConfig) {
-        if(null == oAuthConfig) {
+        if (null == oAuthConfig) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. OAuthConfig cannot be empty");
         }
         if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {
@@ -168,22 +167,23 @@ public class AccessTokenHelper {
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.4" target="_blank">4.4.  Client Credentials Grant</a>
      */
     private static AccessToken getAccessTokenOfClientMode(HttpServletRequest request, OAuthConfig oAuthConfig) {
-        Map<String, String> params = Maps.newHashMap();
-        params.put("grant_type", Oauth2GrantType.client_credentials.name());
-        if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
-            params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
-        }
-        String url = oAuthConfig.getTokenUrl();
-
-        String tokenResponse = HttpUtil.post(url, params, false);
-        Kv tokenInfo = JsonUtil.parseKv(tokenResponse);
-        Oauth2Util.checkOauthResponse(tokenResponse, tokenInfo, "Oauth2Strategy failed to get AccessToken.");
-
-        if (ObjectUtil.isEmpty(request.getParameter("access_token"))) {
-            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken.");
-        }
-
-        return mapToAccessToken(tokenInfo);
+        throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. Grant type of client_credentials type is not supported.");
+//        Map<String, String> params = Maps.newHashMap();
+//        params.put("grant_type", Oauth2GrantType.client_credentials.name());
+//        if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
+//            params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
+//        }
+//        String url = oAuthConfig.getTokenUrl();
+//
+//        String tokenResponse = HttpUtil.post(url, params, false);
+//        Kv tokenInfo = JsonUtil.parseKv(tokenResponse);
+//        Oauth2Util.checkOauthResponse(tokenResponse, tokenInfo, "Oauth2Strategy failed to get AccessToken.");
+//
+//        if (ObjectUtil.isEmpty(request.getParameter("access_token"))) {
+//            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken.");
+//        }
+//
+//        return mapToAccessToken(tokenInfo);
     }
 
     private static AccessToken mapToAccessToken(Kv tokenMap) {

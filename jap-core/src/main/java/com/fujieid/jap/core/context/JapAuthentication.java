@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Manage the context of jap, after successful login,
@@ -80,7 +81,8 @@ public class JapAuthentication implements Serializable {
 
         JapConfig config = context.getConfig();
         if (null != config) {
-            JapUtil.redirect(config.getLogoutRedirect(), response);
+            String logoutRedirect = config.getLogoutRedirect();
+            JapUtil.redirect(Optional.ofNullable(logoutRedirect).orElse(config.getLoginUrl()), response);
         }
     }
 
