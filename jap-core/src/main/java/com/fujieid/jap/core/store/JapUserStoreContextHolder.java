@@ -74,7 +74,7 @@ public class JapUserStoreContextHolder {
     public static void logout(HttpServletRequest request, HttpServletResponse response) {
         removeStoreUser(request, response);
 
-        // 清空所有 cookie 信息
+        // Clear all cookie information
         Map<String, Cookie> cookieMap = ServletUtil.readCookieMap(request);
         if (CollectionUtil.isEmpty(cookieMap)) {
             return;
