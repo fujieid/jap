@@ -41,18 +41,6 @@ public class JapSsoConfig {
      */
     private String paramReturnUrl = "returnUrl";
 
-    /**
-     * Login Url. Default is `/login`
-     */
-    @Deprecated
-    private String loginUrl = "/login";
-
-    /**
-     * Logout Url. Default is `/logout`
-     */
-    @Deprecated
-    private String logoutUrl = "/logout";
-
     public String getCookieName() {
         return cookieName;
     }
@@ -80,30 +68,12 @@ public class JapSsoConfig {
         return this;
     }
 
-    public String getLoginUrl() {
-        return loginUrl;
-    }
-
-    public JapSsoConfig setLoginUrl(String loginUrl) {
-        this.loginUrl = loginUrl;
-        return this;
-    }
-
     public int getCookieMaxAge() {
         return cookieMaxAge;
     }
 
     public JapSsoConfig setCookieMaxAge(int cookieMaxAge) {
         this.cookieMaxAge = cookieMaxAge;
-        return this;
-    }
-
-    public String getLogoutUrl() {
-        return logoutUrl;
-    }
-
-    public JapSsoConfig setLogoutUrl(String logoutUrl) {
-        this.logoutUrl = logoutUrl;
         return this;
     }
 }

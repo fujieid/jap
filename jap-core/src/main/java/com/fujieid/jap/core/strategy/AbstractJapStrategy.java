@@ -19,11 +19,11 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.fujieid.jap.core.*;
 import com.fujieid.jap.core.cache.JapCache;
-import com.fujieid.jap.core.cache.JapCacheContextHolder;
 import com.fujieid.jap.core.cache.JapLocalCache;
+import com.fujieid.jap.core.context.JapAuthentication;
+import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.store.JapUserStore;
-import com.fujieid.jap.core.store.JapUserStoreContextHolder;
 import com.fujieid.jap.core.store.SessionJapUserStore;
 import com.fujieid.jap.core.store.SsoJapUserStore;
 import com.fujieid.jap.sso.JapSsoHelper;
@@ -46,17 +46,9 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      */
     protected JapUserService japUserService;
     /**
-     * user store
-     */
-    protected JapUserStore japUserStore;
-    /**
-     * jap cache
-     */
-    protected JapCache japCache;
-    /**
      * Jap configuration.
      */
-    protected JapConfig japConfig;
+    protected JapContext japContext;
 
     /**
      * `Strategy` constructor.
@@ -77,37 +69,36 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      */
     public AbstractJapStrategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache) {
         this.japUserService = japUserService;
-        this.japCache = japCache;
-        this.japConfig = japConfig;
-        this.japUserStore = japConfig.isSso() ? new SsoJapUserStore(japUserService, japConfig.getSsoConfig()) : new SessionJapUserStore();
         if (japConfig.isSso()) {
             // init Kisso config
             JapSsoHelper.initKissoConfig(japConfig.getSsoConfig());
         }
+        JapUserStore japUserStore = japConfig.isSso() ? new SsoJapUserStore(japUserService, japConfig.getSsoConfig()) : new SessionJapUserStore();
+        this.japContext = new JapContext(japUserStore, japCache, japConfig);
 
-        JapUserStoreContextHolder.enable(this.japUserStore);
-        JapCacheContextHolder.enable(this.japCache);
+        JapAuthentication.setContext(this.japContext);
+
     }
 
     /**
      * Verify whether the user logs in. If so, jump to {@code japConfig.getSuccessRedirect()}. Otherwise, return {@code false}
      *
-     * @param request  Current Authentication Request
+     * @param request  Current JapAuthentication Request
      * @param response Current response
      * @return boolean
      */
     protected boolean checkSession(HttpServletRequest request, HttpServletResponse response) {
-        JapUser sessionUser = japUserStore.get(request, response);
+        JapUser sessionUser = japContext.getUserStore().get(request, response);
         if (null != sessionUser) {
-            JapUtil.redirect(japConfig.getSuccessRedirect(), response);
+            JapUtil.redirect(japContext.getConfig().getSuccessRedirect(), response);
             return true;
         }
         return false;
     }
 
     protected void loginSuccess(JapUser japUser, HttpServletRequest request, HttpServletResponse response) {
-        japUserStore.save(request, response, japUser);
-        JapUtil.redirect(japConfig.getSuccessRedirect(), response);
+        japContext.getUserStore().save(request, response, japUser);
+        JapUtil.redirect(japContext.getConfig().getSuccessRedirect(), response);
     }
 
     /**

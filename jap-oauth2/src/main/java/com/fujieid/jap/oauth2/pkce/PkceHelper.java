@@ -15,7 +15,7 @@
  */
 package com.fujieid.jap.oauth2.pkce;
 
-import com.fujieid.jap.core.cache.JapCacheContextHolder;
+import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.oauth2.OAuthConfig;
 import com.fujieid.jap.oauth2.Oauth2Util;
 import com.google.common.collect.Maps;
@@ -59,7 +59,7 @@ public class PkceHelper {
         params.put(PkceParams.CODE_CHALLENGE, codeChallenge);
         params.put(PkceParams.CODE_CHALLENGE_METHOD, pkceCodeChallengeMethod);
         // The default cache is local map.
-        JapCacheContextHolder.getCache().set(oAuthConfig.getClientId(), codeVerifier, oAuthConfig.getCodeVerifierTimeout());
+        JapAuthentication.getContext().getCache().set(oAuthConfig.getClientId(), codeVerifier, oAuthConfig.getCodeVerifierTimeout());
         return params;
     }
 
@@ -70,6 +70,6 @@ public class PkceHelper {
      * @return {@code code_verifier}
      */
     public static String getCacheCodeVerifier(String clientId) {
-        return (String) JapCacheContextHolder.getCache().get(clientId);
+        return (String) JapAuthentication.getContext().getCache().get(clientId);
     }
 }

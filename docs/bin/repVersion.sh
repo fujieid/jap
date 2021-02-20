@@ -24,7 +24,7 @@ fi
 
 # 替换README.md等文件中的版本
 sed -i "s/${old_version}/${new_version}/g" $pwd/README.md
-sed -i "s/${old_version}/${new_version}/g" $pwd/README.en-US.md
+sed -i "s/${old_version}/${new_version}/g" $pwd/README.en.md
 
 # 保留新版本号
 echo "$new_version" > $pwd/docs/bin/version.txt

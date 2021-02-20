@@ -16,8 +16,9 @@
 package com.fujieid.jap.oauth2.pkce;
 
 import com.fujieid.jap.core.cache.JapCache;
-import com.fujieid.jap.core.cache.JapCacheContextHolder;
 import com.fujieid.jap.core.cache.JapLocalCache;
+import com.fujieid.jap.core.context.JapAuthentication;
+import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.oauth2.OAuthConfig;
 import org.junit.Assert;
 import org.junit.Test;
@@ -77,8 +78,8 @@ public class PkceHelperTest {
     @Test
     public void getCacheCodeVerifier() {
         JapCache japCache = new JapLocalCache();
-        JapCacheContextHolder.enable(japCache);
-        JapCacheContextHolder.getCache().set("clientId", "111", 111111);
+        JapAuthentication.setContext(new JapContext().setCache(japCache));
+        JapAuthentication.getContext().getCache().set("clientId", "111", 111111);
         String res = PkceHelper.getCacheCodeVerifier("clientId");
         Assert.assertNotNull(res);
         Assert.assertEquals("111", res);

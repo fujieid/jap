@@ -16,8 +16,9 @@
 package com.fujieid.jap.oauth2;
 
 import com.fujieid.jap.core.cache.JapCache;
-import com.fujieid.jap.core.cache.JapCacheContextHolder;
 import com.fujieid.jap.core.cache.JapLocalCache;
+import com.fujieid.jap.core.context.JapAuthentication;
+import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import com.xkcoding.json.util.Kv;
@@ -158,7 +159,7 @@ public class Oauth2UtilTest {
         boolean verifyState = true;
         JapCache cache = new JapLocalCache();
         cache.set(Oauth2Const.STATE_CACHE_KEY.concat(clientId), state);
-        JapCacheContextHolder.enable(cache);
+        JapAuthentication.setContext(new JapContext().setCache(cache));
         Oauth2Util.checkState(state, clientId, verifyState);
     }
 
@@ -169,7 +170,7 @@ public class Oauth2UtilTest {
         boolean verifyState = true;
         JapCache cache = new JapLocalCache();
         cache.set(Oauth2Const.STATE_CACHE_KEY.concat(clientId), "11");
-        JapCacheContextHolder.enable(cache);
+        JapAuthentication.setContext(new JapContext().setCache(cache));
         Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkState(state, clientId, verifyState));
     }
 

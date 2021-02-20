@@ -25,7 +25,7 @@ case "$1" in
     docs/bin/deploy.sh
 	;;
   'c')
-    docs/bin/codecov.sh
+    docs/bin/codecov.sh $2
 	;;
   *)
     help

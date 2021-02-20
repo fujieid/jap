@@ -81,8 +81,6 @@ public class JapSsoHelper {
         ssoConfig.setCookieDomain(japSsoConfig.getCookieDomain());
         ssoConfig.setCookieName(japSsoConfig.getCookieName());
         ssoConfig.setParamReturnUrl(japSsoConfig.getParamReturnUrl());
-        ssoConfig.setLoginUrl(japSsoConfig.getLoginUrl());
-        ssoConfig.setLogoutUrl(japSsoConfig.getLogoutUrl());
         ssoConfig.setCookieMaxAge(japSsoConfig.getCookieMaxAge());
         KiSsoHelper.setSsoConfig(ssoConfig);
         return ssoConfig;

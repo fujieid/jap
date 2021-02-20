@@ -20,7 +20,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-import com.fujieid.jap.core.cache.JapCacheContextHolder;
+import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import com.xkcoding.json.util.Kv;
@@ -95,7 +95,7 @@ public class Oauth2Util {
             throw new JapOauth2Exception("Illegal state.");
 
         }
-        Serializable cacheState = JapCacheContextHolder.getCache().get(Oauth2Const.STATE_CACHE_KEY.concat(clientId));
+        Serializable cacheState = JapAuthentication.getContext().getCache().get(Oauth2Const.STATE_CACHE_KEY.concat(clientId));
         if (null == cacheState || !cacheState.equals(state)) {
             throw new JapOauth2Exception("Illegal state.");
         }

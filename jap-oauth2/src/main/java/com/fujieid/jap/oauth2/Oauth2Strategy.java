@@ -18,8 +18,7 @@ package com.fujieid.jap.oauth2;
 import cn.hutool.core.util.*;
 import com.fujieid.jap.core.*;
 import com.fujieid.jap.core.cache.JapCache;
-import com.fujieid.jap.core.cache.JapCacheContextHolder;
-import com.fujieid.jap.core.exception.JapOauth2Exception;
+import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.exception.JapUserException;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import com.fujieid.jap.oauth2.pkce.PkceHelper;
@@ -159,7 +158,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
             state = RandomUtil.randomString(6);
         }
         params.put("state", oAuthConfig.getState());
-        JapCacheContextHolder.getCache().set(Oauth2Const.STATE_CACHE_KEY.concat(oAuthConfig.getClientId()), state);
+        JapAuthentication.getContext().getCache().set(Oauth2Const.STATE_CACHE_KEY.concat(oAuthConfig.getClientId()), state);
         // Pkce is only applicable to authorization code mode
         if (Oauth2ResponseType.code == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
             params.putAll(PkceHelper.generatePkceParameters(oAuthConfig));

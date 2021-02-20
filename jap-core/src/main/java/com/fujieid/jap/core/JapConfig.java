@@ -52,11 +52,6 @@ public class JapConfig {
     private String successRedirect = "/";
 
     /**
-     * Prompt message after successful login
-     */
-    private String successMessage;
-
-    /**
      * After logout, redirect to {@code logoutRedirect}. Default is `/`
      */
     private String logoutRedirect = "/";
@@ -65,11 +60,6 @@ public class JapConfig {
      * After failed login, redirect to {@code failureRedirect}. Default is `/error`
      */
     private String failureRedirect = "/error";
-
-    /**
-     * Prompt message after login failed
-     */
-    private String failureMessage;
 
     public String getLoginUrl() {
         return loginUrl;
@@ -116,30 +106,12 @@ public class JapConfig {
         return this;
     }
 
-    public String getSuccessMessage() {
-        return successMessage;
-    }
-
-    public JapConfig setSuccessMessage(String successMessage) {
-        this.successMessage = successMessage;
-        return this;
-    }
-
     public String getFailureRedirect() {
         return failureRedirect;
     }
 
     public JapConfig setFailureRedirect(String failureRedirect) {
         this.failureRedirect = failureRedirect;
-        return this;
-    }
-
-    public String getFailureMessage() {
-        return failureMessage;
-    }
-
-    public JapConfig setFailureMessage(String failureMessage) {
-        this.failureMessage = failureMessage;
         return this;
     }
 
