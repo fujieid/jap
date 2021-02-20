@@ -6,13 +6,13 @@
 </p>
 <p align="center">
 	<a target="_blank" href="https://search.maven.org/search?q=jap">
-	  <img src="https://img.shields.io/badge/Maven%20Central-1.0.0-blue" ></img>
+	  <img src="https://img.shields.io/badge/Maven%20Central-1.0.1-blue" ></img>
 	</a>
 	<a target="_blank" href="https://gitee.com/yadong.zhang/JustAuth/blob/master/LICENSE">
 	  <img src="https://img.shields.io/badge/license-LGPL%203.0-red" ></img>
 	</a>
 	<a target="_blank" href="https://apidoc.gitee.com/fujieid/jap" title="API文档">
-	  <img src="https://img.shields.io/badge/Api%20Docs-1.0.0-orange" ></img>
+	  <img src="https://img.shields.io/badge/Api%20Docs-latest-orange" ></img>
 	</a>
 	<a target="_blank" href="https://justauth.plus" title="开发文档">
 	  <img src="https://img.shields.io/badge/Docs-latest-blueviolet.svg" ></img>
