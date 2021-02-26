@@ -46,6 +46,7 @@
     <module>jap-sso</module>
     <module>jap-oidc</module>
     <module>jap-mfa</module>
+    <module>jap-ids</module>
   </modules>
 
   <properties>
