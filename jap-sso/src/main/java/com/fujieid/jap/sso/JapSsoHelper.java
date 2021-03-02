@@ -42,20 +42,15 @@ public class JapSsoHelper {
      * @param request      current request
      * @param response     current response
      */
-    public static void login(Object userId, String username, JapSsoConfig japSsoConfig, HttpServletRequest request, HttpServletResponse response) {
+    public static String login(Object userId, String username, JapSsoConfig japSsoConfig, HttpServletRequest request, HttpServletResponse response) {
         // Initialize Jap SSO config to prevent NPE
         japSsoConfig = null == japSsoConfig ? new JapSsoConfig() : japSsoConfig;
         // Reset kisso config
         resetKissoConfig(japSsoConfig);
         // set jap cookie
-        KiSsoHelper.setCookie(request, response,
-            new SSOToken()
-                .setId(userId)
-                .setIssuer(username)
-                .setIp(request)
-                .setUserAgent(request),
-            true
-        );
+        SSOToken ssoToken = JapSsoUtil.createSsoToken(userId, username, request);
+        KiSsoHelper.setCookie(request, response, ssoToken, true);
+        return ssoToken.getToken();
     }
 
     /**
