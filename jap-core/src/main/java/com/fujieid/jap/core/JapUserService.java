@@ -15,8 +15,6 @@
  */
 package com.fujieid.jap.core;
 
-import com.fujieid.jap.core.exception.JapUserException;
-
 import java.util.Map;
 
 /**
@@ -35,7 +33,7 @@ public interface JapUserService {
      * @return JapUser
      */
     default JapUser getById(String userId) {
-        throw new JapUserException("JapUserService#getById(String) must be overridden by subclass");
+        return null;
     }
 
     /**
@@ -47,7 +45,7 @@ public interface JapUserService {
      * @return JapUser
      */
     default JapUser getByName(String username) {
-        throw new JapUserException("JapUserService#getByName(String) must be overridden by subclass");
+        return null;
     }
 
     /**
@@ -60,7 +58,7 @@ public interface JapUserService {
      * @return {@code boolean} When true is returned, the password matches, otherwise the password is wrong
      */
     default boolean validPassword(String password, JapUser user) {
-        throw new JapUserException("JapUserService#validPassword(String, JapUser) must be overridden by subclass");
+        return false;
     }
 
     /**
@@ -73,7 +71,7 @@ public interface JapUserService {
      * @return JapUser
      */
     default JapUser getByPlatformAndUid(String platform, String uid) {
-        throw new JapUserException("JapUserService#getByPlatformAndUid(String, String) must be overridden by subclass");
+        return null;
     }
 
     /**
@@ -85,7 +83,7 @@ public interface JapUserService {
      * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
      */
     default JapUser createAndGetSocialUser(Object userInfo) {
-        throw new JapUserException("JapUserService#createSocialUser(AuthUser) must be overridden by subclass");
+        return null;
     }
 
     /**
@@ -100,7 +98,7 @@ public interface JapUserService {
      * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
      */
     default JapUser createAndGetOauth2User(String platform, Map<String, Object> userInfo, Object tokenInfo) {
-        throw new JapUserException("JapUserService#createAndGetOauth2User(String, Map<String, Object>, Object) must be overridden by subclass");
+        return null;
     }
 
 }

@@ -18,6 +18,10 @@ package com.fujieid.jap.core.store;
 import cn.hutool.core.bean.BeanUtil;
 import com.fujieid.jap.core.JapConst;
 import com.fujieid.jap.core.JapUser;
+import com.fujieid.jap.core.config.JapConfig;
+import com.fujieid.jap.core.context.JapAuthentication;
+import com.fujieid.jap.core.util.JapTokenHelper;
+import com.fujieid.jap.core.util.JapUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +33,9 @@ import javax.servlet.http.HttpSession;
  * @since 1.0.0
  */
 public class SessionJapUserStore implements JapUserStore {
+
+    public SessionJapUserStore() {
+    }
 
     /**
      * Login completed, save user information to the cache
@@ -44,6 +51,13 @@ public class SessionJapUserStore implements JapUserStore {
         JapUser newUser = BeanUtil.copyProperties(japUser, JapUser.class);
         newUser.setPassword(null);
         session.setAttribute(JapConst.SESSION_USER_KEY, newUser);
+
+        JapConfig japConfig = JapAuthentication.getContext().getConfig();
+        if (!japConfig.isSso()) {
+            String token = JapUtil.createToken(japUser, request);
+            new JapTokenHelper(JapAuthentication.getContext().getCache()).saveUserToken(japUser.getUserId(), token);
+            japUser.setToken(token);
+        }
         return japUser;
     }
 
@@ -55,6 +69,15 @@ public class SessionJapUserStore implements JapUserStore {
      */
     @Override
     public void remove(HttpServletRequest request, HttpServletResponse response) {
+
+        JapConfig japConfig = JapAuthentication.getContext().getConfig();
+        if (!japConfig.isSso()) {
+            JapUser japUser = this.get(request, response);
+            if (null != japUser) {
+                new JapTokenHelper(JapAuthentication.getContext().getCache()).removeUserToken(japUser.getUserId());
+            }
+        }
+
         HttpSession session = request.getSession();
         session.removeAttribute(JapConst.SESSION_USER_KEY);
         session.invalidate();

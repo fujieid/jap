@@ -18,6 +18,8 @@ package com.fujieid.jap.core.store;
 import cn.hutool.core.util.StrUtil;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.JapUserService;
+import com.fujieid.jap.core.context.JapAuthentication;
+import com.fujieid.jap.core.util.JapTokenHelper;
 import com.fujieid.jap.sso.JapSsoHelper;
 import com.fujieid.jap.sso.config.JapSsoConfig;
 
@@ -57,9 +59,10 @@ public class SsoJapUserStore extends SessionJapUserStore {
      */
     @Override
     public JapUser save(HttpServletRequest request, HttpServletResponse response, JapUser japUser) {
-        JapSsoHelper.login(japUser.getUserId(), japUser.getUsername(), this.japSsoConfig, request, response);
+        String token = JapSsoHelper.login(japUser.getUserId(), japUser.getUsername(), this.japSsoConfig, request, response);
         super.save(request, response, japUser);
-        return japUser;
+        new JapTokenHelper(JapAuthentication.getContext().getCache()).saveUserToken(japUser.getUserId(), token);
+        return japUser.setToken(token);
     }
 
     /**
@@ -70,6 +73,10 @@ public class SsoJapUserStore extends SessionJapUserStore {
      */
     @Override
     public void remove(HttpServletRequest request, HttpServletResponse response) {
+        JapUser japUser = this.get(request, response);
+        if(null != japUser) {
+            new JapTokenHelper(JapAuthentication.getContext().getCache()).removeUserToken(japUser.getUserId());
+        }
         super.remove(request, response);
         JapSsoHelper.logout(request, response);
     }

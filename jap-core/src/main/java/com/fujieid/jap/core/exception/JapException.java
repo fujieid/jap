@@ -15,6 +15,8 @@
  */
 package com.fujieid.jap.core.exception;
 
+import com.fujieid.jap.core.result.JapErrorCode;
+
 /**
  * Wrap all exception information related to the JAP
  *
@@ -23,13 +25,9 @@ package com.fujieid.jap.core.exception;
  * @since 1.0.0
  */
 public class JapException extends RuntimeException {
-    /**
-     * Constructs a new runtime exception with {@code null} as its
-     * detail message.  The cause is not initialized, and may subsequently be
-     * initialized by a call to {@link #initCause}.
-     */
-    public JapException() {
-    }
+
+    protected int errorCode;
+    protected String errorMessage;
 
     /**
      * Constructs a new runtime exception with the specified detail message.
@@ -41,6 +39,21 @@ public class JapException extends RuntimeException {
      */
     public JapException(String message) {
         super(message);
+        this.errorCode = JapErrorCode.ERROR.getErrroCode();
+        this.errorMessage = message;
+    }
+
+    /**
+     * Constructs a new runtime exception with the specified detail message.
+     * The cause is not initialized, and may subsequently be initialized by a
+     * call to {@link #initCause}.
+     *
+     * @param errorCode error code
+     */
+    public JapException(JapErrorCode errorCode) {
+        super(errorCode.getErrorMessage());
+        this.errorCode = errorCode.getErrroCode();
+        this.errorMessage = errorCode.getErrorMessage();
     }
 
     /**
@@ -94,5 +107,13 @@ public class JapException extends RuntimeException {
      */
     public JapException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }

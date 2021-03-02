@@ -58,4 +58,11 @@ public interface JapCache {
      * @return boolean
      */
     boolean containsKey(String key);
+
+    /**
+     * Delete the key from the cache
+     *
+     * @param key Cache key
+     */
+    void removeKey(String key);
 }

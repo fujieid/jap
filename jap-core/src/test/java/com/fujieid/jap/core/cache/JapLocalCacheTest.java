@@ -62,7 +62,8 @@ public class JapLocalCacheTest {
     @Test
     public void getByNotEmptyKey() {
         JapCache japCache = new JapLocalCache();
-        String res = (String) japCache.get("key");
+        String res = (String) japCache.get("ke1y");
+        System.out.println(res);
         Assert.assertNull(res);
     }
 

@@ -49,6 +49,8 @@ public class JapUser implements Serializable {
      */
     private Object additional;
 
+    private String token;
+
     public String getUserId() {
         return userId;
     }
@@ -82,6 +84,15 @@ public class JapUser implements Serializable {
 
     public JapUser setAdditional(Object additional) {
         this.additional = additional;
+        return this;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public JapUser setToken(String token) {
+        this.token = token;
         return this;
     }
 }

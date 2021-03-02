@@ -22,15 +22,6 @@ package com.fujieid.jap.core.exception;
  */
 public class JapOauth2Exception extends JapException {
     /**
-     * Constructs a new runtime exception with {@code null} as its
-     * detail message.  The cause is not initialized, and may subsequently be
-     * initialized by a call to {@link #initCause}.
-     */
-    public JapOauth2Exception() {
-        super();
-    }
-
-    /**
      * Constructs a new runtime exception with the specified detail message.
      * The cause is not initialized, and may subsequently be initialized by a
      * call to {@link #initCause}.

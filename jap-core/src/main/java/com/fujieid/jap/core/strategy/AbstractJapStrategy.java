@@ -17,12 +17,18 @@ package com.fujieid.jap.core.strategy;
 
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.fujieid.jap.core.*;
+import com.fujieid.jap.core.JapUser;
+import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.cache.JapCache;
+import com.fujieid.jap.core.cache.JapCacheConfig;
 import com.fujieid.jap.core.cache.JapLocalCache;
+import com.fujieid.jap.core.config.AuthenticateConfig;
+import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.core.result.JapErrorCode;
+import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.store.SessionJapUserStore;
 import com.fujieid.jap.core.store.SsoJapUserStore;
@@ -78,6 +84,9 @@ public abstract class AbstractJapStrategy implements JapStrategy {
 
         JapAuthentication.setContext(this.japContext);
 
+        // Update the cache validity period
+        JapCacheConfig.timeout = japConfig.getCacheExpireTime();
+
     }
 
     /**
@@ -87,18 +96,13 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      * @param response Current response
      * @return boolean
      */
-    protected boolean checkSession(HttpServletRequest request, HttpServletResponse response) {
-        JapUser sessionUser = japContext.getUserStore().get(request, response);
-        if (null != sessionUser) {
-            JapUtil.redirect(japContext.getConfig().getSuccessRedirect(), response);
-            return true;
-        }
-        return false;
+    protected JapUser checkSession(HttpServletRequest request, HttpServletResponse response) {
+        return japContext.getUserStore().get(request, response);
     }
 
-    protected void loginSuccess(JapUser japUser, HttpServletRequest request, HttpServletResponse response) {
+    protected JapResponse loginSuccess(JapUser japUser, HttpServletRequest request, HttpServletResponse response) {
         japContext.getUserStore().save(request, response, japUser);
-        JapUtil.redirect(japContext.getConfig().getSuccessRedirect(), response);
+        return JapResponse.success(japUser);
     }
 
     /**
@@ -107,9 +111,9 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      * @param sourceConfig      The parameters passed in by the caller
      * @param targetConfigClazz The actual parameter class type
      */
-    protected void checkAuthenticateConfig(AuthenticateConfig sourceConfig, Class<?> targetConfigClazz) {
+    protected void checkAuthenticateConfig(AuthenticateConfig sourceConfig, Class<?> targetConfigClazz) throws JapException {
         if (ObjectUtil.isNull(sourceConfig)) {
-            throw new JapException("AuthenticateConfig is required");
+            throw new JapException(JapErrorCode.MISS_AUTHENTICATE_CONFIG);
         }
         if (!ClassUtil.isAssignable(sourceConfig.getClass(), targetConfigClazz)) {
             throw new JapException("Unsupported parameter type, please use " + ClassUtil.getClassName(targetConfigClazz, true) + ", a subclass of AuthenticateConfig");

@@ -28,6 +28,8 @@ public interface JapConst {
 
     String SESSION_USER_KEY = "_jap:session:user";
 
+    String USER_TOKEN_KEY = "_jap:user:token:";
+
     /**
      * default delimiter
      */

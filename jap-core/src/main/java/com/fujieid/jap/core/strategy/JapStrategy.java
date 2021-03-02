@@ -15,8 +15,9 @@
  */
 package com.fujieid.jap.core.strategy;
 
-import com.fujieid.jap.core.AuthenticateConfig;
-import com.fujieid.jap.core.exception.JapStrategyException;
+import com.fujieid.jap.core.config.AuthenticateConfig;
+import com.fujieid.jap.core.result.JapErrorCode;
+import com.fujieid.jap.core.result.JapResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +38,7 @@ public interface JapStrategy {
      * @param request  The request to authenticate
      * @param response The response to authenticate
      */
-    default void authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
-        throw new JapStrategyException("JapStrategy#authenticate must be overridden by subclass");
+    default JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+        return JapResponse.error(JapErrorCode.ERROR.getErrroCode(), "JapStrategy#authenticate(AuthenticateConfig, HttpServletRequest, HttpServletResponse) must be overridden by subclass");
     }
 }

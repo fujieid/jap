@@ -29,5 +29,5 @@ public class JapCacheConfig {
     /**
      * The cache expiration time is 1 day by default
      */
-    public static long timeout = TimeUnit.DAYS.toMillis(1);
+    public static long timeout = TimeUnit.DAYS.toMillis(7);
 }

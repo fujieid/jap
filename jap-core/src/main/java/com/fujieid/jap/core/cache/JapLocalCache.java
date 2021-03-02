@@ -79,4 +79,14 @@ public class JapLocalCache implements JapCache {
     public boolean containsKey(String key) {
         return LOCAL_CACHE.containsKey(key);
     }
+
+    /**
+     * Delete the key from the cache
+     *
+     * @param key Cache key
+     */
+    @Override
+    public void removeKey(String key) {
+        LOCAL_CACHE.remove(key);
+    }
 }

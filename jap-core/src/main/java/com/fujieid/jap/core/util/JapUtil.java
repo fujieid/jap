@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fujieid.jap.core;
+package com.fujieid.jap.core.util;
 
+import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.sso.JapSsoUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -31,15 +34,21 @@ public class JapUtil extends com.xkcoding.json.util.ObjectUtil {
 
     private static final String REDIRECT_ERROR = "JAP failed to redirect via HttpServletResponse.";
 
+    @Deprecated
     public static void redirect(String url, HttpServletResponse response) {
         redirect(url, REDIRECT_ERROR, response);
     }
 
+    @Deprecated
     public static void redirect(String url, String errorMessage, HttpServletResponse response) {
         try {
             response.sendRedirect(url);
         } catch (IOException ex) {
             throw new JapException(errorMessage, ex);
         }
+    }
+
+    public static String createToken(JapUser japUser, HttpServletRequest request) {
+        return JapSsoUtil.createToken(japUser.getUserId(), japUser.getUsername(), request);
     }
 }

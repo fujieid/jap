@@ -16,18 +16,24 @@
 package com.fujieid.jap.core.context;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.servlet.ServletUtil;
-import com.fujieid.jap.core.JapConfig;
 import com.fujieid.jap.core.JapUser;
-import com.fujieid.jap.core.JapUtil;
+import com.fujieid.jap.core.cache.JapCache;
+import com.fujieid.jap.core.config.JapConfig;
+import com.fujieid.jap.core.result.JapErrorCode;
+import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.store.JapUserStore;
+import com.fujieid.jap.core.util.JapTokenHelper;
+import com.xkcoding.json.util.Kv;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Manage the context of jap, after successful login,
@@ -43,14 +49,31 @@ public class JapAuthentication implements Serializable {
     private JapAuthentication() {
     }
 
+    /**
+     * Get JAP Context
+     *
+     * @return JapContext
+     */
     public static JapContext getContext() {
         return context;
     }
 
+    /**
+     * Save JAP Context
+     *
+     * @param japContext JAP Context details
+     */
     public static void setContext(JapContext japContext) {
         context = japContext;
     }
 
+    /**
+     * Get the currently logged in user
+     *
+     * @param request  Current request
+     * @param response Current response
+     * @return JapUser
+     */
     public static JapUser getUser(HttpServletRequest request, HttpServletResponse response) {
         if (null == context) {
             return null;
@@ -62,28 +85,94 @@ public class JapAuthentication implements Serializable {
         return japUserStore.get(request, response);
     }
 
-    public static void logout(HttpServletRequest request, HttpServletResponse response) {
+    /**
+     * Check whether the user is logged in. Reference method of use:
+     * <p>
+     * <p>
+     * <code>
+     * if(!JapAuthentication.checkUser(request, response).isSuccess()) { <br/>
+     *     // Not logged in.<br/>
+     * }<br/>
+     * </code>
+     * <p>
+     * <p>
+     * Is equivalent to the following code：
+     * <p>
+     * <p>
+     * <code>
+     * JapUser japUser = JapAuthentication.getUser(request, response);<br/>
+     * if (null == japUser) {<br/>
+     *     // Not logged in.<br/>
+     * }<br/>
+     * </code>
+     *
+     * @param request  Current request
+     * @param response Current response
+     * @return JapResponse
+     */
+    public static JapResponse checkUser(HttpServletRequest request, HttpServletResponse response) {
+        JapUser japUser = getUser(request, response);
+        if (null == japUser) {
+            return JapResponse.error(JapErrorCode.NOT_LOGGED_IN);
+        }
+        return JapResponse.success(japUser);
+    }
+
+    /**
+     * Verify the legitimacy of JAP Token
+     *
+     * @param token jwt token
+     * @return Map
+     */
+    public static Map<String, Object> checkToken(String token) {
+        if (null == context || ObjectUtil.isEmpty(token)) {
+            return null;
+        }
+        JapCache japCache = context.getCache();
+        if (null == japCache) {
+            return null;
+        }
+        Map<String, Object> tokenMap = new JapTokenHelper(japCache).checkToken(token);
+        if (MapUtil.isNotEmpty(tokenMap)) {
+            Kv kv = new Kv();
+            kv.putAll(tokenMap);
+            // Get the token creation time, multiplied by 1000 is the number of milliseconds
+            long iat = kv.getLong("iat") * 1000;
+            JapConfig japConfig = context.getConfig();
+            // Get token expiration time
+            long tokenExpireTime = japConfig.getTokenExpireTime();
+            // The token is available when the token creation time plus the token expiration time is later than the current time,
+            // otherwise the token has expired
+            if (new Date(iat + tokenExpireTime).after(new Date())) {
+                return tokenMap;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * sign out
+     *
+     * @param request  Current request
+     * @param response Current response
+     * @return boolean
+     */
+    public static boolean logout(HttpServletRequest request, HttpServletResponse response) {
         JapUserStore japUserStore = context.getUserStore();
         if (null == japUserStore) {
-            return;
+            return false;
         }
         japUserStore.remove(request, response);
 
         // Clear all cookie information
         Map<String, Cookie> cookieMap = ServletUtil.readCookieMap(request);
-        if (CollectionUtil.isEmpty(cookieMap)) {
-            return;
+        if (CollectionUtil.isNotEmpty(cookieMap)) {
+            cookieMap.forEach((key, cookie) -> {
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            });
         }
-        cookieMap.forEach((key, cookie) -> {
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
-        });
-
-        JapConfig config = context.getConfig();
-        if (null != config) {
-            String logoutRedirect = config.getLogoutRedirect();
-            JapUtil.redirect(Optional.ofNullable(logoutRedirect).orElse(config.getLoginUrl()), response);
-        }
+        return true;
     }
 
 }
