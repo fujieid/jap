@@ -17,7 +17,7 @@ package com.fujieid.jap.oauth2.token;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import com.fujieid.jap.core.JapUtil;
+import com.fujieid.jap.core.util.JapUtil;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.*;
 import com.fujieid.jap.oauth2.pkce.PkceHelper;
@@ -50,7 +50,7 @@ public class AccessTokenHelper {
      * @param oAuthConfig oauth config
      * @return AccessToken
      */
-    public static AccessToken getToken(HttpServletRequest request, OAuthConfig oAuthConfig) {
+    public static AccessToken getToken(HttpServletRequest request, OAuthConfig oAuthConfig) throws JapOauth2Exception {
         if (null == oAuthConfig) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. OAuthConfig cannot be empty");
         }
@@ -78,7 +78,7 @@ public class AccessTokenHelper {
      * @return token request url
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.1" target="_blank">4.1.  Authorization Code Grant</a>
      */
-    private static AccessToken getAccessTokenOfAuthorizationCodeMode(HttpServletRequest request, OAuthConfig oAuthConfig) {
+    private static AccessToken getAccessTokenOfAuthorizationCodeMode(HttpServletRequest request, OAuthConfig oAuthConfig) throws JapOauth2Exception {
         String state = request.getParameter("state");
         Oauth2Util.checkState(state, oAuthConfig.getClientId(), oAuthConfig.isVerifyState());
 
@@ -114,7 +114,7 @@ public class AccessTokenHelper {
      * @return token request url
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.2" target="_blank">4.2.  Implicit Grant</a>
      */
-    private static AccessToken getAccessTokenOfImplicitMode(HttpServletRequest request) {
+    private static AccessToken getAccessTokenOfImplicitMode(HttpServletRequest request) throws JapOauth2Exception {
         Oauth2Util.checkOauthCallbackRequest(request.getParameter("error"), request.getParameter("error_description"),
             "Oauth2Strategy failed to get AccessToken.");
 
@@ -138,7 +138,7 @@ public class AccessTokenHelper {
      * @return token request url
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">4.3.  Resource Owner Password Credentials Grant</a>
      */
-    private static AccessToken getAccessTokenOfPasswordMode(HttpServletRequest request, OAuthConfig oAuthConfig) {
+    private static AccessToken getAccessTokenOfPasswordMode(HttpServletRequest request, OAuthConfig oAuthConfig) throws JapOauth2Exception {
         Map<String, String> params = Maps.newHashMap();
         params.put("grant_type", Oauth2GrantType.password.name());
         params.put("username", oAuthConfig.getUsername());
@@ -166,7 +166,7 @@ public class AccessTokenHelper {
      * @return token request url
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.4" target="_blank">4.4.  Client Credentials Grant</a>
      */
-    private static AccessToken getAccessTokenOfClientMode(HttpServletRequest request, OAuthConfig oAuthConfig) {
+    private static AccessToken getAccessTokenOfClientMode(HttpServletRequest request, OAuthConfig oAuthConfig) throws JapOauth2Exception {
         throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. Grant type of client_credentials type is not supported.");
 //        Map<String, String> params = Maps.newHashMap();
 //        params.put("grant_type", Oauth2GrantType.client_credentials.name());

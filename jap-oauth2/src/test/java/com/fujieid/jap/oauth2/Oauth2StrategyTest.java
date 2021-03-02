@@ -15,12 +15,13 @@
  */
 package com.fujieid.jap.oauth2;
 
-import com.fujieid.jap.core.AuthenticateConfig;
-import com.fujieid.jap.core.JapConfig;
+import com.fujieid.jap.core.config.AuthenticateConfig;
+import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.cache.JapCache;
 import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.core.result.JapResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,6 +82,16 @@ public class Oauth2StrategyTest {
             public boolean containsKey(String key) {
                 return false;
             }
+
+            /**
+             * Delete the key from the cache
+             *
+             * @param key Cache key
+             */
+            @Override
+            public void removeKey(String key) {
+
+            }
         });
     }
 
@@ -88,14 +99,18 @@ public class Oauth2StrategyTest {
     public void authenticateNullConfig() {
         JapUserService japUserService = getJapUserService();
         Oauth2Strategy oauth2Strategy = new Oauth2Strategy(japUserService, new JapConfig());
-        Assert.assertThrows(JapException.class, () -> oauth2Strategy.authenticate(null, httpServletRequestMock, httpServletResponseMock));
+
+        JapResponse response = oauth2Strategy.authenticate(null, httpServletRequestMock, httpServletResponseMock);
+        Assert.assertEquals(1005, response.getCode());
     }
 
     @Test
     public void authenticateNotOAuthConfig() {
         JapUserService japUserService = getJapUserService();
         Oauth2Strategy oauth2Strategy = new Oauth2Strategy(japUserService, new JapConfig());
-        Assert.assertThrows(JapException.class, () -> oauth2Strategy.authenticate(new NotOAuthConfig(), httpServletRequestMock, httpServletResponseMock));
+
+        JapResponse response = oauth2Strategy.authenticate(new NotOAuthConfig(), httpServletRequestMock, httpServletResponseMock);
+        Assert.assertEquals(500, response.getCode());
     }
 
     @Test

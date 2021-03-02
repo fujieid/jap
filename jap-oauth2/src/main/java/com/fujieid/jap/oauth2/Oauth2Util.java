@@ -24,7 +24,6 @@ import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import com.xkcoding.json.util.Kv;
-import org.jose4j.base64url.Base64Url;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
@@ -52,7 +51,7 @@ public class Oauth2Util {
      * @see <a href="https://docs.fujieid.com/college/protocol/oauth-2.0/oauth-2.0-pkce" target="_blank">https://docs.fujieid.com/college/protocol/oauth-2.0/oauth-2.0-pkce</a>
      */
     public static String generateCodeVerifier() {
-        return Base64Url.encode(RandomUtil.randomString(50), "UTF-8");
+        return Base64.encode(RandomUtil.randomString(50), "UTF-8");
     }
 
     /**

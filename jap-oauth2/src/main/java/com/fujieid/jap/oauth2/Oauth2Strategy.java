@@ -16,10 +16,16 @@
 package com.fujieid.jap.oauth2;
 
 import cn.hutool.core.util.*;
-import com.fujieid.jap.core.*;
+import com.fujieid.jap.core.JapUser;
+import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.cache.JapCache;
+import com.fujieid.jap.core.config.AuthenticateConfig;
+import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.context.JapAuthentication;
-import com.fujieid.jap.core.exception.JapUserException;
+import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.core.exception.JapOauth2Exception;
+import com.fujieid.jap.core.result.JapErrorCode;
+import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import com.fujieid.jap.oauth2.pkce.PkceHelper;
 import com.fujieid.jap.oauth2.token.AccessToken;
@@ -78,19 +84,32 @@ public class Oauth2Strategy extends AbstractJapStrategy {
      * @param response The response to authenticate
      */
     @Override
-    public void authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+    public JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
 
-        Oauth2Util.checkOauthCallbackRequest(request.getParameter("error"), request.getParameter("error_description"),
-            "Oauth2strategy request failed.");
-
-        if (this.checkSession(request, response)) {
-            return;
+        try {
+            Oauth2Util.checkOauthCallbackRequest(request.getParameter("error"), request.getParameter("error_description"),
+                "Oauth2strategy request failed.");
+        } catch (JapOauth2Exception e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
         }
 
-        this.checkAuthenticateConfig(config, OAuthConfig.class);
+        JapUser sessionUser = this.checkSession(request, response);
+        if (null != sessionUser) {
+            return JapResponse.success(sessionUser);
+        }
+
+        try {
+            this.checkAuthenticateConfig(config, OAuthConfig.class);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
         OAuthConfig oAuthConfig = (OAuthConfig) config;
 
-        Oauth2Util.checkOauthConfig(oAuthConfig);
+        try {
+            Oauth2Util.checkOauthConfig(oAuthConfig);
+        } catch (JapOauth2Exception e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
 
         boolean isPasswordOrClientMode = oAuthConfig.getGrantType() == Oauth2GrantType.password
             || oAuthConfig.getGrantType() == Oauth2GrantType.client_credentials;
@@ -98,17 +117,30 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         // If it is not a callback request, it must be a request to jump to the authorization link
         // If it is a password authorization request or a client authorization request, the token will be obtained directly
         if (!Oauth2Util.isCallback(request, oAuthConfig) && !isPasswordOrClientMode) {
-            redirectToAuthorizationEndPoint(response, oAuthConfig);
+            String authorizationUrl = getAuthorizationUrl(oAuthConfig);
+            return JapResponse.success(authorizationUrl);
         } else {
-            AccessToken accessToken = AccessTokenHelper.getToken(request, oAuthConfig);
-            JapUser japUser = getUserInfo(oAuthConfig, accessToken);
+            AccessToken accessToken = null;
+            try {
+                accessToken = AccessTokenHelper.getToken(request, oAuthConfig);
+            } catch (JapOauth2Exception e) {
+                return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+            }
+            JapUser japUser = null;
+            try {
+                japUser = getUserInfo(oAuthConfig, accessToken);
+            } catch (JapOauth2Exception e) {
+                return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+            }
 
-            this.loginSuccess(japUser, request, response);
+            if (null == japUser) {
+                return JapResponse.error(JapErrorCode.UNABLE_SAVE_USERINFO);
+            }
+            return this.loginSuccess(japUser, request, response);
         }
-
     }
 
-    private JapUser getUserInfo(OAuthConfig oAuthConfig, AccessToken accessToken) {
+    private JapUser getUserInfo(OAuthConfig oAuthConfig, AccessToken accessToken) throws JapOauth2Exception {
         String userinfoResponse = HttpUtil.post(oAuthConfig.getUserinfoUrl(),
             ImmutableMap.of("access_token", accessToken.getAccessToken()), false);
         Kv userinfo = JsonUtil.parseKv(userinfoResponse);
@@ -117,12 +149,12 @@ public class Oauth2Strategy extends AbstractJapStrategy {
 
         JapUser japUser = this.japUserService.createAndGetOauth2User(oAuthConfig.getPlatform(), userinfo, accessToken);
         if (ObjectUtil.isNull(japUser)) {
-            throw new JapUserException("Unable to save user information");
+            return null;
         }
         return japUser;
     }
 
-    private void redirectToAuthorizationEndPoint(HttpServletResponse response, OAuthConfig oAuthConfig) {
+    private String getAuthorizationUrl(OAuthConfig oAuthConfig) {
         String url = null;
         // 4.1.  Authorization Code Grant https://tools.ietf.org/html/rfc6749#section-4.1
         // 4.2.  Implicit Grant https://tools.ietf.org/html/rfc6749#section-4.2
@@ -130,7 +162,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
             oAuthConfig.getResponseType() == Oauth2ResponseType.token) {
             url = generateAuthorizationCodeGrantUrl(oAuthConfig);
         }
-        JapUtil.redirect(url, "JAP failed to redirect to " + oAuthConfig.getAuthorizationUrl() + " through HttpServletResponse.", response);
+        return url;
     }
 
     /**

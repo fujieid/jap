@@ -47,6 +47,8 @@ public class PkceHelperTest {
 
     @Test
     public void generatePkceParametersPlainCodeChallengeMethod() {
+        JapAuthentication.setContext(new JapContext());
+        JapAuthentication.getContext().setCache(new JapLocalCache());
         Map<String, Object> pkceInfo = PkceHelper.generatePkceParameters(new OAuthConfig()
             .setCodeChallengeMethod(PkceCodeChallengeMethod.PLAIN)
             .setClientId("clientId")

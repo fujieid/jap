@@ -16,6 +16,9 @@
 package com.fujieid.jap.oauth2.token;
 
 import cn.hutool.core.io.IORuntimeException;
+import com.fujieid.jap.core.cache.JapLocalCache;
+import com.fujieid.jap.core.context.JapAuthentication;
+import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.OAuthConfig;
 import com.fujieid.jap.oauth2.Oauth2GrantType;
@@ -70,8 +73,22 @@ public class AccessTokenHelperTest {
     }
 
     @Test
+    public void getTokenCodeResponseTypeNullCache() {
+        JapAuthentication.setContext(new JapContext());
+        JapAuthentication.getContext().setCache(null);
+        Assert.assertThrows(NullPointerException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+            .setVerifyState(false)
+            .setResponseType(Oauth2ResponseType.code)
+            .setEnablePkce(true)
+            .setCallbackUrl("setCallbackUrl")
+            .setTokenUrl("setTokenUrl")));
+    }
+
+    @Test
     public void getTokenCodeResponseTypeErrorTokenUrl() {
         // UnknownHostException: setTokenUrl
+        JapAuthentication.setContext(new JapContext());
+        JapAuthentication.getContext().setCache(new JapLocalCache());
         Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
             .setVerifyState(false)
             .setResponseType(Oauth2ResponseType.code)
@@ -107,7 +124,7 @@ public class AccessTokenHelperTest {
     @Test
     public void getTokenClientCredentialsGrantTypeErrorTokenUrl() {
         // UnknownHostException: setTokenUrl
-        Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
             .setGrantType(Oauth2GrantType.client_credentials)
             .setScopes(new String[]{"read"})
             .setTokenUrl("setTokenUrl")));

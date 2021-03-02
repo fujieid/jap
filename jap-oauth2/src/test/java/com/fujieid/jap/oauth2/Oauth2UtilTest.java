@@ -21,6 +21,7 @@ import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
+import com.fujieid.jap.oauth2.token.AccessTokenHelper;
 import com.xkcoding.json.util.Kv;
 import org.junit.Assert;
 import org.junit.Before;
@@ -63,7 +64,7 @@ public class Oauth2UtilTest {
     public void generateCodeVerifier() {
         String verifier = Oauth2Util.generateCodeVerifier();
         System.out.println(verifier);
-        Assert.assertEquals(67, verifier.length());
+        Assert.assertEquals(68, verifier.length());
     }
 
     @Test
@@ -72,6 +73,8 @@ public class Oauth2UtilTest {
         String responseStr = "responseStr";
         String errorMsg = "errorMsg";
         Oauth2Util.checkOauthResponse(responseStr, kv, errorMsg);
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+            .setResponseType(Oauth2ResponseType.token)));
     }
 
     @Test
