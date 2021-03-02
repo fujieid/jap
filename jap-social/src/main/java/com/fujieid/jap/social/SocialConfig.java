@@ -15,7 +15,7 @@
  */
 package com.fujieid.jap.social;
 
-import com.fujieid.jap.core.AuthenticateConfig;
+import com.fujieid.jap.core.config.AuthenticateConfig;
 import me.zhyd.oauth.config.AuthConfig;
 
 /**

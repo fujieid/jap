@@ -19,10 +19,16 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.fujieid.jap.core.*;
+import com.fujieid.jap.core.JapUser;
+import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.cache.JapCache;
+import com.fujieid.jap.core.config.AuthenticateConfig;
+import com.fujieid.jap.core.config.JapConfig;
+import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.exception.JapSocialException;
 import com.fujieid.jap.core.exception.JapUserException;
+import com.fujieid.jap.core.result.JapErrorCode;
+import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import me.zhyd.oauth.cache.AuthStateCache;
 import me.zhyd.oauth.config.AuthConfig;
@@ -89,37 +95,49 @@ public class SocialStrategy extends AbstractJapStrategy {
     }
 
     @Override
-    public void authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+    public JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
 
-        if (this.checkSession(request, response)) {
-            return;
+        JapUser sessionUser = this.checkSession(request, response);
+        if (null != sessionUser) {
+            return JapResponse.success(sessionUser);
         }
 
         // Convert AuthenticateConfig to SocialConfig
-        this.checkAuthenticateConfig(config, SocialConfig.class);
+        try {
+            this.checkAuthenticateConfig(config, SocialConfig.class);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
         SocialConfig socialConfig = (SocialConfig) config;
         String source = socialConfig.getPlatform();
 
         // Get the AuthConfig of JustAuth
         AuthConfig authConfig = socialConfig.getJustAuthConfig();
         if (ObjectUtil.isNull(authConfig)) {
-            throw new JapSocialException("AuthConfig in SocialStrategy is required");
+            return JapResponse.error(JapErrorCode.MISS_AUTH_CONFIG);
         }
 
         // Instantiate the AuthRequest of JustAuth
-        AuthRequest authRequest = JustAuthRequestContext.getRequest(source, socialConfig, authConfig, authStateCache);
+        AuthRequest authRequest = null;
+        try {
+            authRequest = JustAuthRequestContext.getRequest(source, socialConfig, authConfig, authStateCache);
+        } catch (JapSocialException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
 
         AuthCallback authCallback = this.parseRequest(request);
 
         // If it is not a callback request, it must be a request to jump to the authorization link
         if (!this.isCallback(source, authCallback)) {
             String url = authRequest.authorize(socialConfig.getState());
-            String redirectErrorMsg = "JAP failed to redirect to " + source + " authorized endpoint through HttpServletResponse.";
-            JapUtil.redirect(url, redirectErrorMsg, response);
-            return;
+            return JapResponse.success(url);
         }
 
-        this.login(request, response, source, authRequest, authCallback);
+        try {
+            return this.login(request, response, source, authRequest, authCallback);
+        } catch (JapUserException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
     }
 
     /**
@@ -131,7 +149,7 @@ public class SocialStrategy extends AbstractJapStrategy {
      * @param authRequest  AuthRequest of justauth
      * @param authCallback Parse the parameters obtained by the third party callback request
      */
-    private void login(HttpServletRequest request, HttpServletResponse response, String source, AuthRequest authRequest, AuthCallback authCallback) {
+    private JapResponse login(HttpServletRequest request, HttpServletResponse response, String source, AuthRequest authRequest, AuthCallback authCallback) throws JapUserException {
         AuthResponse<?> authUserAuthResponse = authRequest.login(authCallback);
         if (!authUserAuthResponse.ok() || ObjectUtil.isNull(authUserAuthResponse.getData())) {
             throw new JapUserException("Third party login of `" + source + "` cannot obtain user information. "
@@ -147,7 +165,7 @@ public class SocialStrategy extends AbstractJapStrategy {
             }
         }
 
-        this.loginSuccess(japUser, request, response);
+        return this.loginSuccess(japUser, request, response);
     }
 
     /**

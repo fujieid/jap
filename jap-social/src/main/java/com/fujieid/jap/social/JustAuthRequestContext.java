@@ -182,7 +182,7 @@ public class JustAuthRequestContext {
      * @param stateCache   Custom state cache
      * @return AuthRequest
      */
-    public static AuthRequest getRequest(String source, SocialConfig socialConfig, AuthConfig authConfig, AuthStateCache stateCache) {
+    public static AuthRequest getRequest(String source, SocialConfig socialConfig, AuthConfig authConfig, AuthStateCache stateCache) throws JapSocialException {
         if (StrUtil.isBlank(source)) {
             throw new JapSocialException("Social#Missing social source");
         }
