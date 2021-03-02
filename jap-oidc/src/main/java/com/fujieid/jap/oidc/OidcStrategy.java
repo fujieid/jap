@@ -17,11 +17,13 @@ package com.fujieid.jap.oidc;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.fujieid.jap.core.AuthenticateConfig;
-import com.fujieid.jap.core.JapConfig;
 import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.cache.JapCache;
-import com.fujieid.jap.core.exception.JapOauth2Exception;
+import com.fujieid.jap.core.config.AuthenticateConfig;
+import com.fujieid.jap.core.config.JapConfig;
+import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.core.result.JapErrorCode;
+import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.oauth2.OAuthConfig;
 import com.fujieid.jap.oauth2.Oauth2Strategy;
 
@@ -69,11 +71,17 @@ public class OidcStrategy extends Oauth2Strategy {
      * @param response The response to authenticate
      */
     @Override
-    public void authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+    public JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
 
-        this.checkAuthenticateConfig(config, OidcConfig.class);
+        try {
+            this.checkAuthenticateConfig(config, OidcConfig.class);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
         OidcConfig oidcConfig = (OidcConfig) config;
-        this.checkOidcConfig(oidcConfig);
+        if (ObjectUtil.isNull(oidcConfig.getIssuer())) {
+            return JapResponse.error(JapErrorCode.MISS_ISSUER);
+        }
 
         String issuer = oidcConfig.getIssuer();
 
@@ -84,12 +92,6 @@ public class OidcStrategy extends Oauth2Strategy {
             .setUserinfoUrl(discoveryDto.getUserinfoEndpoint());
 
         OAuthConfig oAuthConfig = BeanUtil.copyProperties(oidcConfig, OAuthConfig.class);
-        super.authenticate(oAuthConfig, request, response);
-    }
-
-    private void checkOidcConfig(OidcConfig oidcConfig) {
-        if (ObjectUtil.isNull(oidcConfig.getIssuer())) {
-            throw new JapOauth2Exception("OidcStrategy requires a issuer option");
-        }
+        return super.authenticate(oAuthConfig, request, response);
     }
 }
