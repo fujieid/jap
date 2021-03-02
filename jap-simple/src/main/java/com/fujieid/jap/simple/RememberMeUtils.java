@@ -21,6 +21,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.core.result.JapErrorCode;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
@@ -74,12 +75,12 @@ public class RememberMeUtils {
      * @param cookieValue  cookie value
      * @return RememberMeDetails
      */
-    public static RememberMeDetails decode(SimpleConfig simpleConfig, String cookieValue) {
+    public static RememberMeDetails decode(SimpleConfig simpleConfig, String cookieValue) throws JapException {
         String base64DecodeValue;
         try {
             base64DecodeValue = Base64.decodeStr(cookieValue);
         } catch (RuntimeException e) {
-            throw new JapException("Illegal memberme cookie.");
+            throw new JapException(JapErrorCode.INVALID_MEMBERME_COOKIE);
         }
         String[] base64DecodeValueSplitArray = StrUtil.splitToArray(base64DecodeValue, DEFAULT_DELIMITER);
         // Check and validate keys

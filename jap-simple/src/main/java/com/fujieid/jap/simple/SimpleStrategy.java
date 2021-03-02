@@ -18,12 +18,14 @@ package com.fujieid.jap.simple;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.servlet.ServletUtil;
-import com.fujieid.jap.core.AuthenticateConfig;
-import com.fujieid.jap.core.JapConfig;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.cache.JapCache;
-import com.fujieid.jap.core.exception.JapUserException;
+import com.fujieid.jap.core.config.AuthenticateConfig;
+import com.fujieid.jap.core.config.JapConfig;
+import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.core.result.JapErrorCode;
+import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 
 import javax.servlet.http.Cookie;
@@ -62,27 +64,40 @@ public class SimpleStrategy extends AbstractJapStrategy {
     }
 
     @Override
-    public void authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+    public JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
         // Convert AuthenticateConfig to SimpleConfig
-        this.checkAuthenticateConfig(config, SimpleConfig.class);
+        try {
+            this.checkAuthenticateConfig(config, SimpleConfig.class);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
         SimpleConfig simpleConfig = (SimpleConfig) config;
 
-        if (this.checkSessionAndCookie(simpleConfig, request, response)) {
-            return;
+        JapUser sessionUser = null;
+        try {
+            sessionUser = this.checkSessionAndCookie(simpleConfig, request, response);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
+        if (null != sessionUser) {
+            return JapResponse.success(sessionUser);
         }
 
         UsernamePasswordCredential credential = this.doResolveCredential(request, simpleConfig);
+        if (null == credential) {
+            return JapResponse.error(JapErrorCode.MISS_CREDENTIALS);
+        }
         JapUser user = japUserService.getByName(credential.getUsername());
         if (null == user) {
-            throw new JapUserException("The user does not exist.");
+            return JapResponse.error(JapErrorCode.NOT_EXIST_USER);
         }
 
         boolean valid = japUserService.validPassword(credential.getPassword(), user);
         if (!valid) {
-            throw new JapUserException("Passwords don't match.");
+            return JapResponse.error(JapErrorCode.INVALID_PASSWORD);
         }
 
-        this.loginSuccess(simpleConfig, credential, user, request, response);
+        return this.loginSuccess(simpleConfig, credential, user, request, response);
     }
 
     /**
@@ -94,7 +109,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @param request      The request to authenticate
      * @param response     The response to authenticate
      */
-    private void loginSuccess(SimpleConfig simpleConfig, UsernamePasswordCredential credential, JapUser user, HttpServletRequest request, HttpServletResponse response) {
+    private JapResponse loginSuccess(SimpleConfig simpleConfig, UsernamePasswordCredential credential, JapUser user, HttpServletRequest request, HttpServletResponse response) {
         if (credential.isRememberMe()) {
             String cookieDomain = ObjectUtil.isNotEmpty(simpleConfig.getRememberMeCookieDomain()) ? simpleConfig.getRememberMeCookieDomain() : null;
             // add cookie
@@ -106,7 +121,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
                 cookieDomain
             );
         }
-        this.loginSuccess(user, request, response);
+        return this.loginSuccess(user, request, response);
     }
 
     /**
@@ -117,31 +132,32 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @param response     The response to authenticate
      * @return true to login success, false to login
      */
-    private boolean checkSessionAndCookie(SimpleConfig simpleConfig, HttpServletRequest request, HttpServletResponse response) {
-        if (this.checkSession(request, response)) {
-            return true;
+    private JapUser checkSessionAndCookie(SimpleConfig simpleConfig, HttpServletRequest request, HttpServletResponse response) throws JapException {
+        JapUser sessionUser = this.checkSession(request, response);
+        if (null != sessionUser) {
+            return sessionUser;
         }
         if (!RememberMeUtils.enableRememberMe(request, simpleConfig)) {
-            return false;
+            return null;
         }
 
         Cookie cookie = ServletUtil.getCookie(request, simpleConfig.getRememberMeCookieKey());
         if (ObjectUtil.isNull(cookie)) {
-            return false;
+            return null;
         }
 
         UsernamePasswordCredential credential = this.decodeCookieValue(simpleConfig, cookie.getValue());
         if (ObjectUtil.isNull(credential)) {
-            return false;
+            return null;
         }
 
         JapUser user = japUserService.getByName(credential.getUsername());
         if (null == user) {
-            throw new JapUserException("The user does not exist.");
+            return null;
         }
         // redirect login successful
         this.loginSuccess(user, request, response);
-        return true;
+        return user;
     }
 
     /**
@@ -151,7 +167,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @param cookieValue  Cookie value
      * @return Username password credential
      */
-    private UsernamePasswordCredential decodeCookieValue(SimpleConfig simpleConfig, String cookieValue) {
+    private UsernamePasswordCredential decodeCookieValue(SimpleConfig simpleConfig, String cookieValue) throws JapException {
         RememberMeDetails details = RememberMeUtils.decode(simpleConfig, cookieValue);
         if (ObjectUtil.isNotNull(details)) {
             // return no longer password and remember me
@@ -181,7 +197,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
         String username = request.getParameter(simpleConfig.getUsernameField());
         String password = request.getParameter(simpleConfig.getPasswordField());
         if (null == username || null == password) {
-            throw new JapUserException("Missing credentials");
+            return null;
         }
         return new UsernamePasswordCredential()
             .setUsername(username)

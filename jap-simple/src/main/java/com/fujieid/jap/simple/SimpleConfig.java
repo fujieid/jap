@@ -15,7 +15,7 @@
  */
 package com.fujieid.jap.simple;
 
-import com.fujieid.jap.core.AuthenticateConfig;
+import com.fujieid.jap.core.config.AuthenticateConfig;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
