@@ -6,7 +6,7 @@
 </p>
 <p align="center">
 	<a target="_blank" href="https://search.maven.org/search?q=jap">
-	  <img src="https://img.shields.io/badge/Maven%20Central-1.0.1-alpha-blue" ></img>
+	  <img src="https://img.shields.io/badge/Maven%20Central-1.0.1%20alpha-blue" ></img>
 	</a>
 	<a target="_blank" href="https://gitee.com/yadong.zhang/JustAuth/blob/master/LICENSE">
 	  <img src="https://img.shields.io/badge/license-LGPL%203.0-red" ></img>
