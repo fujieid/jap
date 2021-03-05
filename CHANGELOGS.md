@@ -1,4 +1,4 @@
-## v1.0.1-alpha（2021-03-05）(Unpublished)
+## v1.0.1-alpha（2021-03-05）
 
 ### jap-core
 
