@@ -15,6 +15,8 @@
  */
 package com.fujieid.jap.core.result;
 
+import cn.hutool.core.util.ObjectUtil;
+
 import java.io.Serializable;
 
 /**
@@ -53,8 +55,37 @@ public class JapResponse implements Serializable {
             .setMessage(errorMessage);
     }
 
+    /**
+     * Whether the result currently returned is successful
+     *
+     * @return boolean
+     */
     public boolean isSuccess() {
         return this.getCode() == 200;
+    }
+
+    /**
+     * Methods provided for social, oauth, and oidc login strategy. The business flow is as follows:
+     * <p>
+     * 1. When not logged in, call the <code>strategy.authenticate(x)</code> method,
+     * and the returned <code>JapResponse.data</code> is the authorize url of the third-party platform
+     * <p>
+     * 2. When the third-party login completes the callback, call the <code>strategy.authenticate(x)</code> method,
+     * and the returned <code>JapResponse.data</code> is jap user
+     * <p>
+     * After calling the <code>strategy.authenticate(x)</code> method,
+     * the developer can use <code>japResponse.isRedirectUrl()</code> to determine whether the current processing result
+     * is the authorize url that needs to be redirected, or the jap user after successful login
+     * <p>
+     *
+     * @return boolean
+     */
+    public boolean isRedirectUrl() {
+        Object data = this.getData();
+        return isSuccess()
+            && ObjectUtil.isNotNull(data)
+            && data instanceof String
+            && ((String) data).startsWith("http");
     }
 
     public int getCode() {
