@@ -61,7 +61,6 @@
     <maven-surefire-version>2.20</maven-surefire-version>
     <maven-gpg-version>1.6</maven-gpg-version>
     <maven.test.skip>false</maven.test.skip>
-    <maven.javadoc.skip>true</maven.javadoc.skip>
     <cobertura-version>2.7</cobertura-version>
     <jacoco-version>0.8.6</jacoco-version>
 
