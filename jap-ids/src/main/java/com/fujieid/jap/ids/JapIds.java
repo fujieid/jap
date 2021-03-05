@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.fujieid.jap.ids;
+
 /**
  * Authorization service based on rfc6749 protocol specification and OpenID Connect Core 1.0 specification
  * <p>
@@ -48,4 +50,5 @@
  * @see <a href="https://openid.net/specs/openid-connect-backchannel-1_0.html" target="_blank">OpenID Connect Back-Channel Logout 1.0</a>
  * @since 1.0.0
  */
-package com.fujieid.jap.ids;
+public class JapIds {
+}

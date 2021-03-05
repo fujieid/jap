@@ -37,6 +37,7 @@ public interface JapStrategy {
      * @param config   Authenticate Config
      * @param request  The request to authenticate
      * @param response The response to authenticate
+     * @return JapResponse
      */
     default JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
         return JapResponse.error(JapErrorCode.ERROR.getErrroCode(), "JapStrategy#authenticate(AuthenticateConfig, HttpServletRequest, HttpServletResponse) must be overridden by subclass");

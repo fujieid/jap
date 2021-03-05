@@ -88,22 +88,19 @@ public class JapAuthentication implements Serializable {
     /**
      * Check whether the user is logged in. Reference method of use:
      * <p>
-     * <p>
      * <code>
-     * if(!JapAuthentication.checkUser(request, response).isSuccess()) { <br/>
-     *     // Not logged in.<br/>
-     * }<br/>
+     * if(!JapAuthentication.checkUser(request, response).isSuccess()) {
+     * // Not logged in.
+     * }
      * </code>
      * <p>
-     * <p>
      * Is equivalent to the following code：
-     * <p>
-     * <p>
+     *
      * <code>
-     * JapUser japUser = JapAuthentication.getUser(request, response);<br/>
-     * if (null == japUser) {<br/>
-     *     // Not logged in.<br/>
-     * }<br/>
+     * JapUser japUser = JapAuthentication.getUser(request, response);
+     * if (null == japUser) {
+     * // Not logged in.
+     * }
      * </code>
      *
      * @param request  Current request

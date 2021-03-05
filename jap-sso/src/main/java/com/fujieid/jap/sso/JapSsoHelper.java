@@ -41,6 +41,7 @@ public class JapSsoHelper {
      * @param japSsoConfig sso config
      * @param request      current request
      * @param response     current response
+     * @return String
      */
     public static String login(Object userId, String username, JapSsoConfig japSsoConfig, HttpServletRequest request, HttpServletResponse response) {
         // Initialize Jap SSO config to prevent NPE

@@ -43,6 +43,10 @@ public class RememberMeUtils {
 
     /**
      * Credential encryption algorithm: MD5 encryption
+     *
+     * @param request      request
+     * @param simpleConfig simpleConfig
+     * @return boolean
      */
     public static boolean enableRememberMe(HttpServletRequest request, SimpleConfig simpleConfig) {
         return BooleanUtil.toBoolean(request.getParameter(simpleConfig.getRememberMeField()));
