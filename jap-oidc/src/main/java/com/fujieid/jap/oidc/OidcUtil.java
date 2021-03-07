@@ -16,13 +16,11 @@
 package com.fujieid.jap.oidc;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fujieid.jap.core.exception.OidcException;
 import com.xkcoding.http.HttpUtil;
 import com.xkcoding.json.JsonUtil;
-
-import java.util.Map;
+import com.xkcoding.json.util.Kv;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -45,18 +43,23 @@ public class OidcUtil {
         }
         String discoveryUrl = issuer.concat(DISCOVERY_URL);
 
-        String response = HttpUtil.get(discoveryUrl);
-        Map<String, Object> oidcDiscoveryInfo = JsonUtil.toBean(response, Map.class);
+        String response = null;
+        try {
+            response = HttpUtil.get(discoveryUrl);
+        } catch (Exception e) {
+            throw new OidcException("Cannot access discovery url: " + discoveryUrl);
+        }
+        Kv oidcDiscoveryInfo = JsonUtil.parseKv(response);
         if (CollectionUtil.isEmpty(oidcDiscoveryInfo)) {
             throw new OidcException("Unable to parse IDP service discovery configuration information.");
         }
         return new OidcDiscoveryDto()
-            .setIssuer(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.ISSUER)))
-            .setAuthorizationEndpoint(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.AUTHORIZATION_ENDPOINT)))
-            .setTokenEndpoint(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.TOKEN_ENDPOINT)))
-            .setUserinfoEndpoint(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.USERINFO_ENDPOINT)))
-            .setEndSessionEndpoint(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.END_SESSION_ENDPOINT)))
-            .setJwksUri(ObjectUtil.toString(oidcDiscoveryInfo.get(OidcDiscoveryParams.JWKS_URI)));
+            .setIssuer(oidcDiscoveryInfo.getString(OidcDiscoveryParams.ISSUER))
+            .setAuthorizationEndpoint(oidcDiscoveryInfo.getString(OidcDiscoveryParams.AUTHORIZATION_ENDPOINT))
+            .setTokenEndpoint(oidcDiscoveryInfo.getString(OidcDiscoveryParams.TOKEN_ENDPOINT))
+            .setUserinfoEndpoint(oidcDiscoveryInfo.getString(OidcDiscoveryParams.USERINFO_ENDPOINT))
+            .setEndSessionEndpoint(oidcDiscoveryInfo.getString(OidcDiscoveryParams.END_SESSION_ENDPOINT))
+            .setJwksUri(oidcDiscoveryInfo.getString(OidcDiscoveryParams.JWKS_URI));
     }
 
 
