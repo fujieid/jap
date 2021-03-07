@@ -33,7 +33,7 @@ import java.util.Map;
 public class JapTokenHelper {
 
 
-    public static  void saveUserToken(String userId, String token) {
+    public static void saveUserToken(String userId, String token) {
         JapAuthentication.getContext().getCache().set(JapConst.USER_TOKEN_KEY.concat(userId), token);
     }
 

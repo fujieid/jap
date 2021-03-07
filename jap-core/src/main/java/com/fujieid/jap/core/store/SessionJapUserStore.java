@@ -74,7 +74,7 @@ public class SessionJapUserStore implements JapUserStore {
         if (!japConfig.isSso()) {
             JapUser japUser = this.get(request, response);
             if (null != japUser) {
-                 JapTokenHelper.removeUserToken(japUser.getUserId());
+                JapTokenHelper.removeUserToken(japUser.getUserId());
             }
         }
 

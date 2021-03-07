@@ -31,7 +31,7 @@ public enum JapErrorCode {
     ERROR(500, "An error occurred in the system, please refer to the error message."),
     NOT_EXIST_USER(1000, "The user does not exist."),
     INVALID_PASSWORD(1001, "Passwords don't match."),
-    INVALID_MEMBERME_COOKIE(1002, "Illegal memberme cookie."),
+    INVALID_MEMBERME_COOKIE(1002, "Illegal remember me cookie."),
     UNABLE_SAVE_USERINFO(1003, "Unable to save user information."),
     MISS_AUTH_CONFIG(1004, "AuthConfig in SocialStrategy is required."),
     MISS_AUTHENTICATE_CONFIG(1005, "AuthenticateConfig is required."),
