@@ -55,7 +55,7 @@ public class SessionJapUserStore implements JapUserStore {
         JapConfig japConfig = JapAuthentication.getContext().getConfig();
         if (!japConfig.isSso()) {
             String token = JapUtil.createToken(japUser, request);
-            new JapTokenHelper(JapAuthentication.getContext().getCache()).saveUserToken(japUser.getUserId(), token);
+            JapTokenHelper.saveUserToken(japUser.getUserId(), token);
             japUser.setToken(token);
         }
         return japUser;
@@ -74,7 +74,7 @@ public class SessionJapUserStore implements JapUserStore {
         if (!japConfig.isSso()) {
             JapUser japUser = this.get(request, response);
             if (null != japUser) {
-                new JapTokenHelper(JapAuthentication.getContext().getCache()).removeUserToken(japUser.getUserId());
+                 JapTokenHelper.removeUserToken(japUser.getUserId());
             }
         }
 

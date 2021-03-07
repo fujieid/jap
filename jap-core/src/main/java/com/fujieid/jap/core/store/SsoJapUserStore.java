@@ -61,7 +61,7 @@ public class SsoJapUserStore extends SessionJapUserStore {
     public JapUser save(HttpServletRequest request, HttpServletResponse response, JapUser japUser) {
         String token = JapSsoHelper.login(japUser.getUserId(), japUser.getUsername(), this.japSsoConfig, request, response);
         super.save(request, response, japUser);
-        new JapTokenHelper(JapAuthentication.getContext().getCache()).saveUserToken(japUser.getUserId(), token);
+        JapTokenHelper.saveUserToken(japUser.getUserId(), token);
         return japUser.setToken(token);
     }
 
@@ -75,7 +75,7 @@ public class SsoJapUserStore extends SessionJapUserStore {
     public void remove(HttpServletRequest request, HttpServletResponse response) {
         JapUser japUser = this.get(request, response);
         if(null != japUser) {
-            new JapTokenHelper(JapAuthentication.getContext().getCache()).removeUserToken(japUser.getUserId());
+            JapTokenHelper.removeUserToken(japUser.getUserId());
         }
         super.remove(request, response);
         JapSsoHelper.logout(request, response);
