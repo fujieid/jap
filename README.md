@@ -115,6 +115,10 @@ JAP 基于 LGPL 3.0 协议。商用分为以下两种情况：
 
 [参考文章](https://justauth.plus/community/weneed.html)
 
+## 👪 贡献者列表
+
+[![Giteye chart](https://chart.giteye.net/gitee/fujieid/jap/JMU7Y85K.png)](https://giteye.net/chart/JMU7Y85K)
+
 ## 💹 关注统计
 
 ### Gitee
