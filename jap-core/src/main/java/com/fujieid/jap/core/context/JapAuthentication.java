@@ -129,7 +129,7 @@ public class JapAuthentication implements Serializable {
         if (null == japCache) {
             return null;
         }
-        Map<String, Object> tokenMap = new JapTokenHelper(japCache).checkToken(token);
+        Map<String, Object> tokenMap = JapTokenHelper.checkToken(token);
         if (MapUtil.isNotEmpty(tokenMap)) {
             Kv kv = new Kv();
             kv.putAll(tokenMap);
