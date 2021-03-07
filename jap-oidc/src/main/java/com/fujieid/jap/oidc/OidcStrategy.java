@@ -22,6 +22,7 @@ import com.fujieid.jap.core.cache.JapCache;
 import com.fujieid.jap.core.config.AuthenticateConfig;
 import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.core.exception.OidcException;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.oauth2.OAuthConfig;
@@ -85,7 +86,21 @@ public class OidcStrategy extends Oauth2Strategy {
 
         String issuer = oidcConfig.getIssuer();
 
-        OidcDiscoveryDto discoveryDto = OidcUtil.getOidcDiscovery(issuer);
+        OidcDiscoveryDto discoveryDto = null;
+
+        JapCache japCache = this.japContext.getCache();
+
+        String discoveryCacheKey = OidcConst.DISCOVERY_CACHE_KEY.concat(issuer);
+        if (japCache.containsKey(discoveryCacheKey)) {
+            discoveryDto = (OidcDiscoveryDto) japCache.get(discoveryCacheKey);
+        } else {
+            try {
+                discoveryDto = OidcUtil.getOidcDiscovery(issuer);
+                japCache.set(discoveryCacheKey, discoveryDto);
+            } catch (OidcException e) {
+                return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+            }
+        }
 
         oidcConfig.setAuthorizationUrl(discoveryDto.getAuthorizationEndpoint())
             .setTokenUrl(discoveryDto.getTokenEndpoint())
