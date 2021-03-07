@@ -18,7 +18,7 @@ package com.fujieid.jap.core.util;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.kisso.security.token.SSOToken;
 import com.fujieid.jap.core.JapConst;
-import com.fujieid.jap.core.cache.JapCache;
+import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.sso.JapSsoUtil;
 
 import java.util.Map;
@@ -32,31 +32,26 @@ import java.util.Map;
  */
 public class JapTokenHelper {
 
-    private final JapCache japCache;
 
-    public JapTokenHelper(JapCache japCache) {
-        this.japCache = japCache;
+    public static  void saveUserToken(String userId, String token) {
+        JapAuthentication.getContext().getCache().set(JapConst.USER_TOKEN_KEY.concat(userId), token);
     }
 
-    public void saveUserToken(String userId, String token) {
-        japCache.set(JapConst.USER_TOKEN_KEY.concat(userId), token);
+    public static String getUserToken(String userId) {
+        return (String) JapAuthentication.getContext().getCache().get(JapConst.USER_TOKEN_KEY.concat(userId));
     }
 
-    public String getUserToken(String userId) {
-        return (String) japCache.get(JapConst.USER_TOKEN_KEY.concat(userId));
+    public static void removeUserToken(String userId) {
+        JapAuthentication.getContext().getCache().removeKey(JapConst.USER_TOKEN_KEY.concat(userId));
     }
 
-    public void removeUserToken(String userId) {
-        japCache.removeKey(JapConst.USER_TOKEN_KEY.concat(userId));
-    }
-
-    public Map<String, Object> checkToken(String token) {
+    public static Map<String, Object> checkToken(String token) {
         SSOToken ssoToken = JapSsoUtil.parseToken(token);
         if (ObjectUtil.isNull(ssoToken)) {
             return null;
         }
         String cacheKey = JapConst.USER_TOKEN_KEY.concat(ssoToken.getId());
-        if (!japCache.containsKey(cacheKey)) {
+        if (!JapAuthentication.getContext().getCache().containsKey(cacheKey)) {
             return null;
         }
         return ssoToken.getClaims();
