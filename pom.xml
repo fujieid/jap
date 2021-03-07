@@ -5,7 +5,7 @@
 
   <groupId>com.fujieid</groupId>
   <artifactId>jap</artifactId>
-  <version>1.0.1-alpha</version>
+  <version>1.0.1-alpha.1</version>
   <packaging>pom</packaging>
 
   <name>jap</name>
@@ -28,7 +28,7 @@
     <developer>
       <name>Yadong.Zhang</name>
       <email>yadong.zhang0415@gmail.com</email>
-      <url>https://www.justauth.cn</url>
+      <url>https://github.com/zhangyd-c</url>
     </developer>
   </developers>
 
@@ -57,7 +57,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven-source.version>2.2.1</maven-source.version>
     <maven-compiler.version>3.8.1</maven-compiler.version>
-    <maven-javadoc.version>2.9.1</maven-javadoc.version>
+    <maven-javadoc.version>3.1.1</maven-javadoc.version>
     <maven-surefire-version>2.20</maven-surefire-version>
     <maven-gpg-version>1.6</maven-gpg-version>
     <maven.test.skip>false</maven.test.skip>
@@ -202,9 +202,6 @@
             <goals>
               <goal>jar</goal>
             </goals>
-            <configuration>
-              <additionalparam>-Xdoclint:none</additionalparam>
-            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -213,15 +210,46 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-version}</version>
         <configuration>
-          <!-- 包含其他测试类 -->
           <includes>
             <include>**/*Test.java</include>
           </includes>
-          <!-- 排除掉AuthRequestTest测试类，该类只做api演示用 -->
           <excludes>
             <exclude>**/AuthRequestTest.java</exclude>
           </excludes>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>${cobertura-version}</version>
+        <configuration>
+          <formats>
+            <format>xml</format>
+            <format>html</format>
+            <!-- delegate the report aggregation for the coverage tool. -->
+            <aggregate>true</aggregate>
+          </formats>
+          <check/>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco-version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -241,37 +269,6 @@
                 <phase>package</phase>
                 <goals>
                   <goal>jar-no-fork</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>cobertura-maven-plugin</artifactId>
-            <version>${cobertura-version}</version>
-            <configuration>
-              <formats>
-                <format>html</format>
-                <format>xml</format>
-              </formats>
-              <check/>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>${jacoco-version}</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>prepare-agent</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>report</id>
-                <phase>test</phase>
-                <goals>
-                  <goal>report</goal>
                 </goals>
               </execution>
             </executions>
