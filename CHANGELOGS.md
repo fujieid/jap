@@ -1,12 +1,13 @@
 ## v1.0.1-alpha.1（2021-03-07）
 
 ### Modified
-- 修复 `JapErrorCode` 中的描述错误
-- 改进 `JapTokenHelper` 类
+
+- Fix the description error in `JapErrorCode`
+- Improve the `JapTokenHelper`
 
 ### PR
 
-- Merge pull request !8 from 北溪/master
+- Merge pull request !8
 
 ## v1.0.1-alpha（2021-03-05）
 
