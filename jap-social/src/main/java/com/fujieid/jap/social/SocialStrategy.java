@@ -150,7 +150,12 @@ public class SocialStrategy extends AbstractJapStrategy {
      * @param authCallback Parse the parameters obtained by the third party callback request
      */
     private JapResponse login(HttpServletRequest request, HttpServletResponse response, String source, AuthRequest authRequest, AuthCallback authCallback) throws JapUserException {
-        AuthResponse<?> authUserAuthResponse = authRequest.login(authCallback);
+        AuthResponse<?> authUserAuthResponse = null;
+        try {
+            authUserAuthResponse = authRequest.login(authCallback);
+        } catch (Exception e) {
+            throw new JapSocialException("Third party login of `" + source + "` failed. " + e.getMessage());
+        }
         if (!authUserAuthResponse.ok() || ObjectUtil.isNull(authUserAuthResponse.getData())) {
             throw new JapUserException("Third party login of `" + source + "` cannot obtain user information. "
                 + authUserAuthResponse.getMsg());
