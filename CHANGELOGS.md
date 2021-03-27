@@ -1,8 +1,9 @@
 ## v1.0.1-alpha.2（2021-03-**）
 
-- [jap oidc] Optimize the `OidcStrategy#authenticate` method, cache the `OidcDiscoveryDto`, and reduce unnecessary http
+- [jap-oidc] Optimize the `OidcStrategy#authenticate` method, cache the `OidcDiscoveryDto`, and reduce unnecessary http
   requests
 - [jap-oidc] Optimize the code of `OidcUtil`, fix known bugs
+- [jap-social] fix known bugs
 
 ## v1.0.1-alpha.1（2021-03-07）
 
