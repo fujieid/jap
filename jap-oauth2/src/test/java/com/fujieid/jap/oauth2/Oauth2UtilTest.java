@@ -70,9 +70,8 @@ public class Oauth2UtilTest {
     @Test
     public void checkOauthResponseNoError() {
         Kv kv = new Kv();
-        String responseStr = "responseStr";
         String errorMsg = "errorMsg";
-        Oauth2Util.checkOauthResponse(responseStr, kv, errorMsg);
+        Oauth2Util.checkOauthResponse(kv, errorMsg);
         Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
             .setResponseType(Oauth2ResponseType.token)));
     }
@@ -82,9 +81,8 @@ public class Oauth2UtilTest {
         Kv kv = new Kv();
         kv.put("error", "");
         kv.put("error_description", "invalid_request_description");
-        String responseStr = "responseStr";
         String errorMsg = "errorMsg";
-        Oauth2Util.checkOauthResponse(responseStr, kv, errorMsg);
+        Oauth2Util.checkOauthResponse(kv, errorMsg);
     }
 
     @Test
@@ -92,9 +90,8 @@ public class Oauth2UtilTest {
         Kv kv = new Kv();
         kv.put("error", null);
         kv.put("error_description", "invalid_request_description");
-        String responseStr = "responseStr";
         String errorMsg = "errorMsg";
-        Oauth2Util.checkOauthResponse(responseStr, kv, errorMsg);
+        Oauth2Util.checkOauthResponse(kv, errorMsg);
     }
 
     @Test
@@ -102,9 +99,8 @@ public class Oauth2UtilTest {
         Kv kv = new Kv();
         kv.put("error", "invalid_request");
         kv.put("error_description", "invalid_request_description");
-        String responseStr = "responseStr";
         String errorMsg = "errorMsg";
-        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthResponse(responseStr, kv, errorMsg));
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthResponse(kv, errorMsg));
     }
 
     @Test

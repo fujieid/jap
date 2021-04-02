@@ -32,8 +32,6 @@ import com.fujieid.jap.oauth2.token.AccessToken;
 import com.fujieid.jap.oauth2.token.AccessTokenHelper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.xkcoding.http.HttpUtil;
-import com.xkcoding.json.JsonUtil;
 import com.xkcoding.json.util.Kv;
 
 import javax.servlet.http.HttpServletRequest;
@@ -141,11 +139,10 @@ public class Oauth2Strategy extends AbstractJapStrategy {
     }
 
     private JapUser getUserInfo(OAuthConfig oAuthConfig, AccessToken accessToken) throws JapOauth2Exception {
-        String userinfoResponse = HttpUtil.post(oAuthConfig.getUserinfoUrl(),
-            ImmutableMap.of("access_token", accessToken.getAccessToken()), false);
-        Kv userinfo = JsonUtil.parseKv(userinfoResponse);
+        Kv userinfo = Oauth2Util.request(oAuthConfig.getUserInfoEndpointMethodType(), oAuthConfig.getUserinfoUrl(),
+            ImmutableMap.of("access_token", accessToken.getAccessToken()));
 
-        Oauth2Util.checkOauthResponse(userinfoResponse, userinfo, "Oauth2Strategy failed to get userinfo with accessToken.");
+        Oauth2Util.checkOauthResponse(userinfo, "Oauth2Strategy failed to get userinfo with accessToken.");
 
         JapUser japUser = this.japUserService.createAndGetOauth2User(oAuthConfig.getPlatform(), userinfo, accessToken);
         if (ObjectUtil.isNull(japUser)) {

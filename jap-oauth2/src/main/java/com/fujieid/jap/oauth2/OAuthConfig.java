@@ -124,6 +124,21 @@ public class OAuthConfig extends AuthenticateConfig {
      */
     private boolean verifyState = true;
 
+    /**
+     * method of userInfo endpoint, default is POST
+     * <p>
+     * Different third-party platforms may use different request methods,
+     * and some third-party platforms have limited request methods, such as post and get.
+     */
+    private Oauth2EndpointMethodType userInfoEndpointMethodType = Oauth2EndpointMethodType.POST;
+    /**
+     * method of accessToken endpoint, default is POST
+     * <p>
+     * Different third-party platforms may use different request methods,
+     * and some third-party platforms have limited request methods, such as post and get.
+     */
+    private Oauth2EndpointMethodType accessTokenEndpointMethodType = Oauth2EndpointMethodType.POST;
+
     public String getClientId() {
         return clientId;
     }
@@ -274,6 +289,24 @@ public class OAuthConfig extends AuthenticateConfig {
 
     public OAuthConfig setVerifyState(boolean verifyState) {
         this.verifyState = verifyState;
+        return this;
+    }
+
+    public Oauth2EndpointMethodType getUserInfoEndpointMethodType() {
+        return userInfoEndpointMethodType;
+    }
+
+    public OAuthConfig setUserInfoEndpointMethodType(Oauth2EndpointMethodType userInfoEndpointMethodType) {
+        this.userInfoEndpointMethodType = userInfoEndpointMethodType;
+        return this;
+    }
+
+    public Oauth2EndpointMethodType getAccessTokenEndpointMethodType() {
+        return accessTokenEndpointMethodType;
+    }
+
+    public OAuthConfig setAccessTokenEndpointMethodType(Oauth2EndpointMethodType accessTokenEndpointMethodType) {
+        this.accessTokenEndpointMethodType = accessTokenEndpointMethodType;
         return this;
     }
 }

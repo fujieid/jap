@@ -23,10 +23,13 @@ import cn.hutool.crypto.SecureUtil;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
+import com.xkcoding.http.HttpUtil;
+import com.xkcoding.json.JsonUtil;
 import com.xkcoding.json.util.Kv;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -73,10 +76,13 @@ public class Oauth2Util {
         }
     }
 
-    public static void checkOauthResponse(String responseStr, Kv responseKv, String errorMsg) {
+    public static void checkOauthResponse(Kv responseKv, String errorMsg) {
+        if (null == responseKv || responseKv.isEmpty()) {
+            throw new JapOauth2Exception(errorMsg);
+        }
         if (responseKv.containsKey("error") && ObjectUtil.isNotEmpty(responseKv.get("error"))) {
             throw new JapOauth2Exception(Optional.ofNullable(errorMsg).orElse("") +
-                responseKv.get("error_description") + " " + responseStr);
+                responseKv.get("error_description") + " " + responseKv.toString());
         }
     }
 
@@ -189,5 +195,28 @@ public class Oauth2Util {
             return !StrUtil.isEmpty(accessToken);
         }
         return false;
+    }
+
+
+    /**
+     * Different third-party platforms may use different request methods,
+     * and some third-party platforms have limited request methods, such as post and get.
+     * <p>
+     * In the {@code Oauth2Util#request(Oauth2EndpointMethodType, String, Map)},
+     * Use the appropriate request method to obtain data by judging the {@code Oauth2EndpointMethodType}
+     *
+     * @param endpointMethodType Oauth2EndpointMethodType
+     * @param params             Request parameters
+     * @return Kv
+     */
+    public static Kv request(Oauth2EndpointMethodType endpointMethodType, String url, Map<String, String> params) {
+
+        String res = null;
+        if (null == endpointMethodType || Oauth2EndpointMethodType.GET == endpointMethodType) {
+            res = HttpUtil.get(url, params, false);
+        } else {
+            res = HttpUtil.post(url, params, false);
+        }
+        return JsonUtil.parseKv(res);
     }
 }
