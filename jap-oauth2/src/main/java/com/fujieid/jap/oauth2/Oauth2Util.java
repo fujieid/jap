@@ -206,6 +206,7 @@ public class Oauth2Util {
      * Use the appropriate request method to obtain data by judging the {@code Oauth2EndpointMethodType}
      *
      * @param endpointMethodType Oauth2EndpointMethodType
+     * @param url                request Url
      * @param params             Request parameters
      * @return Kv
      */
