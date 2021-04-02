@@ -39,7 +39,7 @@
 	<strong>开源地址：</strong> <a target="_blank" href='https://gitee.com/fujieid/jap'>Gitee</a> | <a target="_blank" href='https://github.com/fujieid/jap'>Github</a> | <a target="_blank" href='https://codechina.csdn.net/fujieid/jap'>CodeChina</a>
 </p>
 <p align="center">
-	<strong>社区论坛：</strong> <a target="_blank" href='https://bbs.justauth.plus'>https://bbs.justauth.plus</a>
+	<strong>社区论坛：</strong> <a target="_blank" href='https://discuss.justauth.plus'>https://discuss.justauth.plus</a>
 </p>
 <p align="center">
 	<strong>开发者中心：</strong> <a target="_blank" href='https://justauth.plus'>https://justauth.plus</a>
