@@ -15,8 +15,6 @@
  */
 package com.fujieid.jap.core;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * JAP constant
  *

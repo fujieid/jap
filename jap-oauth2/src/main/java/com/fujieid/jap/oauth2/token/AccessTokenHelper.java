@@ -22,10 +22,10 @@ import com.fujieid.jap.core.util.JapUtil;
 import com.fujieid.jap.oauth2.*;
 import com.fujieid.jap.oauth2.pkce.PkceHelper;
 import com.fujieid.jap.oauth2.pkce.PkceParams;
-import com.google.common.collect.Maps;
 import com.xkcoding.json.util.Kv;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -81,7 +81,7 @@ public class AccessTokenHelper {
         Oauth2Util.checkState(state, oAuthConfig.getClientId(), oAuthConfig.isVerifyState());
 
         String code = request.getParameter("code");
-        Map<String, String> params = Maps.newHashMap();
+        Map<String, String> params = new HashMap<>(6);
         params.put("grant_type", Oauth2GrantType.authorization_code.name());
         params.put("code", code);
         params.put("client_id", oAuthConfig.getClientId());
@@ -136,7 +136,7 @@ public class AccessTokenHelper {
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">4.3.  Resource Owner Password Credentials Grant</a>
      */
     private static AccessToken getAccessTokenOfPasswordMode(OAuthConfig oAuthConfig) throws JapOauth2Exception {
-        Map<String, String> params = Maps.newHashMap();
+        Map<String, String> params = new HashMap<>(6);
         params.put("grant_type", Oauth2GrantType.password.name());
         params.put("username", oAuthConfig.getUsername());
         params.put("password", oAuthConfig.getPassword());
