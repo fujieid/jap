@@ -18,8 +18,8 @@ package com.fujieid.jap.oauth2.pkce;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.oauth2.OAuthConfig;
 import com.fujieid.jap.oauth2.Oauth2Util;
-import com.google.common.collect.Maps;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -54,7 +54,7 @@ public class PkceHelper {
         PkceCodeChallengeMethod pkceCodeChallengeMethod = Optional.ofNullable(oAuthConfig.getCodeChallengeMethod())
             .orElse(PkceCodeChallengeMethod.S256);
 
-        Map<String, Object> params = Maps.newHashMap();
+        Map<String, Object> params = new HashMap<>(2);
         String codeVerifier = Oauth2Util.generateCodeVerifier();
         String codeChallenge = Oauth2Util.generateCodeChallenge(pkceCodeChallengeMethod, codeVerifier);
         params.put(PkceParams.CODE_CHALLENGE, codeChallenge);
