@@ -19,12 +19,12 @@ import cn.hutool.core.util.*;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.fujieid.jap.core.exception.JapSocialException;
-import com.google.common.collect.Maps;
 import me.zhyd.oauth.cache.AuthStateCache;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.request.AuthRequest;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,7 +47,7 @@ public class JustAuthRequestContext {
     /**
      * Save registered AuthRequest implementation classes
      */
-    private static final Map<String, Class<?>> AUTH_REQUEST_HOLDER = Maps.newHashMap();
+    private static final Map<String, Class<?>> AUTH_REQUEST_HOLDER = new HashMap<>(8);
 
     /**
      * Extract the rules for third-party platform names, only for implementation classes named according to
@@ -126,7 +126,7 @@ public class JustAuthRequestContext {
     private static void scanPackage(String scanPackage, String[] exclusionClassNames) {
         log.debug("Start scanning package path {}...", scanPackage);
         Set<Class<?>> classes = ClassUtil.scanPackage(scanPackage);
-        Map<String, Class<?>> item = Maps.newConcurrentMap();
+        Map<String, Class<?>> item = new HashMap<>(16);
         for (Class<?> clazz : classes) {
             String className = ClassUtil.getClassName(clazz, true);
             if (Arrays.asList(exclusionClassNames).contains(className)) {

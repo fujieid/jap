@@ -15,12 +15,11 @@
  */
 package com.fujieid.jap.oauth2;
 
-import com.fujieid.jap.core.config.AuthenticateConfig;
-import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.cache.JapCache;
-import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.core.config.AuthenticateConfig;
+import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.result.JapResponse;
 import org.junit.Assert;
 import org.junit.Before;
