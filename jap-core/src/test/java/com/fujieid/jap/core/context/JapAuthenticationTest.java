@@ -22,7 +22,6 @@ import com.fujieid.jap.core.cache.JapLocalCache;
 import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.store.JapUserStore;
-import com.google.common.collect.Maps;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +30,7 @@ import org.mockito.MockitoAnnotations;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 
 public class JapAuthenticationTest {
@@ -210,7 +210,7 @@ public class JapAuthenticationTest {
     }
 
     static class JapUserStoreTest implements JapUserStore {
-        Map<String, Object> STORE = Maps.newHashMap();
+        Map<String, Object> STORE = new HashMap<>();
         String USER_KEY = "user";
 
         /**

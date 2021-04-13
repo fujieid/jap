@@ -18,7 +18,6 @@ package com.fujieid.jap.core.context;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.extra.servlet.ServletUtil;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.cache.JapCache;
 import com.fujieid.jap.core.config.JapConfig;
@@ -26,6 +25,7 @@ import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.util.JapTokenHelper;
+import com.fujieid.jap.core.util.RequestUtil;
 import com.xkcoding.json.util.Kv;
 
 import javax.servlet.http.Cookie;
@@ -162,7 +162,7 @@ public class JapAuthentication implements Serializable {
         japUserStore.remove(request, response);
 
         // Clear all cookie information
-        Map<String, Cookie> cookieMap = ServletUtil.readCookieMap(request);
+        Map<String, Cookie> cookieMap = RequestUtil.getCookieMap(request);
         if (CollectionUtil.isNotEmpty(cookieMap)) {
             cookieMap.forEach((key, cookie) -> {
                 cookie.setMaxAge(0);

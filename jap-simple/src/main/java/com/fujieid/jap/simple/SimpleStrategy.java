@@ -17,7 +17,7 @@ package com.fujieid.jap.simple;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.extra.servlet.ServletUtil;
+import com.fujieid.jap.core.util.RequestUtil;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.cache.JapCache;
@@ -113,7 +113,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
         if (credential.isRememberMe()) {
             String cookieDomain = ObjectUtil.isNotEmpty(simpleConfig.getRememberMeCookieDomain()) ? simpleConfig.getRememberMeCookieDomain() : null;
             // add cookie
-            ServletUtil.addCookie(response,
+            RequestUtil.setCookie(response,
                 simpleConfig.getRememberMeCookieKey(),
                 this.encodeCookieValue(user, simpleConfig),
                 simpleConfig.getRememberMeCookieExpire(),
@@ -141,7 +141,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
             return null;
         }
 
-        Cookie cookie = ServletUtil.getCookie(request, simpleConfig.getRememberMeCookieKey());
+        Cookie cookie = RequestUtil.getCookie(request, simpleConfig.getRememberMeCookieKey());
         if (ObjectUtil.isNull(cookie)) {
             return null;
         }
