@@ -42,9 +42,9 @@ Note: In the vulnerability description, please describe the reproduction steps i
 
 ## Other
 
-为了保护使用者的安全，降低不必要的影响，希望您在漏洞未修复之前尽量不要公开或传播。
-
 In order to protect the safety of users and reduce unnecessary impact, we hope that you will try not to disclose or spread the vulnerability before it is fixed.
+
+为了保护使用者的安全，降低不必要的影响，希望您在漏洞未修复之前尽量不要公开或传播。
 
 by Fujie
 
