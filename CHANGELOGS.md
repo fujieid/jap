@@ -1,9 +1,20 @@
-## v1.0.1-alpha.2（2021-03-**）
+## v1.0.1（2021-04-**）
+
+### New features
+
+- Add `com.fujieid.jap.core.util.RequestUtil`, remove `hutool-extra` dependency
+
+### Modified
 
 - [jap-oidc] Optimize the `OidcStrategy#authenticate` method, cache the `OidcDiscoveryDto`, and reduce unnecessary http
   requests
 - [jap-oidc] Optimize the code of `OidcUtil`, fix known bugs
 - [jap-social] fix known bugs
+- Refactor `com.fujieid.jap.core.cache.JapLocalCache`, implement timer manually, clean local cache regularly, and remove `hutool-cache` dependency
+
+### PR
+
+- Merge Gitee PR [#9](https://gitee.com/fujieid/jap/pulls/9) by [@dreamlu](https://gitee.com/dreamlu)
 
 ## v1.0.1-alpha.1（2021-03-07）
 
@@ -14,7 +25,7 @@
 
 ### PR
 
-- Merge pull request !8
+- Merge Gitee PR [#8](https://gitee.com/fujieid/jap/pulls/8)
 
 ## v1.0.1-alpha（2021-03-05）
 
