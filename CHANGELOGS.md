@@ -2,7 +2,8 @@
 
 ### New features
 
-- Add `com.fujieid.jap.core.util.RequestUtil`, remove `hutool-extra` dependency
+- **Complete the development of the `jap-ids` module, and provide oauth services externally based on `jap-ids`**
+- Add `com.fujieid.jap.core.util.RequestUtil`
 
 ### Modified
 
@@ -10,7 +11,7 @@
   requests
 - [jap-oidc] Optimize the code of `OidcUtil`, fix known bugs
 - [jap-social] fix known bugs
-- Refactor `com.fujieid.jap.core.cache.JapLocalCache`, implement timer manually, clean local cache regularly, and remove `hutool-cache` dependency
+- Refactor `com.fujieid.jap.core.cache.JapLocalCache`, implement timer manually, clean local cache regularly
 
 ### PR
 
