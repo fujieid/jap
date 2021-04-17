@@ -28,6 +28,8 @@ import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.TokenUtil;
 import com.xkcoding.json.util.StringUtil;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * The token endpoint creates a token, and returns different token information for different authorization types
  *
@@ -84,11 +86,12 @@ public class IdsTokenProvider {
     /**
      * RFC6749 4.3.  Resource Owner Password Credentials Grant
      *
-     * @param param request params
+     * @param param   request params
+     * @param request current request
      * @return IdsResponse
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">4.3.  Resource Owner Password Credentials Grant</a>
      */
-    public IdsResponse<String, Object> generatePasswordResponse(IdsRequestParam param) {
+    public IdsResponse<String, Object> generatePasswordResponse(IdsRequestParam param, HttpServletRequest request) {
 
         if (ObjectUtil.hasNull(param.getClientId())) {
             throw new InvalidClientException(ErrorResponse.INVALID_CLIENT);
@@ -100,6 +103,7 @@ public class IdsTokenProvider {
         if (null == userInfo) {
             throw new IdsException(ErrorResponse.INVALID_USER_CERTIFICATE);
         }
+        JapIds.saveUserInfo(userInfo, request);
 
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(param.getClientId());
         String requestScope = param.getScope();

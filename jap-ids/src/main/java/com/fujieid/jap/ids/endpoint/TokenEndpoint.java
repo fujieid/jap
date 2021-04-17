@@ -56,7 +56,7 @@ public class TokenEndpoint extends AbstractEndpoint {
             return idsTokenProvider.generateAuthorizationCodeResponse(param);
         }
         if (GrantType.PASSWORD.getType().equals(param.getGrantType())) {
-            return idsTokenProvider.generatePasswordResponse(param);
+            return idsTokenProvider.generatePasswordResponse(param, request);
         }
         if (GrantType.CLIENT_CREDENTIALS.getType().equals(param.getGrantType())) {
             return idsTokenProvider.generateClientCredentialsResponse(param);
