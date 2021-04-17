@@ -17,7 +17,6 @@ package com.fujieid.jap.core.util;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
-import com.sun.istack.internal.Nullable;
 import com.xkcoding.json.util.StringUtil;
 
 import javax.servlet.http.Cookie;
@@ -41,7 +40,9 @@ public class RequestUtil {
     /**
      * Get the url parameter value of the request through {@code request.getParameter(paramName)}
      *
-     * @return String
+     * @param paramName parameter name
+     * @param request   Current request
+     * @return string
      */
     public static String getParam(String paramName, HttpServletRequest request) {
         if (null == request) {
@@ -53,7 +54,9 @@ public class RequestUtil {
     /**
      * Get request header
      *
-     * @return String
+     * @param headerName request header name
+     * @param request    Current request
+     * @return string
      */
     public static String getHeader(String headerName, HttpServletRequest request) {
         if (null == request) {
@@ -65,7 +68,8 @@ public class RequestUtil {
     /**
      * Get the referer of the current request
      *
-     * @return String
+     * @param request Current request
+     * @return string
      */
     public static String getReferer(HttpServletRequest request) {
         return getHeader("Referer", request);
@@ -74,7 +78,8 @@ public class RequestUtil {
     /**
      * Get the User-Agent of the current request
      *
-     * @return String
+     * @param request Current request
+     * @return string
      */
     public static String getUa(HttpServletRequest request) {
         return getHeader("User-Agent", request);
@@ -83,7 +88,8 @@ public class RequestUtil {
     /**
      * Get the IP of the current request
      *
-     * @return String
+     * @param request Current request
+     * @return string
      */
     public static String getIp(HttpServletRequest request) {
         if (null == request) {
@@ -133,7 +139,9 @@ public class RequestUtil {
     /**
      * Get the request url
      *
-     * @return String
+     * @param encode  Whether to encode url
+     * @param request Current request
+     * @return string
      */
     public static String getRequestUrl(boolean encode, HttpServletRequest request) {
         if (null == request) {
@@ -165,7 +173,6 @@ public class RequestUtil {
      * @param name    cookie name
      * @return String
      */
-    @Nullable
     public static String getCookieVal(HttpServletRequest request, String name) {
         Cookie cookie = getCookie(request, name);
         return cookie != null ? cookie.getValue() : null;
@@ -178,7 +185,6 @@ public class RequestUtil {
      * @param name    cookie name
      * @return Cookie
      */
-    @Nullable
     public static Cookie getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
@@ -216,7 +222,7 @@ public class RequestUtil {
      * @param path     path
      * @param domain   domain
      */
-    public static void setCookie(HttpServletResponse response, String name, @Nullable String value, int maxAge, String path, String domain) {
+    public static void setCookie(HttpServletResponse response, String name, String value, int maxAge, String path, String domain) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath(path);
         if (null != domain) {

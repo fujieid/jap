@@ -35,7 +35,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class JapLocalCache implements JapCache {
+public class JapLocalCache implements JapCache, Serializable {
 
     private static final Map<String, CacheObj> LOCAL_CACHE = new ConcurrentHashMap<>();
     private final ReentrantReadWriteLock cacheLock = new ReentrantReadWriteLock(true);
