@@ -32,7 +32,6 @@ public class LogoutEndpoint extends AbstractEndpoint {
 
     public IdsResponse<String, Object> logout(HttpServletRequest request) {
         JapIds.removeUserInfo(request);
-        TokenUtil.invalidateToken(request);
         request.getSession().invalidate();
         return new IdsResponse<String, Object>()
             .data(idsConfig.getLogoutRedirectUrl());

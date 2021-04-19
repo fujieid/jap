@@ -87,7 +87,9 @@ public class AbstractIdsFilter {
             String registrationUrl = config.getRegistrationUrl();
             String jwksUrl = config.getJwksUrl();
             String discoveryUrl = config.getDiscoveryUrl();
-            String[] urls = {authorizeUrl, loginUrl, errorUrl, confirmUrl, tokenUrl, registrationUrl, jwksUrl, discoveryUrl};
+            String logoutUrl = config.getLoginUrl();
+            String logoutRedirectUrl = config.getLogoutRedirectUrl();
+            String[] urls = {authorizeUrl, loginUrl, errorUrl, confirmUrl, tokenUrl, registrationUrl, jwksUrl, discoveryUrl, logoutUrl, logoutRedirectUrl};
             for (String url : urls) {
                 if (StringUtil.isNotEmpty(url) && url.startsWith(issuer)) {
                     this.ignoreUrls.add(url.substring(issuer.length()));

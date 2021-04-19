@@ -223,7 +223,7 @@ public class IdsConfig {
     }
 
     public String getLogoutRedirectUrl() {
-        return logoutRedirectUrl;
+        return null == logoutRedirectUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "/" : logoutRedirectUrl;
     }
 
     public IdsConfig setLogoutRedirectUrl(String logoutRedirectUrl) {
