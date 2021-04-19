@@ -83,7 +83,7 @@ public class IdsConfig {
     /**
      * After logout, redirect to {@code logoutRedirectUrl}. Default is `/`
      */
-    private String logoutRedirectUrl = "/";
+    private String logoutRedirectUrl;
     /**
      * public key url, the default is {@code issuer + /.well-known/jwks.json}
      */
@@ -223,7 +223,7 @@ public class IdsConfig {
     }
 
     public String getLogoutRedirectUrl() {
-        return null == logoutRedirectUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "/" : logoutRedirectUrl;
+        return null == logoutRedirectUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) : logoutRedirectUrl;
     }
 
     public IdsConfig setLogoutRedirectUrl(String logoutRedirectUrl) {
