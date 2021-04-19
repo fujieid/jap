@@ -92,11 +92,6 @@ public class IdsTokenProvider {
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">4.3.  Resource Owner Password Credentials Grant</a>
      */
     public IdsResponse<String, Object> generatePasswordResponse(IdsRequestParam param, HttpServletRequest request) {
-
-        if (ObjectUtil.hasNull(param.getClientId())) {
-            throw new InvalidClientException(ErrorResponse.INVALID_CLIENT);
-        }
-
         String username = param.getUsername();
         String password = param.getPassword();
         UserInfo userInfo = JapIds.getContext().getUserService().loginByUsernameAndPassword(username, password);
@@ -138,10 +133,6 @@ public class IdsTokenProvider {
      */
     public IdsResponse<String, Object> generateClientCredentialsResponse(IdsRequestParam param) {
         String clientId = param.getClientId();
-
-        if (ObjectUtil.hasNull(param.getClientId(), param.getClientSecret())) {
-            throw new InvalidClientException(ErrorResponse.INVALID_CLIENT);
-        }
 
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(clientId);
         String requestScope = param.getScope();

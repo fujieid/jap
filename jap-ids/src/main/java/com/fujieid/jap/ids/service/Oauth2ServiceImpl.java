@@ -21,6 +21,7 @@ import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.InvalidCodeException;
+import com.fujieid.jap.ids.exception.UnsupportedGrantTypeException;
 import com.fujieid.jap.ids.model.AuthCode;
 import com.fujieid.jap.ids.model.IdsConsts;
 import com.fujieid.jap.ids.model.IdsRequestParam;
@@ -58,7 +59,7 @@ public class Oauth2ServiceImpl implements Oauth2Service {
     @Override
     public AuthCode validateAndGetAuthrizationCode(String grantType, String code) {
         if (!GrantType.AUTHORIZATION_CODE.getType().equals(grantType)) {
-            return null;
+            throw new UnsupportedGrantTypeException(ErrorResponse.UNSUPPORTED_GRANT_TYPE);
         }
         AuthCode authCode = this.getCodeInfo(code);
         if (null == authCode || ObjectUtil.hasNull(authCode.getUser(), authCode.getScope())) {

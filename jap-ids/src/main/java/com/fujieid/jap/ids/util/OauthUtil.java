@@ -145,12 +145,12 @@ public class OauthUtil {
             if (param.isEnablePkce()) {
                 oauth2Service.validateAuthrizationCodeChallenge(param.getCodeVerifier(), param.getCode());
             } else {
-                if (!clientDetail.getClientSecret().equals(param.getClientSecret())) {
+                if (StringUtil.isEmpty(param.getClientSecret()) || !clientDetail.getClientSecret().equals(param.getClientSecret())) {
                     throw new InvalidClientException(ErrorResponse.INVALID_CLIENT);
                 }
             }
         } else {
-            if (!clientDetail.getClientSecret().equals(param.getClientSecret())) {
+            if (StringUtil.isEmpty(param.getClientSecret()) || !clientDetail.getClientSecret().equals(param.getClientSecret())) {
                 throw new InvalidClientException(ErrorResponse.INVALID_CLIENT);
             }
         }

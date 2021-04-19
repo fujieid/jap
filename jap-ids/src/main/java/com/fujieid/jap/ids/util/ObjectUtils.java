@@ -19,6 +19,7 @@ import cn.hutool.core.util.URLUtil;
 import com.xkcoding.json.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,33 @@ public class ObjectUtils {
             return str;
         }
         return str.endsWith(suffix) ? str : str + suffix;
+    }
+
+    /**
+     * string to map, str format is{@code xxx=xxx&xxx=xxx}
+     *
+     * @param input The string to be converted
+     * @return map
+     */
+    public static Map<String, String> parseStringToMap(String input) {
+        Map<String, String> res = null;
+        if (input.contains("&")) {
+            String[] fields = input.split("&");
+            res = new HashMap<>((int) (fields.length / 0.75 + 1));
+            for (String field : fields) {
+                if (field.contains("=")) {
+                    String[] keyValue = field.split("=");
+                    res.put(keyValue[0], keyValue.length == 2 ? keyValue[1] : null);
+                }
+            }
+        } else if (input.contains("=")) {
+            String[] keyValue = input.split("=");
+            res = new HashMap<>((int) (keyValue.length / 0.75 + 1));
+            res.put(keyValue[0], keyValue.length == 2 ? keyValue[1] : null);
+        } else {
+            res = new HashMap<>(0);
+        }
+        return res;
     }
 
     /**

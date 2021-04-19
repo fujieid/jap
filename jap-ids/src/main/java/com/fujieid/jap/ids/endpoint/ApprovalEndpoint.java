@@ -49,7 +49,7 @@ public class ApprovalEndpoint extends AbstractEndpoint {
      * @param response Current response
      * @throws IOException IOException
      */
-    public void confirm(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void showConfirmPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String approvalContent = createConfirmPageHtml(request);
         response.setContentType("text/html;charset=UTF-8");
         response.getWriter().append(approvalContent);
@@ -63,11 +63,9 @@ public class ApprovalEndpoint extends AbstractEndpoint {
      */
     public IdsResponse<String, Object> getAuthClientInfo(HttpServletRequest request) {
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
-        // Verify client application
-        if (StringUtil.isEmpty(param.getClientId())) {
-            throw new InvalidClientException(ErrorResponse.INVALID_CLIENT);
-        }
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(param.getClientId());
+        OauthUtil.validClientDetail(clientDetail);
+
         List<Map<String, Object>> scopeInfo = getScopeInfo(param);
 
         Map<String, Object> result = new HashMap<>(5);
@@ -162,7 +160,7 @@ public class ApprovalEndpoint extends AbstractEndpoint {
      */
     private List<Map<String, Object>> getScopeInfo(IdsRequestParam param) {
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(param.getClientId());
-        OauthUtil.validClientDetail(clientDetail);
+
         Set<String> userAuthorizedScopes = OauthUtil.validateScope(param.getScope(), clientDetail.getScopes());
 
         Set<String> supportedScopes = OauthUtil.convertStrToList(clientDetail.getScopes());
