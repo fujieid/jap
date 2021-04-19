@@ -56,7 +56,6 @@ public class OidcUtil {
         model.put("registration_endpoint", ObjectUtils.appendIfNotEndWith(config.getRegistrationUrl(), identity));
         model.put("end_session_endpoint", ObjectUtils.appendIfNotEndWith(config.getEndSessionUrl(), identity));
         model.put("check_session_iframe", ObjectUtils.appendIfNotEndWith(config.getCheckSessionUrl(), identity));
-        model.put("check_token_endpoint", ObjectUtils.appendIfNotEndWith(config.getCheckTokenUrl(), identity));
         model.put("jwks_uri", ObjectUtils.appendIfNotEndWith(config.getJwksUrl(), identity));
         model.put("grant_types_supported", GrantType.grantTypes());
         model.put("response_modes_supported", Arrays.asList(
