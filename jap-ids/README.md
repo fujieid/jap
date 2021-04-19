@@ -343,7 +343,6 @@ JapIds.registerContext(new IdsContext()
     <li>获取授权：http://{host}:{port}/oauth/authorize</li>
     <li>确认授权：http://{host}:{port}/oauth/confirm</li>
     <li>获取/刷新Token：http://{host}:{port}/oauth/token</li>
-    <li>校验Token：http://{host}:{port}/oauth/check_token</li>
     <li>收回Token：http://{host}:{port}/oauth/revoke_token</li>
     <li>用户详情：http://{host}:{port}/oauth/userinfo</li>
     <li>check session：http://{host}:{port}/oauth/check_session</li>
@@ -390,7 +389,6 @@ public FilterRegistrationBean<IdsAccessTokenFilter> registeraccessTokenFilter() 
             "/oauth/confirm," +
             "/oauth/authorize," +
             "/oauth/token," +
-            "/oauth/check_token," +
             "/oauth/check_session," +
             "/oauth/registration," +
             "/.well-known/jwks.json," +
@@ -416,7 +414,6 @@ public FilterRegistrationBean<IdsUserStatusFilter> registerUserStatusFilter() {
             "/oauth/confirm," +
             "/oauth/authorize," +
             "/oauth/token," +
-            "/oauth/check_token," +
             "/oauth/check_session," +
             "/oauth/registration," +
             "/.well-known/jwks.json," +

@@ -67,11 +67,6 @@ public class TokenEndpoint extends AbstractEndpoint {
         throw new UnsupportedGrantTypeException(ErrorResponse.UNSUPPORTED_GRANT_TYPE);
     }
 
-    public IdsResponse<String, Object> checkToken(String token) {
-        return new IdsResponse<String, Object>()
-            .addAll(JwtUtil.parseJwtToken(token));
-    }
-
     public IdsResponse<String, Object> revokeToken(HttpServletRequest request) {
         TokenUtil.invalidateToken(request);
         return new IdsResponse<>();
