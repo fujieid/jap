@@ -22,5 +22,11 @@
       <artifactId>jap-oidc</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.bitbucket.b_c</groupId>
+      <artifactId>jose4j</artifactId>
+      <version>${jose4j.version}</version>
+    </dependency>
   </dependencies>
 </project>
