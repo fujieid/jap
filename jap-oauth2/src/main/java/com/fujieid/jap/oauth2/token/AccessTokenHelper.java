@@ -17,17 +17,15 @@ package com.fujieid.jap.oauth2.token;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import com.fujieid.jap.core.util.JapUtil;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
+import com.fujieid.jap.core.util.JapUtil;
 import com.fujieid.jap.oauth2.*;
 import com.fujieid.jap.oauth2.pkce.PkceHelper;
 import com.fujieid.jap.oauth2.pkce.PkceParams;
-import com.google.common.collect.Maps;
-import com.xkcoding.http.HttpUtil;
-import com.xkcoding.json.JsonUtil;
 import com.xkcoding.json.util.Kv;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -61,7 +59,7 @@ public class AccessTokenHelper {
             return getAccessTokenOfImplicitMode(request);
         }
         if (oAuthConfig.getGrantType() == Oauth2GrantType.password) {
-            return getAccessTokenOfPasswordMode(request, oAuthConfig);
+            return getAccessTokenOfPasswordMode(oAuthConfig);
         }
         if (oAuthConfig.getGrantType() == Oauth2GrantType.client_credentials) {
             return getAccessTokenOfClientMode(request, oAuthConfig);
@@ -83,7 +81,7 @@ public class AccessTokenHelper {
         Oauth2Util.checkState(state, oAuthConfig.getClientId(), oAuthConfig.isVerifyState());
 
         String code = request.getParameter("code");
-        Map<String, String> params = Maps.newHashMap();
+        Map<String, String> params = new HashMap<>(6);
         params.put("grant_type", Oauth2GrantType.authorization_code.name());
         params.put("code", code);
         params.put("client_id", oAuthConfig.getClientId());
@@ -91,17 +89,16 @@ public class AccessTokenHelper {
         if (StrUtil.isNotBlank(oAuthConfig.getCallbackUrl())) {
             params.put("redirect_uri", oAuthConfig.getCallbackUrl());
         }
-        // Pkce is only applicable to authorization code mode
+        // PKCE is only applicable to authorization code mode
         if (Oauth2ResponseType.code == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
             params.put(PkceParams.CODE_VERIFIER, PkceHelper.getCacheCodeVerifier(oAuthConfig.getClientId()));
         }
 
-        String tokenResponse = HttpUtil.post(oAuthConfig.getTokenUrl(), params, false);
-        Kv tokenInfo = JsonUtil.parseKv(tokenResponse);
-        Oauth2Util.checkOauthResponse(tokenResponse, tokenInfo, "Oauth2Strategy failed to get AccessToken.");
+        Kv tokenInfo = Oauth2Util.request(oAuthConfig.getAccessTokenEndpointMethodType(), oAuthConfig.getTokenUrl(), params);
+        Oauth2Util.checkOauthResponse(tokenInfo, "Oauth2Strategy failed to get AccessToken.");
 
         if (!tokenInfo.containsKey("access_token")) {
-            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenResponse);
+            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenInfo.toString());
         }
 
         return mapToAccessToken(tokenInfo);
@@ -138,8 +135,8 @@ public class AccessTokenHelper {
      * @return token request url
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">4.3.  Resource Owner Password Credentials Grant</a>
      */
-    private static AccessToken getAccessTokenOfPasswordMode(HttpServletRequest request, OAuthConfig oAuthConfig) throws JapOauth2Exception {
-        Map<String, String> params = Maps.newHashMap();
+    private static AccessToken getAccessTokenOfPasswordMode(OAuthConfig oAuthConfig) throws JapOauth2Exception {
+        Map<String, String> params = new HashMap<>(6);
         params.put("grant_type", Oauth2GrantType.password.name());
         params.put("username", oAuthConfig.getUsername());
         params.put("password", oAuthConfig.getPassword());
@@ -148,13 +145,11 @@ public class AccessTokenHelper {
         if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
             params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
         }
-        String url = oAuthConfig.getTokenUrl();
-        String tokenResponse = HttpUtil.post(url, params, false);
-        Kv tokenInfo = JsonUtil.parseKv(tokenResponse);
-        Oauth2Util.checkOauthResponse(tokenResponse, tokenInfo, "Oauth2Strategy failed to get AccessToken.");
+        Kv tokenInfo = Oauth2Util.request(oAuthConfig.getAccessTokenEndpointMethodType(), oAuthConfig.getTokenUrl(), params);
+        Oauth2Util.checkOauthResponse(tokenInfo, "Oauth2Strategy failed to get AccessToken.");
 
         if (!tokenInfo.containsKey("access_token")) {
-            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenResponse);
+            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenInfo.toString());
         }
         return mapToAccessToken(tokenInfo);
     }
@@ -173,14 +168,12 @@ public class AccessTokenHelper {
 //        if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
 //            params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
 //        }
-//        String url = oAuthConfig.getTokenUrl();
 //
-//        String tokenResponse = HttpUtil.post(url, params, false);
-//        Kv tokenInfo = JsonUtil.parseKv(tokenResponse);
-//        Oauth2Util.checkOauthResponse(tokenResponse, tokenInfo, "Oauth2Strategy failed to get AccessToken.");
+//        Kv tokenInfo = Oauth2Util.request(oAuthConfig.getAccessTokenEndpointMethodType(), oAuthConfig.getTokenUrl(), params);
+//        Oauth2Util.checkOauthResponse(tokenInfo, "Oauth2Strategy failed to get AccessToken.");
 //
 //        if (ObjectUtil.isEmpty(request.getParameter("access_token"))) {
-//            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken.");
+//            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenInfo.toString());
 //        }
 //
 //        return mapToAccessToken(tokenInfo);

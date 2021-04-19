@@ -1,8 +1,21 @@
-## v1.0.1-alpha.1（2021-03-08）
+## v1.0.1（2021-04-**）
 
-- [jap oidc] Optimize the `OidcStrategy#authenticate` method, cache the `OidcDiscoveryDto`, and reduce unnecessary http
+### New features
+
+- **Complete the development of the `jap-ids` module, and provide oauth services externally based on `jap-ids`**
+- Add `com.fujieid.jap.core.util.RequestUtil`
+
+### Modified
+
+- [jap-oidc] Optimize the `OidcStrategy#authenticate` method, cache the `OidcDiscoveryDto`, and reduce unnecessary http
   requests
 - [jap-oidc] Optimize the code of `OidcUtil`, fix known bugs
+- [jap-social] fix known bugs
+- Refactor `com.fujieid.jap.core.cache.JapLocalCache`, implement timer manually, clean local cache regularly
+
+### PR
+
+- Merge Gitee PR [#9](https://gitee.com/fujieid/jap/pulls/9) by [@dreamlu](https://gitee.com/dreamlu)
 
 ## v1.0.1-alpha.1（2021-03-07）
 
@@ -13,7 +26,7 @@
 
 ### PR
 
-- Merge pull request !8
+- Merge Gitee PR [#8](https://gitee.com/fujieid/jap/pulls/8)
 
 ## v1.0.1-alpha（2021-03-05）
 

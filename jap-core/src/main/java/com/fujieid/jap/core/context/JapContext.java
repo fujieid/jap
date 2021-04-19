@@ -15,8 +15,8 @@
  */
 package com.fujieid.jap.core.context;
 
-import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.cache.JapCache;
+import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.store.JapUserStore;
 
 /**

@@ -15,7 +15,7 @@
  */
 package com.fujieid.jap.simple;
 
-import cn.hutool.extra.servlet.ServletUtil;
+import com.fujieid.jap.core.util.RequestUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -40,9 +40,9 @@ public class JapAuthenticationDetails implements Serializable {
 
     public JapAuthenticationDetails(HttpServletRequest request) {
 
-        this.clientIp = ServletUtil.getClientIP(request);
+        this.clientIp = RequestUtil.getIp(request);
         this.remoteAddress = request.getRemoteAddr();
-        this.userAgent = ServletUtil.getHeader(request, "user-agent", "UTF-8");
+        this.userAgent = RequestUtil.getHeader("user-agent", request);
 
         HttpSession session = request.getSession(false);
         this.sessionId = (session != null) ? session.getId() : null;

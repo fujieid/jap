@@ -5,7 +5,7 @@
 
   <groupId>com.fujieid</groupId>
   <artifactId>jap</artifactId>
-  <version>1.0.1-alpha.1</version>
+  <version>1.0.1</version>
   <packaging>pom</packaging>
 
   <name>jap</name>
@@ -67,10 +67,9 @@
     <junit.version>4.13.1</junit.version>
     <mockito.version>2.23.4</mockito.version>
     <hutool.version>5.5.7</hutool.version>
-    <guava.version>RELEASE</guava.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
-    <justauth.version>1.15.9</justauth.version>
-    <jose4j.version>0.7.1</jose4j.version>
+    <justauth.version>1.16.0</justauth.version>
+    <jose4j.version>0.7.6</jose4j.version>
     <slf4j-api.version>1.7.30</slf4j-api.version>
     <jedis.version>3.2.0</jedis.version>
     <kisso.version>3.7.6</kisso.version>
@@ -106,7 +105,6 @@
     </dependency>
     <!-- junit end -->
 
-
     <!--
     To decouple the JSON class library, developers only need to select the appropriate JSON class library to introduce, as follows:
         - jackson
@@ -122,12 +120,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>${guava.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>cn.hutool</groupId>
       <artifactId>hutool-core</artifactId>
       <version>${hutool.version}</version>
@@ -135,13 +127,7 @@
 
     <dependency>
       <groupId>cn.hutool</groupId>
-      <artifactId>hutool-extra</artifactId>
-      <version>${hutool.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-cache</artifactId>
+      <artifactId>hutool-log</artifactId>
       <version>${hutool.version}</version>
     </dependency>
 
@@ -151,17 +137,12 @@
       <version>${hutool.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.bitbucket.b_c</groupId>
-      <artifactId>jose4j</artifactId>
-      <version>${jose4j.version}</version>
-    </dependency>
-
     <!-- servlet -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>${javax.servlet.version}</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 

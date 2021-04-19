@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * Authorization service based on rfc6749 protocol specification and OpenID Connect Core 1.0 specification
+ * Authorization service based on RFC6749 protocol specification and OpenID Connect Core 1.0 specification
  * <p>
  * Features：
  * <p>
@@ -43,6 +43,7 @@
  * @see <a href="https://tools.ietf.org/html/rfc6749" target="_blank"> The OAuth 2.0 Authorization Framework</a>
  * @see <a href="https://openid.net/specs/openid-connect-core-1_0.html" target="_blank">OpenID Connect Core 1.0 incorporating errata set 1</a>
  * @see <a href="https://tools.ietf.org/html/rfc7636" target="_blank">Proof Key for Code Exchange by OAuth Public Clients</a>
+ * @see <a href="https://tools.ietf.org/html/rfc7033" target="_blank">WebFinger</a>
  * @see <a href="https://openid.net/specs/openid-connect-discovery-1_0.html" target="_blank">OpenID Connect Discovery 1.0 incorporating errata set 1</a>
  * @see <a href="https://openid.net/specs/openid-connect-frontchannel-1_0.html" target="_blank">OpenID Connect Front-Channel Logout 1.0</a>
  * @see <a href="https://openid.net/specs/openid-connect-backchannel-1_0.html" target="_blank">OpenID Connect Back-Channel Logout 1.0</a>

@@ -17,9 +17,9 @@ package com.fujieid.jap.sso;
 
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import com.fujieid.jap.sso.util.QrCodeUtil;
 import com.warrenstrange.googleauth.*;
 
 import javax.servlet.http.HttpServletResponse;

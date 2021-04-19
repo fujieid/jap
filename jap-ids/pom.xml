@@ -5,14 +5,28 @@
   <parent>
     <groupId>com.fujieid</groupId>
     <artifactId>jap</artifactId>
-    <version>1.0.1-alpha.1</version>
+    <version>1.0.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>jap-ids</artifactId>
   <name>jap-ids</name>
   <description>
-    Authorization service based on rfc6749(https://tools.ietf.org/html/rfc6749) protocol specification
+    Authorization service based on RFC6749(https://tools.ietf.org/html/rfc6749) protocol specification
     and OpenID Connect Core 1.0(https://openid.net/specs/openid-connect-core-1_0.html) specification
   </description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.fujieid</groupId>
+      <artifactId>jap-oidc</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.bitbucket.b_c</groupId>
+      <artifactId>jose4j</artifactId>
+      <version>${jose4j.version}</version>
+    </dependency>
+  </dependencies>
 </project>

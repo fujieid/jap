@@ -18,8 +18,6 @@ package com.fujieid.jap.core.cache;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * unit test
  *

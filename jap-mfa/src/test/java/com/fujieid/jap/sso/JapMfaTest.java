@@ -15,7 +15,6 @@
  */
 package com.fujieid.jap.sso;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;

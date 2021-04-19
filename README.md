@@ -36,51 +36,44 @@
   </a>
 </p>
 <p align="center">
-	<strong>开源地址：</strong> <a target="_blank" href='https://gitee.com/fujieid/jap'>Gitee</a> | <a target="_blank" href='https://github.com/fujieid/jap'>Github</a>
+	<strong>开源地址：</strong> <a target="_blank" href='https://gitee.com/fujieid/jap'>Gitee</a> | <a target="_blank" href='https://github.com/fujieid/jap'>Github</a> | <a target="_blank" href='https://codechina.csdn.net/fujieid/jap'>CodeChina</a>
 </p>
 <p align="center">
-	<strong>官方网站（Wiki）：</strong> <a target="_blank" href='https://justauth.plus'>https://justauth.plus</a>
+	<strong>社区论坛：</strong> <a target="_blank" href='https://discuss.justauth.plus'>https://discuss.justauth.plus</a>
+</p>
+<p align="center">
+	<strong>开发者中心：</strong> <a target="_blank" href='https://justauth.plus'>https://justauth.plus</a>
 </p>
 
 ## 🎨 JAP 是什么？
 
-JAP 是**一款开源的登录中间件**，基于模块化设计，并且与业务高度解耦，使用起来非常灵活，开发者可以毫不费力地将 JAP 集成到任何 web 应用程序中，就像集成 JustAuth 一样简单方便。
-
-JAP 要做的是为所有需要登录认证的应用提供一套标准的解决方案，集成所有 APP。方便开发者无缝对接任何第三方应用或者自有系统。
+JustAuthPlus（以下简称"**JAP**"）是一款开源的登录认证中间件，基于模块化设计，为所有需要登录认证的 WEB 应用提供一套标准的技术解决方案，开发者可以基于 JAP 适配绝大多数的 WEB 系统（自有系统、联邦协议），就像集成 [JustAuth](https://gitee.com/yadong.zhang/JustAuth) 一样，简单方便。
 
 - JAP 口号：Just auth into any app!
 - JAP 目标：让身份链接无处可藏
-- JAP 价值：方便开发者无缝对接任何第三方应用或者自有系统，提高开发效率，减少代码维护成本
-- JAP 愿景：以开源的方式，受惠于开源社区，赋能于开发者。使之成为开发者生态内必不可少的“基础设施”，以期形成新的技术标准。
+- JAP 价值：方便开发者无缝对接绝大多数第三方应用或者自有系统，提高开发效率，减少代码维护成本
+- JAP 愿景：使之成为开发者生态内必不可少的“基础设施”，以期形成新的技术标准。
 
-**ps：我们要让开发者可以基于 JAP 开发出自己的 IAM 或者 IDaaS 系统。**
+**ps：我们要让开发者可以基于 JAP 开发出自己的 IAM 或者 IDaaS 系统。Build your own IDaaS/IAM.**
 
-## ✨ JAP 有什么特点？
+## ✨ JAP 有什么特性？
 
-- 单点登录：一处登录，处处通行
-- 开箱即用：API 设计趋近于白话，类似并参考 JustAuth
-- 多平台：
-    - 国内外数十家第三方平台（基于 JustAuth）
-    - OAuth（OIDC） 协议的平台，内置国内外常见平台
-    - SAML 协议的平台，内置国内外常见平台
-- 业务解耦：JAP 不深入具体的业务，只将授权认证方面的功能抽象出一套标准的组件，方便任意系统快速对接
-- 模块化：JAP 基于模块开发，基本做到，用哪种引哪种
-- 统一标准：一切内置实现或者自定义的实现，都基于标准的策略
-- 多语言支持计划：后期将会支持以下语言版本：Java、Python、Go、Node 等
+- **易用性**：JAP 的 API 沿袭 JustAuth 的简单性，做到了开箱即用的程度。JAP 高度抽象各种登录场景，提供了多套简单使用的 API，极大程度的降低了开发者的学习成本和使用成本 
+- **全面性**：JAP 全量适配 JustAuth 支持的第三方平台，实现第三方登录。同时也支持所有基于标准OAuth2.0 协议或者 OIDC 协议或者 SAML 协议的应用、系统，同时 JAP 还提供不同语言版本的项目 SDK，适配多种研发场景
+- **模块化**：JAP 基于模块化设计开发，针对每一种登录场景，比如账号密码、OAuth、OIDC等，都单独提供了独有的模块化解决方案
+- **标准化**：JAP 和业务完全解耦，将登录认证相关的逻辑抽象出一套标准的技术解决方案，针对每一种业务场景，比如用户登录、验证密码、创建并绑定第三方系统的账号等，都提供了一套标准的策略或者接口，开发者可以基于 JAP，灵活并方便的完成相关业务逻辑的开发和适配
+- **通用性**：JAP 不仅可以用到第三方登录、OAuth授权、OIDC认证等业务场景，还能适配开发者现有的业务系统的普通账号密码的登录场景，基本将所有登录相关的业务场景都已经涵盖。针对 WEB 应用，JAP 将提供满足各种不同登录场景的解决方案（和开发语言无关）
+
+## 🎯 JAP 有什么功能？
+
+![](docs/media/01c3231f.png)
 
 ## 💥 适用于哪些场景？
 
-- 新项目立项，你们需要研发一套独立的、统一的、包含登录、认证的系统
-- 现有登录模块为自研，但是新一轮的技术规划中，你们想将登录认证模块重构，以更加灵活的架构适应后面的新需求，比如：集成 MFA 登录、集成 OAuth 登录等
-- 你们的项目太多，每个项目都需要登录认证模块，想解决这种重复劳动的问题
-- 从长远方面考虑，公司或组织或个人需要一套标准的、灵活的、功能全面的登录认证功能
-- 你们不想将研发成本放到登录认证这种必须但想做完善又需要花费大量时间成本、人力成本的事情上，希望有一个中间件可以完美集成登录认证功能，使研发人员有更多的时间和精力投入到业务开发中，提高研发产能和研发效率
-- 你们除了需要对接标准的身份提供商外，还有一些非标准的身份提供商，需要投入研发人员单独定制开发
-- 你们企业中用到的开发语言较多，比如：Java、Python、Node等，每种语言对应的系统，都要使用不同语言实现相同的登录认证功能
-- 你们需要研发一个支持 OAuth 登录的 Web 应用程序
-- 你们想让自己的系统支持对外提供 OAuth 服务
-- 你们需要研发一个支持 SAML 登录的 Web 应用程序，但又苦于 SAML 那庞大而繁琐的业务流程和配置
-- 你们想研发一个支持 LDAP 登录的程序，但又不知道如何入手
+JAP 适用于所有需要登录功能的场景。比如：
+- **要求规范**：新项目立项，你们需要研发一套包含登录、认证的系统，并且从长远方面考虑，你们需要一套标准的、灵活的、功能全面的登录认证功能。
+- **需求灵活**：现有登录模块为自研，但是新一轮的技术规划中，你们想将登录认证模块重构，以更加灵活的架构适应后面的新需求，比如：集成 MFA 登录、集成 OAuth 登录、SAML登录等。
+- **力求省事**：你们的项目太多（或者是开发语言较多，比如：Java、Python、Node 等），每个项目都需要登录认证模块，想解决这种重复劳动的问题，使研发人员有更多的时间和精力投入到业务开发中，提高研发产能和研发效率。
 - ...
 
 ## ❓ JAP 常见问题有哪些？
@@ -117,7 +110,7 @@ JAP 基于 LGPL 3.0 协议。商用分为以下两种情况：
 
 ## 👪 贡献者列表
 
-[![Giteye chart](https://chart.giteye.net/gitee/fujieid/jap/JMU7Y85K.png)](https://giteye.net/chart/JMU7Y85K)
+[![contributors](https://whnb.wang/contributors/fujieid/jap)](https://whnb.wang)
 
 ## 💹 关注统计
 

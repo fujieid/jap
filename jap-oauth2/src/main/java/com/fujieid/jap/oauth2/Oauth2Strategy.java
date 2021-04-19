@@ -30,15 +30,12 @@ import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import com.fujieid.jap.oauth2.pkce.PkceHelper;
 import com.fujieid.jap.oauth2.token.AccessToken;
 import com.fujieid.jap.oauth2.token.AccessTokenHelper;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-import com.xkcoding.http.HttpUtil;
-import com.xkcoding.json.JsonUtil;
 import com.xkcoding.json.util.Kv;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -141,13 +138,14 @@ public class Oauth2Strategy extends AbstractJapStrategy {
     }
 
     private JapUser getUserInfo(OAuthConfig oAuthConfig, AccessToken accessToken) throws JapOauth2Exception {
-        String userinfoResponse = HttpUtil.post(oAuthConfig.getUserinfoUrl(),
-            ImmutableMap.of("access_token", accessToken.getAccessToken()), false);
-        Kv userinfo = JsonUtil.parseKv(userinfoResponse);
+        Map<String, String> params = new HashMap<>(6);
+        params.put("access_token", accessToken.getAccessToken());
 
-        Oauth2Util.checkOauthResponse(userinfoResponse, userinfo, "Oauth2Strategy failed to get userinfo with accessToken.");
+        Kv userInfo = Oauth2Util.request(oAuthConfig.getUserInfoEndpointMethodType(), oAuthConfig.getUserinfoUrl(), params);
 
-        JapUser japUser = this.japUserService.createAndGetOauth2User(oAuthConfig.getPlatform(), userinfo, accessToken);
+        Oauth2Util.checkOauthResponse(userInfo, "Oauth2Strategy failed to get userInfo with accessToken.");
+
+        JapUser japUser = this.japUserService.createAndGetOauth2User(oAuthConfig.getPlatform(), userInfo, accessToken);
         if (ObjectUtil.isNull(japUser)) {
             return null;
         }
@@ -176,7 +174,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.2" target="_blank">4.2.  Implicit Grant</a>
      */
     private String generateAuthorizationCodeGrantUrl(OAuthConfig oAuthConfig) {
-        Map<String, Object> params = Maps.newHashMap();
+        Map<String, Object> params = new HashMap<>(6);
         params.put("response_type", oAuthConfig.getResponseType());
         params.put("client_id", oAuthConfig.getClientId());
         if (StrUtil.isNotBlank(oAuthConfig.getCallbackUrl())) {

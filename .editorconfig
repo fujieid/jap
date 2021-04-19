@@ -1,7 +1,7 @@
-# JAP 开发组IDE 编辑器标准
+# Jap Development Group IDE Editor Standard
 root = true
 
-# 空格替代Tab缩进在各种编辑工具下效果一致
+# Use spaces instead of tab indentation to keep the effect consistent under various editing tools
 [*]
 indent_style = space
 indent_size = 2

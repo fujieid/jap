@@ -30,4 +30,11 @@ public class JapCacheConfig {
      * The cache expiration time is 1 day by default
      */
     public static long timeout = TimeUnit.DAYS.toMillis(7);
+
+    /**
+     * Turn on the timed task of clearing the local memory cache.
+     * After it is turned on, the {@link JapLocalCache#pruneCache()} method will be called to automatically clear the cache.
+     * If you customize the implemented jap cache interface, you can ignore this config.
+     */
+    public static boolean schedulePrune = true;
 }
