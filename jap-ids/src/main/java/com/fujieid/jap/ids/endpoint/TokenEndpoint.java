@@ -69,7 +69,7 @@ public class TokenEndpoint extends AbstractEndpoint {
 
     public IdsResponse<String, Object> checkToken(String token) {
         return new IdsResponse<String, Object>()
-            .addAll(JwtUtil.parseJwtToken(token, JapIds.getIdsConfig()));
+            .addAll(JwtUtil.parseJwtToken(token));
     }
 
     public IdsResponse<String, Object> revokeToken(HttpServletRequest request) {

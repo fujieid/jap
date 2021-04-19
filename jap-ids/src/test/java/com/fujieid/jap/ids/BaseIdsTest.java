@@ -42,7 +42,7 @@ public class BaseIdsTest {
             .setClientDetailService(new IdsClientDetailServiceImpl())
             .setIdentityService(new IdsIdentityServiceImpl())
             .setIdsConfig(new IdsConfig()
-                .setIssuer("http://localhost:8080")
+                .setIssuer("http://www.baidu.com")
                 .setJwtConfig(new JwtConfig()
                     .setJwksKeyId("jap-jwk-keyid")
                     .setJwksJson("{\n" +

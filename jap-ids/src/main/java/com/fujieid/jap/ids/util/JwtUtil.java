@@ -17,6 +17,7 @@ package com.fujieid.jap.ids.util;
 
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.config.JwtConfig;
 import com.fujieid.jap.ids.exception.IdsTokenException;
@@ -66,15 +67,15 @@ public class JwtUtil {
      * @param userinfo      User Profile
      * @param tokenExpireIn Id Token validity (seconds)
      * @param nonce         noncestr
-     * @param idsConfig     ids config
      * @return jwt token
      */
-    public static String createJwtToken(String clientId, UserInfo userinfo, Long tokenExpireIn, String nonce, IdsConfig idsConfig) {
+    public static String createJwtToken(String clientId, UserInfo userinfo, Long tokenExpireIn, String nonce) {
+        String issuer = JapIds.getIdsConfig().getIssuer();
         JwtClaims claims = new JwtClaims();
 
         // required
         // A unique identity of the person providing the authentication information. Usually an HTTPS URL (excl. queryString and Fragment)
-        claims.setIssuer(idsConfig.getIssuer());
+        claims.setIssuer(issuer);
         // The LOGO of EU provided by ISS is unique within the scope of ISS. It is used by the RP to identify a unique user. The maximum length is 255 ASCII characters
         claims.setSubject(null == userinfo ? clientId : userinfo.getId());
         // Identify the audience for ID Token. OAuth2's client_ID must be included
@@ -103,7 +104,10 @@ public class JwtUtil {
         // The payload of the JWS is JSON content of the JWT Claims
         jws.setPayload(claims.toJson());
 
-        JwtConfig jwtConfig = idsConfig.getJwtConfig();
+        JwtConfig jwtConfig = JapIds.getContext().getIdentityService().getJwtConfig(clientId);
+        if (null == jwtConfig) {
+            throw new InvalidJwksException("Unable to create Jwt Token: jwt config cannot be empty.");
+        }
         PublicJsonWebKey publicJsonWebKey = IdsVerificationKeyResolver.createPublicJsonWebKey(jwtConfig.getJwksKeyId(), jwtConfig.getJwksJson(), jwtConfig.getTokenSigningAlg());
         if (null == publicJsonWebKey) {
             throw new InvalidJwksException("Unable to create Jwt Token: Unable to create public json web key.");
@@ -135,8 +139,11 @@ public class JwtUtil {
         return idToken;
     }
 
-    public static Map<String, Object> parseJwtToken(String jwtToken, IdsConfig idsConfig) {
-        JwtConfig jwtConfig = idsConfig.getJwtConfig();
+    public static Map<String, Object> parseJwtToken(String jwtToken) {
+        JwtConfig jwtConfig = JapIds.getContext().getIdentityService().getJwtConfig(null);
+        if (null == jwtConfig) {
+            throw new InvalidJwksException("Unable to parse Jwt Token: jwt config cannot be empty.");
+        }
 
         PublicJsonWebKey publicJsonWebKey = IdsVerificationKeyResolver.createPublicJsonWebKey(jwtConfig.getJwksKeyId(), jwtConfig.getJwksJson(), jwtConfig.getTokenSigningAlg());
         if (null == publicJsonWebKey) {
@@ -148,7 +155,7 @@ public class JwtUtil {
             // allow some leeway in validating time based claims to account for clock skew
             .setAllowedClockSkewInSeconds(30)
             // verify the signature with the public key
-            .setVerificationKey(publicJsonWebKey.getPublicKey())
+//            .setVerificationKey(publicJsonWebKey.getPublicKey())
             // create the JwtConsumer instance
             .build();
 
@@ -168,7 +175,7 @@ public class JwtUtil {
         }
     }
 
-    public static Map<String, Object> validateJwtToken(String clientId, String userId, String jwtToken, IdsConfig idsConfig) {
+    public static Map<String, Object> validateJwtToken(String clientId, String userId, String jwtToken) {
         // Use JwtConsumerBuilder to construct an appropriate JwtConsumer, which will
         // be used to validate and process the JWT.
         // The specific validation requirements for a JWT are context dependent, however,
@@ -176,7 +183,11 @@ public class JwtUtil {
         // and audience that identifies your system as the intended recipient.
         // If the JWT is encrypted too, you need only provide a decryption key or
         // decryption key resolver to the builder.
-        JwtConfig jwtConfig = idsConfig.getJwtConfig();
+        IdsConfig idsConfig = JapIds.getIdsConfig();
+        JwtConfig jwtConfig = JapIds.getContext().getIdentityService().getJwtConfig(clientId);
+        if (null == jwtConfig) {
+            throw new InvalidJwksException("Unable to validate Jwt Token: jwt config cannot be empty.");
+        }
         JwtConsumerBuilder jwtConsumerBuilder = new JwtConsumerBuilder();
 
         JwtVerificationType jwtVerificationType = jwtConfig.getJwtVerificationType();

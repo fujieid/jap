@@ -28,7 +28,6 @@ import com.fujieid.jap.ids.model.enums.ResponseType;
 import com.fujieid.jap.ids.provider.IdsScopeProvider;
 import com.fujieid.jap.ids.util.JwtUtil;
 import com.fujieid.jap.ids.util.ObjectUtils;
-import com.xkcoding.json.util.StringUtil;
 import org.jose4j.jwk.JsonWebKey;
 import org.jose4j.jwk.JsonWebKeySet;
 import org.jose4j.jwt.ReservedClaimNames;
@@ -43,8 +42,9 @@ import java.util.stream.Collectors;
  */
 public class OidcUtil {
 
-    public static OidcDiscoveryDto getOidcDiscoveryInfo(String identity, IdsConfig config) {
+    public static OidcDiscoveryDto getOidcDiscoveryInfo(String identity) {
 
+        IdsConfig config = JapIds.getIdsConfig();
         List<String> scopes = IdsScopeProvider.getScopeCodes();
 
         Map<String, Object> model = new HashMap<>();
@@ -56,6 +56,7 @@ public class OidcUtil {
         model.put("registration_endpoint", ObjectUtils.appendIfNotEndWith(config.getRegistrationUrl(), identity));
         model.put("end_session_endpoint", ObjectUtils.appendIfNotEndWith(config.getEndSessionUrl(), identity));
         model.put("check_session_iframe", ObjectUtils.appendIfNotEndWith(config.getCheckSessionUrl(), identity));
+        model.put("check_token_endpoint", ObjectUtils.appendIfNotEndWith(config.getCheckTokenUrl(), identity));
         model.put("jwks_uri", ObjectUtils.appendIfNotEndWith(config.getJwksUrl(), identity));
         model.put("grant_types_supported", GrantType.grantTypes());
         model.put("response_modes_supported", Arrays.asList(
@@ -115,13 +116,8 @@ public class OidcUtil {
         return BeanUtil.mapToBean(model, OidcDiscoveryDto.class, false, null);
     }
 
-    public static String getJwksPublicKey(String identity, IdsConfig idsConfig) {
-        String jwksJson = null;
-        if (StringUtil.isNotEmpty(identity)) {
-            jwksJson = JapIds.getContext().getIdentityService().getJwksJson(identity);
-        } else {
-            jwksJson = idsConfig.getJwtConfig().getJwksJson();
-        }
+    public static String getJwksPublicKey(String identity) {
+        String jwksJson = JapIds.getContext().getIdentityService().getJwksJson(identity);
         JsonWebKeySet jsonWebKeySet = JwtUtil.IdsVerificationKeyResolver.createJsonWebKeySet(jwksJson);
         return jsonWebKeySet.toJson(JsonWebKey.OutputControlLevel.PUBLIC_ONLY);
     }

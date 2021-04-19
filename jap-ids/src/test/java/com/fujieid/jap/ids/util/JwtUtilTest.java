@@ -15,8 +15,8 @@
  */
 package com.fujieid.jap.ids.util;
 
-import com.fujieid.jap.ids.config.IdsConfig;
-import com.fujieid.jap.ids.config.JwtConfig;
+import com.fujieid.jap.ids.BaseIdsTest;
+import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.model.UserInfo;
 import com.fujieid.jap.ids.model.enums.JwtVerificationType;
 import com.fujieid.jap.ids.model.enums.TokenSigningAlg;
@@ -27,13 +27,12 @@ import java.util.Map;
 /**
  * https://mkjwk.org/
  */
-public class JwtUtilTest {
+public class JwtUtilTest extends BaseIdsTest {
 
     String clientId = "xxxxxxx";
     UserInfo userInfo = new UserInfo();
     String nonce = "asdasd";
 
-    String issuer = "http://www.baidu.com";
     Long tokenExpireIn = 365 * 24 * 60 * 60L;
     String rs256JwksJson = "{\n" +
         "    \"keys\": [\n" +
@@ -139,148 +138,137 @@ public class JwtUtilTest {
 
     @Test
     public void createJwtTokenFromRs256() {
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig().setJwksJson(rs256JwksJson)));
+        JapIds.getIdsConfig().getJwtConfig().setJwksJson(rs256JwksJson);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
         System.out.println(jwtToken);
     }
 
     @Test
     public void parseJwtTokenFromRs256() {
         String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwOi8vd3d3LmJhaWR1LmNvbSIsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjUwMDMxMDE4LCJpYXQiOjE2MTg0OTUwMTgsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOiJyZCJ9.YgqeBmlrGeauzEAwPOi_WIjG7SyLieU8sbAq-2Ptqq8bDOg0CZdKnzaU9mr-3iEoOeAzTTXh02jHzEz8hhorxi2PFnjZy4H1HSgNqGZckAvwGnN5aC_tMPhx1I_8XMZ0_ZpRiCAlV1NSedveQbCm1jJVKSCoBSLUA4hCIWAQqAR__M-de08oQ-r3HfhFZkSghbzMOI8fXMLvVLtexQAxjek6hn769x-hi-AW-DVDPB_ifUojV8TUNZWZHNj2kG89rBwLgK5LsXEBFpBFvwtfkBYPJVxiSf3cGLcUPTpipQ8buvaLXojAYwE_MXIRklUm2FMAuodQKDJunExe3rzYjw";
-        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(rs256JwksJson)
-            ));
+        JapIds.getIdsConfig().getJwtConfig().setJwksJson(rs256JwksJson);
+        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt);
         System.out.println(jwtInfo);
     }
 
     @Test
     public void createJwtTokenFromRs384() {
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(rs384JwksJson)
-                .setTokenSigningAlg(TokenSigningAlg.RS384)
-            ));
+        JapIds.getIdsConfig()
+            .getJwtConfig()
+            .setJwksJson(rs384JwksJson)
+            .setTokenSigningAlg(TokenSigningAlg.RS384);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
         System.out.println(jwtToken);
     }
 
     @Test
     public void parseJwtTokenFromRs384() {
         String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiUlMzODQifQ.eyJpc3MiOiJodHRwOi8vd3d3LmJhaWR1LmNvbSIsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjUwMDMxMDYwLCJpYXQiOjE2MTg0OTUwNjAsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOiJyZCJ9.fqVFn5Hawa6_sDMP8qN1GDq5TTWPJ8WobxPa_Haw6eapEx36Mgqc2Nc5OaV-ZfzqKgEGRqKuWPQl4_KgxcrnkWD2qOmThGsgLlKE8U3MPNeiyCkGTVJ6fMLwXC1lCZhjP8bSJCMDN1E-RVT1oAPGuHptqVmcaVxYDjakzfy_ofFAItFah9O1L875l172LWSeVbt7tjPkShfnjE0XVHPhs1-mG5FcZL5ScpdhZ3doDK0H1Vf5LJAeapuhL1q_zNeBX2P88kCeTy1zc7bEEWaHlA_WM_qStvrXgcFoAlpuVTOAbipyJwX26vxQTi2fKvAhZHINtL03S1un1AQGuIy3FQ";
-        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(rs384JwksJson)
-                .setTokenSigningAlg(TokenSigningAlg.RS384)
-            ));
+
+        JapIds.getIdsConfig()
+            .getJwtConfig()
+            .setJwksJson(rs384JwksJson)
+            .setTokenSigningAlg(TokenSigningAlg.RS384);
+        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt);
         System.out.println(jwtInfo);
     }
 
     @Test
     public void createJwtTokenFromRs512() {
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(rs512JwksJson)
-                .setTokenSigningAlg(TokenSigningAlg.RS512)
-            ));
+        JapIds.getIdsConfig()
+            .getJwtConfig()
+            .setJwksJson(rs512JwksJson)
+            .setTokenSigningAlg(TokenSigningAlg.RS512);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
         System.out.println(jwtToken);
     }
 
     @Test
     public void parseJwtTokenFromRs512() {
         String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiUlM1MTIifQ.eyJpc3MiOiJodHRwOi8vd3d3LmJhaWR1LmNvbSIsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjUwMDMxMDk3LCJpYXQiOjE2MTg0OTUwOTcsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOiJyZCJ9.ibVDk8CxM6jbNcDGqRc-emjqmRvx4ghhSlzvv6rScC8JDmQGgEotdcmu0N5OaxQt-YZex9daAYBF3Cx09jIvjjot0Iy-0mLf1sT4tjG3K5LQ862LRao3L9MyE3Pzqhe2am9AMaGlGimCdrrAFmufSprTADw7jgLxoVIwY5ou1ei5SAO__RjZo-Nmxp8kTW2ea9zKFuhWEkjmLWdZAi6Iet8ntcSFsa1RFc05Urytu8fbOKlqQwaVLOfiaEQw6QDmd28Q7h_BFP_rbclaHaJHOjv05WMKeH5iOEN0wCz4HlZYKOLfLPzH5pZuutMdueiDdCN5WemGLeekpOcJ0BKDfw";
-        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(rs512JwksJson)
-                .setTokenSigningAlg(TokenSigningAlg.RS512)
-            ));
+        JapIds.getIdsConfig()
+            .getJwtConfig()
+            .setJwksJson(rs512JwksJson)
+            .setTokenSigningAlg(TokenSigningAlg.RS512);
+        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt);
         System.out.println(jwtInfo);
     }
 
     @Test
     public void createJwtTokenFromEs256() {
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(es256JwksJson)
-                .setTokenSigningAlg(TokenSigningAlg.ES256)
-            ));
+        JapIds.getIdsConfig()
+            .getJwtConfig()
+            .setJwksJson(es256JwksJson)
+            .setTokenSigningAlg(TokenSigningAlg.ES256);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
         System.out.println(jwtToken);
     }
 
     @Test
     public void parseJwtTokenFromEs256() {
         String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOm51bGwsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjUwMDMxMTIzLCJpYXQiOjE2MTg0OTUxMjMsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOiJyZCJ9.k1b3DEceONkjvOfyE3oBLoVnMNBafx8cMQPU8971D5Xmksn4nnrJl9v2DinvbCrCTc2MVqznClvuhiQ0c76aXg";
-        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(es256JwksJson)
-                .setTokenSigningAlg(TokenSigningAlg.ES256)
-            ));
+
+        JapIds.getIdsConfig()
+            .getJwtConfig()
+            .setJwksJson(es256JwksJson)
+            .setTokenSigningAlg(TokenSigningAlg.ES256);
+        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt);
         System.out.println(jwtInfo);
     }
 
     @Test
     public void createJwtTokenFromEs384() {
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(es384JwksJson)
-                .setTokenSigningAlg(TokenSigningAlg.ES384)
-            ));
+        JapIds.getIdsConfig()
+            .getJwtConfig()
+            .setJwksJson(es384JwksJson)
+            .setTokenSigningAlg(TokenSigningAlg.ES384);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
         System.out.println(jwtToken);
     }
 
     @Test
     public void parseJwtTokenFromEs384() {
-        String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiRVMzODQifQ.eyJpc3MiOm51bGwsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjE4NTkyMzQxLCJpYXQiOjE2MTg0OTIzNDEsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOm51bGx9.BhVF8JagDRjpnW8wbsNi-Fik9nVnIq8X5mpnrkpp1f6K7b1vqCuBuzmHYpy2Wwz1eVYUTa3haRay30jFC2OwzwXNMNXIdJ6X5w-KKefKtiFl_YITFQU-WDwAsPGT3ZfI";
-        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(es384JwksJson)
-                .setTokenSigningAlg(TokenSigningAlg.ES384)
-            ));
+        String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiRVMzODQifQ.eyJpc3MiOiJodHRwOi8vd3d3LmJhaWR1LmNvbSIsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjUwMzU5OTI0LCJpYXQiOjE2MTg4MjM5MjQsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOiJyZCJ9.s833h8GubRExoKfr3XkYrU8qzkaqxme_ATXNJAeSDgC8HJWKTLh1SlXhQaSBjKF5DQ0nJoodJFnpr1dBcC_pZ-GooADXdLOOQtu0Y-p0OXCkh4zHEWzKyu-hPs2Sbis0";
+
+        JapIds.getIdsConfig()
+            .getJwtConfig()
+            .setJwksJson(es384JwksJson)
+            .setTokenSigningAlg(TokenSigningAlg.ES384);
+        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt);
         System.out.println(jwtInfo);
     }
 
     @Test
     public void createJwtTokenFromEs512() {
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(es512JwksJson)
-                .setTokenSigningAlg(TokenSigningAlg.ES512)
-            ));
+        JapIds.getIdsConfig()
+            .getJwtConfig()
+            .setJwksJson(es512JwksJson)
+            .setTokenSigningAlg(TokenSigningAlg.ES512);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
         System.out.println(jwtToken);
     }
 
     @Test
     public void parseJwtTokenFromEs512() {
-        String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiRVM1MTIifQ.eyJpc3MiOm51bGwsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjE4NTkyNDQwLCJpYXQiOjE2MTg0OTI0NDAsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOiJyZCJ9.ARZRKO52FZe7MCKy_Kv02IodCIli6y1ZbSlWpe4Qn0sCBNLGzmcK5A0302TM9dZ8yu8TgLK9j7MbW9i6VaeDZmfwAA0_z1J1SBiIwJ38IdhISJItFBQL28KVf02zfFXfKHl2AZ9DU_liyuNsdkuV92Np-sEAoFMpkC_4cSlJqpM6T-oi";
-        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(es512JwksJson)
-                .setTokenSigningAlg(TokenSigningAlg.ES512)
-            ));
+        String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiRVM1MTIifQ.eyJpc3MiOiJodHRwOi8vd3d3LmJhaWR1LmNvbSIsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjUwMzU5OTQ3LCJpYXQiOjE2MTg4MjM5NDcsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOiJyZCJ9.AAsIflGEuCTJJxZ8CV6aEVkXM8TXjvs9RfsXRuhTyfzXjqtMMaEUZ9aaH1vXlNrQWPvcJDw4HgcQvzRitN1_NLNFASTAzr7l0ef-J_4Raj-DQTpQq5Wdb4icGyunPy-LeLfvNYygbJNNa9AbQ4kMiizI4NIy6gKNc5nXHziTmyXA2eN2";
+
+        JapIds.getIdsConfig()
+            .getJwtConfig()
+            .setJwksJson(es512JwksJson)
+            .setTokenSigningAlg(TokenSigningAlg.ES512);
+        Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt);
         System.out.println(jwtInfo);
     }
 
     @Test
     public void validateJwtToken() {
-        String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiUlMzODQifQ.eyJpc3MiOiJodHRwOi8vd3d3LmJhaWR1LmNvbSIsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjUwMDMxMDYwLCJpYXQiOjE2MTg0OTUwNjAsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOiJyZCJ9.fqVFn5Hawa6_sDMP8qN1GDq5TTWPJ8WobxPa_Haw6eapEx36Mgqc2Nc5OaV-ZfzqKgEGRqKuWPQl4_KgxcrnkWD2qOmThGsgLlKE8U3MPNeiyCkGTVJ6fMLwXC1lCZhjP8bSJCMDN1E-RVT1oAPGuHptqVmcaVxYDjakzfy_ofFAItFah9O1L875l172LWSeVbt7tjPkShfnjE0XVHPhs1-mG5FcZL5ScpdhZ3doDK0H1Vf5LJAeapuhL1q_zNeBX2P88kCeTy1zc7bEEWaHlA_WM_qStvrXgcFoAlpuVTOAbipyJwX26vxQTi2fKvAhZHINtL03S1un1AQGuIy3FQ";
-        Map<String, Object> jwtInfo = JwtUtil.validateJwtToken(clientId, userInfo.getId(), jwt, new IdsConfig()
-            .setIssuer(issuer)
-            .setJwtConfig(new JwtConfig()
-                .setJwksJson(es512JwksJson)
-                .setTokenSigningAlg(TokenSigningAlg.ES512)
-                .setJwtVerificationType(JwtVerificationType.JWKS)
-            ));
+        String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiRVM1MTIifQ.eyJpc3MiOiJodHRwOi8vd3d3LmJhaWR1LmNvbSIsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjUwMzU5OTQ3LCJpYXQiOjE2MTg4MjM5NDcsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOiJyZCJ9.AAsIflGEuCTJJxZ8CV6aEVkXM8TXjvs9RfsXRuhTyfzXjqtMMaEUZ9aaH1vXlNrQWPvcJDw4HgcQvzRitN1_NLNFASTAzr7l0ef-J_4Raj-DQTpQq5Wdb4icGyunPy-LeLfvNYygbJNNa9AbQ4kMiizI4NIy6gKNc5nXHziTmyXA2eN2";
+        JapIds.getIdsConfig()
+            .getJwtConfig()
+            .setJwksJson(es512JwksJson)
+            .setTokenSigningAlg(TokenSigningAlg.ES512)
+            .setJwtVerificationType(JwtVerificationType.JWKS);
+        Map<String, Object> jwtInfo = JwtUtil.validateJwtToken(clientId, userInfo.getId(), jwt);
         System.out.println(jwtInfo);
     }
 }

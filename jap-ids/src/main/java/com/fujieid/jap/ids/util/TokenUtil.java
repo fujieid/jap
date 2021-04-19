@@ -100,7 +100,7 @@ public class TokenUtil {
 
     public static String createIdToken(ClientDetail clientDetail, UserInfo user, String nonce) {
         long idTokenExpiresIn = OauthUtil.getIdTokenExpiresIn(clientDetail.getIdTokenExpiresIn());
-        return JwtUtil.createJwtToken(clientDetail.getClientId(), user, idTokenExpiresIn, nonce, JapIds.getIdsConfig());
+        return JwtUtil.createJwtToken(clientDetail.getClientId(), user, idTokenExpiresIn, nonce);
     }
 
     public static AccessToken createAccessToken(UserInfo user, ClientDetail clientDetail, String grantType, String scope, String nonce) {
@@ -109,7 +109,7 @@ public class TokenUtil {
         long accessTokenExpiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
         long refreshTokenExpiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getRefreshTokenExpiresIn());
 
-        String accessTokenStr = JwtUtil.createJwtToken(clientId, user, accessTokenExpiresIn, nonce, JapIds.getIdsConfig());
+        String accessTokenStr = JwtUtil.createJwtToken(clientId, user, accessTokenExpiresIn, nonce);
         String refreshTokenStr = SecureUtil.sha256(clientId.concat(scope).concat(System.currentTimeMillis() + ""));
 
         AccessToken accessToken = new AccessToken();
@@ -138,7 +138,7 @@ public class TokenUtil {
 
     public static AccessToken refreshAccessToken(UserInfo user, ClientDetail clientDetail, AccessToken accessToken, String nonce) {
         String rawToken = accessToken.getAccessToken();
-        String accessTokenStr = JwtUtil.createJwtToken(clientDetail.getClientId(), user, clientDetail.getAccessTokenExpiresIn(), nonce, JapIds.getIdsConfig());
+        String accessTokenStr = JwtUtil.createJwtToken(clientDetail.getClientId(), user, clientDetail.getAccessTokenExpiresIn(), nonce);
         accessToken.setAccessToken(accessTokenStr);
         accessToken.setAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
 

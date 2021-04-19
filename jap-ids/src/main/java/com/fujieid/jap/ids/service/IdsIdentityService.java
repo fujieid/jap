@@ -15,8 +15,8 @@
  */
 package com.fujieid.jap.ids.service;
 
+import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.config.JwtConfig;
-import com.fujieid.jap.ids.exception.IdsException;
 
 /**
  * User/organization/enterprise and other identity service related interfaces
@@ -28,23 +28,25 @@ import com.fujieid.jap.ids.exception.IdsException;
 public interface IdsIdentityService {
 
     /**
-     * Get the jwt token encryption key string
+     * Get the jwt token encryption key string, The default is the scoped global jwt config configured in ids config.
      *
      * @param identity User/organization/enterprise identification
      * @return Encryption key string in json format
      */
     default String getJwksJson(String identity) {
-        throw new IdsException("Not implemented `IdsIdentityService.getJwksJson(String)`");
+        return JapIds.getIdsConfig().getJwtConfig().getJwksJson();
     }
 
     /**
-     * Get the configuration of jwt token encryption
+     * Get the configuration of jwt token encryption, The default is the scoped global jwt config configured in ids config.
+     * <p>
+     * 调用者需要根据
      *
-     * @param identity User/organization/enterprise identification
+     * @param clientId The client id of the client that currently needs to be authorized
      * @return Encryption key string in json format
      */
-    default JwtConfig getJwtConfig(String identity) {
-        throw new IdsException("Not implemented `IdsIdentityService.getJwtConfig(String)`");
+    default JwtConfig getJwtConfig(String clientId) {
+        return JapIds.getIdsConfig().getJwtConfig();
     }
 
 }

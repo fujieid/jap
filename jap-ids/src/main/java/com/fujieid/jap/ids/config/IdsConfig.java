@@ -81,6 +81,10 @@ public class IdsConfig {
      */
     private String checkSessionUrl;
     /**
+     * check session url, the default is {@code issuer + /oauth/check_token}
+     */
+    private String checkTokenUrl;
+    /**
      * After logout, redirect to {@code logoutRedirectUrl}. Default is `/`
      */
     private String logoutRedirectUrl;
@@ -219,6 +223,15 @@ public class IdsConfig {
 
     public IdsConfig setCheckSessionUrl(String checkSessionUrl) {
         this.checkSessionUrl = checkSessionUrl;
+        return this;
+    }
+
+    public String getCheckTokenUrl() {
+        return null == checkTokenUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/check_token" : checkTokenUrl;
+    }
+
+    public IdsConfig setCheckTokenUrl(String checkTokenUrl) {
+        this.checkTokenUrl = checkTokenUrl;
         return this;
     }
 

@@ -43,9 +43,9 @@ public class IdsScopeProvider {
     static {
         addScope(new IdsScope().setCode("read").setDescription("Allows to read resources, including users, protected resources, etc."));
         addScope(new IdsScope().setCode("write").setDescription("Allows to modify resources, including adding, deleting, and modifying resources such as users and protected resources."));
-        addScope(new IdsScope().setCode("openid").setDescription("OpenID connect must include scope"));
-        addScope(new IdsScope().setCode("email").setDescription("Allow access to user's mailbox"));
-        addScope(new IdsScope().setCode("phone").setDescription("Allow access to the user’s phone number"));
+        addScope(new IdsScope().setCode("openid").setDescription("OpenID connect must include scope."));
+        addScope(new IdsScope().setCode("email").setDescription("Allow access to user's mailbox."));
+        addScope(new IdsScope().setCode("phone").setDescription("Allow access to the user’s phone number."));
     }
 
     /**
