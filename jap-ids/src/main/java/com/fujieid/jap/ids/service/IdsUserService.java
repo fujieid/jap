@@ -27,6 +27,13 @@ import com.fujieid.jap.ids.model.UserInfo;
  */
 public interface IdsUserService {
 
+    /**
+     * Login with account and password
+     *
+     * @param username account number
+     * @param password password
+     * @return UserInfo
+     */
     default UserInfo loginByUsernameAndPassword(String username, String password) {
         throw new IdsException("Not implemented `IdsUserService.loginByUsernameAndPassword(String, String)`");
     }
@@ -35,7 +42,7 @@ public interface IdsUserService {
      * Get user info by userid.
      *
      * @param userId userId of the business system
-     * @return JapUser
+     * @return UserInfo
      */
     default UserInfo getById(String userId) {
         throw new IdsException("Not implemented `IdsUserService.getById(String)`");
@@ -45,7 +52,7 @@ public interface IdsUserService {
      * Get user info by username.
      *
      * @param username username of the business system
-     * @return JapUser
+     * @return UserInfo
      */
     default UserInfo getByName(String username) {
         throw new IdsException("Not implemented `IdsUserService.getByName(String)`");
