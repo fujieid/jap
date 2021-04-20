@@ -28,6 +28,7 @@ import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.model.enums.GrantType;
 import com.fujieid.jap.ids.service.Oauth2Service;
 import com.xkcoding.json.util.StringUtil;
+import org.jose4j.base64url.Base64Url;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -353,6 +354,15 @@ public class OauthUtil {
         } else {
             return codeVerifier;
         }
+    }
+
+    /**
+     * Suitable for oauth 2.0 pkce enhanced protocol
+     *
+     * @return code verifier
+     */
+    public static String generateCodeVerifier(){
+        return Base64Url.encode(RandomUtil.randomString(50), "UTF-8");
     }
 
 }

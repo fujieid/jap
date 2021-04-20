@@ -50,7 +50,7 @@ public class AbstractIdsFilter {
         }
         for (String ignoreUrl : ignoreUrls) {
             if (ignoreUrl.contains("**")) {
-                String[] urls = ignoreUrl.split("/*/*");
+                String[] urls = ignoreUrl.split("\\*\\*");
                 if (urls.length == 1) {
                     if (servletPath.startsWith(urls[0])) {
                         return true;

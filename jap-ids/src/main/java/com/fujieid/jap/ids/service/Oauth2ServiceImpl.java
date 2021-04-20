@@ -70,13 +70,13 @@ public class Oauth2ServiceImpl implements Oauth2Service {
 
     @Override
     public void validateAuthrizationCodeChallenge(String codeVerifier, String code) {
-        log.debug("客户端开启了 PKCE 增强协议，开始校验 code challenge 的合法性...");
+        log.debug("The client opened the pkce enhanced protocol and began to verify the legitimacy of the code challenge...");
         AuthCode authCode = this.getCodeInfo(code);
         if (ObjectUtil.isNull(authCode)) {
             throw new InvalidCodeException(ErrorResponse.INVALID_CODE);
         }
         if (ObjectUtil.hasNull(authCode.getCodeChallenge(), authCode.getCodeChallengeMethod())) {
-            log.debug("客户端开启了 PKCE 增强协议，code challenge 的合法性，校验失败...");
+            log.debug("The client opened the pkce enhanced protocol, and the legality verification of the code challenge failed...");
             throw new InvalidCodeException(ErrorResponse.INVALID_CODE_CHALLENGE);
         }
         String codeChallengeMethod = authCode.getCodeChallengeMethod();
