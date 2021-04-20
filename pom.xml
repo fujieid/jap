@@ -68,7 +68,7 @@
     <mockito.version>2.23.4</mockito.version>
     <hutool.version>5.5.7</hutool.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
-    <justauth.version>1.16.0</justauth.version>
+    <justauth.version>1.16.1</justauth.version>
     <jose4j.version>0.7.6</jose4j.version>
     <slf4j-api.version>1.7.30</slf4j-api.version>
     <jedis.version>3.2.0</jedis.version>
