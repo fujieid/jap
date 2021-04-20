@@ -145,7 +145,7 @@ public class JwtUtilTest extends BaseIdsTest {
 
     @Test
     public void parseJwtTokenFromRs256() {
-        String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwOi8vd3d3LmJhaWR1LmNvbSIsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjUwMDMxMDE4LCJpYXQiOjE2MTg0OTUwMTgsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOiJyZCJ9.YgqeBmlrGeauzEAwPOi_WIjG7SyLieU8sbAq-2Ptqq8bDOg0CZdKnzaU9mr-3iEoOeAzTTXh02jHzEz8hhorxi2PFnjZy4H1HSgNqGZckAvwGnN5aC_tMPhx1I_8XMZ0_ZpRiCAlV1NSedveQbCm1jJVKSCoBSLUA4hCIWAQqAR__M-de08oQ-r3HfhFZkSghbzMOI8fXMLvVLtexQAxjek6hn769x-hi-AW-DVDPB_ifUojV8TUNZWZHNj2kG89rBwLgK5LsXEBFpBFvwtfkBYPJVxiSf3cGLcUPTpipQ8buvaLXojAYwE_MXIRklUm2FMAuodQKDJunExe3rzYjw";
+        String jwt = "eyJraWQiOiJqYXAtandrLWtleWlkIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwOi8vd3d3LmJhaWR1LmNvbSIsInN1YiI6IjExMTEiLCJhdWQiOiJ4eHh4eHh4IiwiZXhwIjoxNjUwNDU4MzczLCJpYXQiOjE2MTg5MjIzNzMsIm5vbmNlIjoiYXNkYXNkIiwidXNlcm5hbWUiOiJyZCJ9.EgqR5HJT3lhfF7bWtxOu0YLlCZ3Fze5dZ3ueUoxKPbzIGUd36592O-DZO_3xWL6jpW5GrZSeLV-mYpHB9T0vCcWWrZOvc1TB7_BDlOdsRHitZoxieTxK3Gvzcd-a4gK88ymB8FUL7_97xJ3ReCiJlf5g6haDIftLJ1kH8bbi8gdas0HpQg2Ey9OPGEbd4hx-djzxlqXrn1zQyZfUCdNOJbFE-UzXfzT7KNktp7UrkA48KiQ0Av9dyDU1qolNYjnljHvSKmJuruWqT0vC20jaLqzc7J2-zWyfAUI-SD5a7lrDJWtvYdj4H8FJKP1A5TO8-5hu_hXy3YAOiBVM3Px9jQ";
         JapIds.getIdsConfig().getJwtConfig().setJwksJson(rs256JwksJson);
         Map<String, Object> jwtInfo = JwtUtil.parseJwtToken(jwt);
         System.out.println(jwtInfo);
