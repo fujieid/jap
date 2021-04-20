@@ -171,19 +171,21 @@ public class JapAuthenticationTest {
 
     @Test
     public void checkToken() {
+
         JapUserStore japUserStore = new JapUserStoreTest();
         JapCache japCache = new JapLocalCache();
         JapConfig japConfig = new JapConfig();
         JapContext japContext = new JapContext(japUserStore, japCache, japConfig);
         JapAuthentication.setContext(japContext);
 
-        String token = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIxMTExIiwiaXAiOiIxOTIuMTY4LjEuMTAzIiwiaXNzIjoiamFwIiwidWEiOiJiM2VmOSIsImlhdCI6MTYxNDY3NjA2N30.MK6CBJR98y6UnRBy2coHXrxNJU4N4bZIA05oCgkaNYODdfSRwXhUEqV-OqYsushOxNmUYH0Lp6sKAtrBip0yCw";
-        String cacheKey = JapConst.USER_TOKEN_KEY.concat("1111");
+        String token = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIxMTExMSIsImlwIjoiMTI3LjAuMC4xIiwiaXNzIjoidXNlcm5hbWUiLCJ1YSI6IjlmNGQ3IiwiaWF0IjoxNjE4OTE1MjI5fQ.U_MMO8UaXtl1ksy3nXL_K99j4TtiU1npH58tXLNWEMyUY5tEOW3Ym8VNwSkPCrstp2uEcE69hhFD8qm8YXGvlg";
+        String cacheKey = JapConst.USER_TOKEN_KEY.concat("11111");
         japCache.set(cacheKey, token);
         Map<String, Object> map = JapAuthentication.checkToken(token);
         System.out.println(map);
-        Assert.assertEquals("{jti=1111, ip=192.168.1.103, iss=jap, ua=b3ef9, iat=1614676067}", map.toString());
+        Assert.assertEquals("{jti=11111, ip=127.0.0.1, iss=username, ua=9f4d7, iat=1618915229}", map.toString());
     }
+
 
     @Test
     public void logout() {
