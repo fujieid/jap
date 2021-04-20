@@ -191,7 +191,7 @@ public class IdsTokenProvider {
                 .add(IdsConsts.TOKEN_TYPE, IdsConsts.TOKEN_TYPE_BEARER)
                 .add(IdsConsts.SCOPE, requestScope);
         } catch (Exception e) {
-            throw new InvalidRequestException(ErrorResponse.SERVER_ERROR);
+            throw new IdsException(ErrorResponse.SERVER_ERROR);
         }
     }
 }

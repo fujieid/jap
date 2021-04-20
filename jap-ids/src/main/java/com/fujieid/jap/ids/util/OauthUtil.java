@@ -76,7 +76,7 @@ public class OauthUtil {
     public static Set<String> validateScope(String requestScopes, String clientScopes) {
 
         if (StringUtil.isEmpty(requestScopes)) {
-            throw new InvalidScopeException("Empty scope (either the client or the user is not allowed the requested scopes)");
+            throw new InvalidScopeException(ErrorResponse.INVALID_SCOPE);
         }
         Set<String> scopes = OauthUtil.convertStrToList(requestScopes);
 
@@ -84,7 +84,7 @@ public class OauthUtil {
             Set<String> appScopes = OauthUtil.convertStrToList(clientScopes);
             for (String scope : scopes) {
                 if (!appScopes.contains(scope)) {
-                    throw new InvalidScopeException("Invalid scope: " + scope + ". " + clientScopes);
+                    throw new InvalidScopeException("Invalid scope: " + scope + ". Only the following scopes are supported: " + clientScopes);
                 }
             }
         }
@@ -361,7 +361,7 @@ public class OauthUtil {
      *
      * @return code verifier
      */
-    public static String generateCodeVerifier(){
+    public static String generateCodeVerifier() {
         return Base64Url.encode(RandomUtil.randomString(50), "UTF-8");
     }
 
