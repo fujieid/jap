@@ -18,6 +18,7 @@ package com.fujieid.jap.core.config;
 import com.fujieid.jap.sso.config.JapSsoConfig;
 
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * Jap configuration.
@@ -50,6 +51,17 @@ public class JapConfig {
 
     public boolean isSso() {
         return sso;
+    }
+
+    public JapConfig enableSso() {
+        return setSso(true);
+    }
+
+    public JapConfig enableSso(Consumer<JapSsoConfig> ssoConfig) {
+        setSso(true);
+        JapSsoConfig japSsoConfig = new JapSsoConfig();
+        ssoConfig.accept(japSsoConfig);
+        return setSsoConfig(japSsoConfig);
     }
 
     public JapConfig setSso(boolean sso) {

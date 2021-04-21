@@ -74,19 +74,29 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      * @param japConfig      japConfig
      */
     public AbstractJapStrategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache) {
+        this(japUserService, japConfig, japConfig.isSso() ? new SsoJapUserStore(japUserService, japConfig.getSsoConfig()) : new SessionJapUserStore(), japCache);
+    }
+
+    /**
+     * `Strategy` constructor.
+     *
+     * @param japUserService japUserService
+     * @param japConfig      japConfig
+     * @param japUserStore   JapUserStore
+     * @param japCache       Jap cache
+     */
+    public AbstractJapStrategy(JapUserService japUserService, JapConfig japConfig, JapUserStore japUserStore, JapCache japCache) {
         this.japUserService = japUserService;
         if (japConfig.isSso()) {
             // init Kisso config
             JapSsoHelper.initKissoConfig(japConfig.getSsoConfig());
         }
-        JapUserStore japUserStore = japConfig.isSso() ? new SsoJapUserStore(japUserService, japConfig.getSsoConfig()) : new SessionJapUserStore();
         this.japContext = new JapContext(japUserStore, japCache, japConfig);
 
         JapAuthentication.setContext(this.japContext);
 
         // Update the cache validity period
         JapCacheConfig.timeout = japConfig.getCacheExpireTime();
-
     }
 
     /**
