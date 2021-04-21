@@ -18,6 +18,9 @@ case "$1" in
   'pd')
     docs/bin/push-dev.sh
 	;;
+  'ppd')
+    docs/bin/pull-dev.sh
+	;;
   'p')
     docs/bin/push.sh
 	;;
