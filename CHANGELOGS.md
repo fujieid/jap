@@ -36,6 +36,10 @@ For more details about the use of `jap-ids`, please refer to the sample project:
 
 - Merge Gitee PR [#9](https://gitee.com/fujieid/jap/pulls/9) by [@dreamlu](https://gitee.com/dreamlu)
 
+### Issue
+
+- Fix Gitee Issue [#I3DC7N](https://gitee.com/fujieid/jap/issues/I3DC7N)
+
 ## v1.0.1-alpha.1（2021-03-07）
 
 ### Modified
