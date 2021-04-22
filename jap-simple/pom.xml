@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.fujieid</groupId>
     <artifactId>jap</artifactId>
-    <version>1.0.1</version>
+    <version>${revision}</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -19,7 +19,6 @@
     <dependency>
       <groupId>com.fujieid</groupId>
       <artifactId>jap-core</artifactId>
-      <version>${project.parent.version}</version>
     </dependency>
   </dependencies>
 </project>

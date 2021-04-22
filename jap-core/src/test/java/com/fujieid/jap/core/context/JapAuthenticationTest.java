@@ -182,7 +182,9 @@ public class JapAuthenticationTest {
         japCache.set(cacheKey, token);
         Map<String, Object> map = JapAuthentication.checkToken(token);
         System.out.println(map);
-        Assert.assertEquals("{jti=1111, ip=192.168.1.103, iss=jap, ua=b3ef9, iat=1614676067}", map.toString());
+        // token 已经过期，会返回 null
+        Assert.assertNull(map);
+//        Assert.assertEquals("{jti=1111, ip=192.168.1.103, iss=jap, ua=b3ef9, iat=1614676067}", map.toString());
     }
 
     @Test
