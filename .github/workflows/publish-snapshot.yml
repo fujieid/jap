@@ -20,10 +20,6 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '8'
-      # 安装JDK环境
-      - name: Set up Apache Maven Central
-        uses: actions/setup-java@v2
-        with:
           distribution: 'adopt'
           server-id: 'sonatype-nexus-snapshots' # Value of the distributionManagement/repository/id field of the pom.xml
           server-username: MAVEN_USERNAME
