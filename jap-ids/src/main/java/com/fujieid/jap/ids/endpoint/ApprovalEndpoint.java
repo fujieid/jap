@@ -16,17 +16,14 @@
 package com.fujieid.jap.ids.endpoint;
 
 import com.fujieid.jap.ids.JapIds;
-import com.fujieid.jap.ids.exception.InvalidClientException;
 import com.fujieid.jap.ids.model.ClientDetail;
 import com.fujieid.jap.ids.model.IdsRequestParam;
 import com.fujieid.jap.ids.model.IdsResponse;
 import com.fujieid.jap.ids.model.IdsScope;
-import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.provider.IdsRequestParamProvider;
 import com.fujieid.jap.ids.provider.IdsScopeProvider;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.ObjectUtils;
-import com.xkcoding.json.util.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

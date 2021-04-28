@@ -75,7 +75,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
         }
 
         return new IdsResponse<String, Object>()
-            .data(OauthUtil.createAuthorizeUrl(idsConfig.getLoginUrl(), param));
+            .data(OauthUtil.createAuthorizeUrl(JapIds.getIdsConfig().getLoginUrl(), param));
     }
 
     /**

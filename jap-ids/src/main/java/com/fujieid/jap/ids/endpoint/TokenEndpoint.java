@@ -15,7 +15,6 @@
  */
 package com.fujieid.jap.ids.endpoint;
 
-import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.UnsupportedGrantTypeException;
 import com.fujieid.jap.ids.model.IdsRequestParam;
 import com.fujieid.jap.ids.model.IdsResponse;
@@ -23,7 +22,6 @@ import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.model.enums.GrantType;
 import com.fujieid.jap.ids.provider.IdsRequestParamProvider;
 import com.fujieid.jap.ids.provider.IdsTokenProvider;
-import com.fujieid.jap.ids.util.JwtUtil;
 import com.fujieid.jap.ids.util.TokenUtil;
 import com.xkcoding.json.util.StringUtil;
 

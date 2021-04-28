@@ -17,6 +17,7 @@ package com.fujieid.jap.ids.endpoint;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.fujieid.jap.ids.JapIds;
+import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.IdsResponse;
 import com.fujieid.jap.ids.model.UserInfo;
@@ -93,6 +94,7 @@ public class LoginEndpoint extends AbstractEndpoint {
      * @return Confirm authorization page
      */
     public IdsResponse<String, Object> signin(HttpServletRequest request) {
+        IdsConfig idsConfig = JapIds.getIdsConfig();
         String username = request.getParameter(idsConfig.getUsernameField());
         String password = request.getParameter(idsConfig.getPasswordField());
         if (ObjectUtil.hasEmpty(username, password)) {
