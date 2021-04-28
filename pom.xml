@@ -5,7 +5,7 @@
 
   <groupId>com.fujieid</groupId>
   <artifactId>jap</artifactId>
-  <version>${revision}</version>
+  <version>${jap.version}</version>
   <packaging>pom</packaging>
 
   <name>jap</name>
@@ -52,7 +52,7 @@
 
   <properties>
     <!-- jap version -->
-    <revision>1.0.1</revision>
+    <jap.version>1.0.2-SNAPSHOT</jap.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -134,7 +134,7 @@
       <dependency>
         <groupId>com.fujieid</groupId>
         <artifactId>jap-bom</artifactId>
-        <version>${revision}</version>
+        <version>${jap.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

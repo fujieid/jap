@@ -10,7 +10,7 @@ echo "当前路径：$pwd"
 if [ -n "$1" ];then
     new_version="$1"
     old_version=`cat $pwd/docs/bin/version.txt`
-    echo "$old_version 替换为新版本 $new_version"
+    echo "将项目版本 v$old_version 修改为 v$new_version"
 else
     # 参数错误，退出
     echo "ERROR: 请指定新版本！"
@@ -22,9 +22,14 @@ if [ ! -n "$old_version" ]; then
     exit
 fi
 
-# 替换README.md等文件中的版本
+echo "替换 $pwd/README.md"
 sed -i "s/${old_version}/${new_version}/g" $pwd/README.md
+echo "替换 $pwd/README.en.md"
 sed -i "s/${old_version}/${new_version}/g" $pwd/README.en.md
+echo "替换 $pwd/jap-bom/pom.xml"
+sed -i "s/${old_version}/${new_version}/g" $pwd/jap-bom/pom.xml
+echo "替换 $pwd/pom.xml"
+sed -i "s/${old_version}/${new_version}/g" $pwd/pom.xml
 
 # 保留新版本号
 echo "$new_version" > $pwd/docs/bin/version.txt

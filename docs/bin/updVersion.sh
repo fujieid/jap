@@ -13,7 +13,7 @@ if [ ! -n "$1" ]; then
 fi
 
 # 替换所有模块pom.xml中的版本
-mvn versions:set -DnewVersion=$1
+#mvn versions:set -DnewVersion=$1
 
 # 替换其它地方的版本
 source $(pwd)/docs/bin/repVersion.sh "$1"

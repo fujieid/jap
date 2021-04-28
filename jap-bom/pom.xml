@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.fujieid</groupId>
   <artifactId>jap-bom</artifactId>
-  <version>${revision}</version>
+  <version>${jap.version}</version>
   <name>${project.artifactId}</name>
   <packaging>pom</packaging>
   <description>
@@ -14,7 +14,7 @@
 
   <properties>
     <!-- jap version -->
-    <revision>1.0.1</revision>
+    <jap.version>1.0.2-SNAPSHOT</jap.version>
 
     <junit.version>4.13.1</junit.version>
     <mockito.version>2.23.4</mockito.version>
@@ -37,42 +37,42 @@
       <dependency>
         <groupId>com.fujieid</groupId>
         <artifactId>jap-core</artifactId>
-        <version>${revision}</version>
+        <version>${jap.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fujieid</groupId>
         <artifactId>jap-simple</artifactId>
-        <version>${revision}</version>
+        <version>${jap.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fujieid</groupId>
         <artifactId>jap-social</artifactId>
-        <version>${revision}</version>
+        <version>${jap.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fujieid</groupId>
         <artifactId>jap-oauth2</artifactId>
-        <version>${revision}</version>
+        <version>${jap.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fujieid</groupId>
         <artifactId>jap-sso</artifactId>
-        <version>${revision}</version>
+        <version>${jap.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fujieid</groupId>
         <artifactId>jap-oidc</artifactId>
-        <version>${revision}</version>
+        <version>${jap.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fujieid</groupId>
         <artifactId>jap-mfa</artifactId>
-        <version>${revision}</version>
+        <version>${jap.version}</version>
       </dependency>
       <dependency>
         <groupId>com.fujieid</groupId>
         <artifactId>jap-ids</artifactId>
-        <version>${revision}</version>
+        <version>${jap.version}</version>
       </dependency>
 
       <!-- junit start -->
