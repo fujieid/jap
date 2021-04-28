@@ -6,21 +6,21 @@
 </p>
 <p align="center">
 	<a target="_blank" href="https://search.maven.org/search?q=jap">
-	  <img src="https://img.shields.io/badge/Maven%20Central-1.0.1-blue" ></img>
+	  <img src="https://img.shields.io/badge/nexus-v1.0.1-blue" ></img>
+	</a>
+	<a target="_blank" href="https://oss.sonatype.org/content/repositories/snapshots/com/fujieid">
+	  <img src="https://img.shields.io/nexus/s/https/oss.sonatype.org/com.fujieid/jap-bom.svg?style=flat-square" ></img>
 	</a>
 	<a target="_blank" href="https://gitee.com/yadong.zhang/JustAuth/blob/master/LICENSE">
-	  <img src="https://img.shields.io/badge/license-LGPL%203.0-red" ></img>
+	  <img src="https://img.shields.io/badge/license-LGPL%203.0-yellow" ></img>
 	</a>
-	<a target="_blank" href="https://apidoc.gitee.com/fujieid/jap" title="API文档">
-	  <img src="https://img.shields.io/badge/Api%20Docs-latest-orange" ></img>
-	</a>
-	<a target="_blank" href="https://justauth.plus" title="开发文档">
-	  <img src="https://img.shields.io/badge/Docs-latest-blueviolet.svg" ></img>
-	</a>
-  <a target="_blank" href="https://codecov.io/gh/fujieid/jap" title="开发codecov档">
+  <a href="https://www.codacy.com/gh/fujieid/jap/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fujieid/jap&amp;utm_campaign=Badge_Grade">
+    <img src="https://app.codacy.com/project/badge/Grade/c4c76cde65594819ab3de3e25e9b99d4"/>
+</a>
+  <a target="_blank" href="https://codecov.io/gh/fujieid/jap" title="codecov">
 	  <img src="https://codecov.io/gh/fujieid/jap/branch/master/graph/badge.svg?token=WmfmgwxtnJ" ></img>
 	</a>
-  <a target="_blank" href="https://travis-ci.com/fujieid/jap" title="开发codecov档">
+  <a target="_blank" href="https://travis-ci.com/fujieid/jap" title="ci">
 	  <img src="https://travis-ci.com/fujieid/jap.svg?branch=master&status=passed" ></img>
 	</a>
 	<a target="_blank" href="https://gitter.im/fujieid/JAP?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge">
@@ -42,19 +42,15 @@
 	<strong>社区论坛：</strong> <a target="_blank" href='https://discuss.justauth.plus'>https://discuss.justauth.plus</a>
 </p>
 <p align="center">
-	<strong>开发者中心：</strong> <a target="_blank" href='https://justauth.plus'>https://justauth.plus</a>
+	<strong>API 文档：</strong> <a target="_blank" href='https://apidoc.gitee.com/fujieid/jap'>https://apidoc.gitee.com/fujieid/jap</a>
+</p>
+<p align="center">
+	<strong>开发者文档：</strong> <a target="_blank" href='https://justauth.plus'>https://justauth.plus</a>
 </p>
 
 ## 🎨 JAP 是什么？
 
 JustAuthPlus（以下简称"**JAP**"）是一款开源的登录认证中间件，基于模块化设计，为所有需要登录认证的 WEB 应用提供一套标准的技术解决方案，开发者可以基于 JAP 适配绝大多数的 WEB 系统（自有系统、联邦协议），就像集成 [JustAuth](https://gitee.com/yadong.zhang/JustAuth) 一样，简单方便。
-
-- JAP 口号：Just auth into any app!
-- JAP 目标：让身份链接无处可藏
-- JAP 价值：方便开发者无缝对接绝大多数第三方应用或者自有系统，提高开发效率，减少代码维护成本
-- JAP 愿景：使之成为开发者生态内必不可少的“基础设施”，以期形成新的技术标准。
-
-**ps：我们要让开发者可以基于 JAP 开发出自己的 IAM 或者 IDaaS 系统。Build your own IDaaS/IAM.**
 
 ## ✨ JAP 有什么特性？
 
