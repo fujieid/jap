@@ -5,7 +5,7 @@
 
   <groupId>com.fujieid</groupId>
   <artifactId>jap</artifactId>
-  <version>${jap.version}</version>
+  <version>${revision}</version>
   <packaging>pom</packaging>
 
   <name>jap</name>
@@ -52,9 +52,10 @@
 
   <properties>
     <!-- jap version -->
-    <jap.version>1.0.2-SNAPSHOT</jap.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <revision>1.0.2-SNAPSHOT</revision>
     <java.version>1.8</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- maven -->
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven-source.version>2.2.1</maven-source.version>
@@ -66,7 +67,21 @@
     <maven.test.skip>false</maven.test.skip>
     <cobertura-version>2.7</cobertura-version>
     <jacoco-version>0.8.6</jacoco-version>
-
+    <!-- java -->
+    <junit.version>4.13.1</junit.version>
+    <mockito.version>2.23.4</mockito.version>
+    <hutool.version>5.5.7</hutool.version>
+    <javax.servlet.version>4.0.1</javax.servlet.version>
+    <justauth.version>1.16.1</justauth.version>
+    <jose4j.version>0.7.6</jose4j.version>
+    <slf4j-api.version>1.7.30</slf4j-api.version>
+    <jedis.version>3.2.0</jedis.version>
+    <kisso.version>3.7.6</kisso.version>
+    <simple-json.version>0.0.2</simple-json.version>
+    <simple-http.version>1.0.3</simple-http.version>
+    <zxing.version>3.3.3</zxing.version>
+    <googleauth.version>1.4.0</googleauth.version>
+    <commons-cli.version>1.4</commons-cli.version>
   </properties>
 
   <dependencies>
@@ -91,36 +106,6 @@
       <artifactId>slf4j-api</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- junit end -->
-
-    <!--
-    To decouple the JSON class library, developers only need to select the appropriate JSON class library to introduce, as follows:
-        - jackson
-        - fastjson
-        - gson
-        - hutool-json
-    For more information on the use of `simple-json`, please refer to: https://github.com/xkcoding/simple-json
-    -->
-    <dependency>
-      <groupId>com.xkcoding.json</groupId>
-      <artifactId>simple-json</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-log</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-crypto</artifactId>
-    </dependency>
-
     <!-- servlet -->
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -133,10 +118,126 @@
     <dependencies>
       <dependency>
         <groupId>com.fujieid</groupId>
-        <artifactId>jap-bom</artifactId>
-        <version>${jap.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
+        <artifactId>jap-core</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fujieid</groupId>
+        <artifactId>jap-simple</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fujieid</groupId>
+        <artifactId>jap-social</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fujieid</groupId>
+        <artifactId>jap-oauth2</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fujieid</groupId>
+        <artifactId>jap-sso</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fujieid</groupId>
+        <artifactId>jap-oidc</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fujieid</groupId>
+        <artifactId>jap-mfa</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fujieid</groupId>
+        <artifactId>jap-ids</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <!-- junit start -->
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-http</artifactId>
+        <version>${hutool.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j-api.version}</version>
+      </dependency>
+      <!-- junit end -->
+      <dependency>
+        <groupId>com.xkcoding.json</groupId>
+        <artifactId>simple-json</artifactId>
+        <version>${simple-json.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-core</artifactId>
+        <version>${hutool.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-log</artifactId>
+        <version>${hutool.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-crypto</artifactId>
+        <version>${hutool.version}</version>
+      </dependency>
+      <!-- servlet -->
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>${javax.servlet.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>kisso</artifactId>
+        <version>${kisso.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.xkcoding.http</groupId>
+        <artifactId>simple-http</artifactId>
+        <version>${simple-http.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>me.zhyd.oauth</groupId>
+        <artifactId>JustAuth</artifactId>
+        <version>${justauth.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.bitbucket.b_c</groupId>
+        <artifactId>jose4j</artifactId>
+        <version>${jose4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>core</artifactId>
+        <version>${zxing.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.warrenstrange</groupId>
+        <artifactId>googleauth</artifactId>
+        <version>${googleauth.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-cli</groupId>
+        <artifactId>commons-cli</artifactId>
+        <version>${commons-cli.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -281,16 +382,17 @@
           </plugin>
         </plugins>
       </build>
-      <distributionManagement>
-        <snapshotRepository>
-          <id>sonatype-nexus-snapshots</id>
-          <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-          <id>sonatype-nexus-staging</id>
-          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-      </distributionManagement>
     </profile>
   </profiles>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
 </project>
