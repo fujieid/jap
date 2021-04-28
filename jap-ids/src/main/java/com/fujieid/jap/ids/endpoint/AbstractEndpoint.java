@@ -15,8 +15,6 @@
  */
 package com.fujieid.jap.ids.endpoint;
 
-import com.fujieid.jap.ids.JapIds;
-import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.service.Oauth2Service;
 import com.fujieid.jap.ids.service.Oauth2ServiceImpl;
 
@@ -29,10 +27,9 @@ import com.fujieid.jap.ids.service.Oauth2ServiceImpl;
  */
 public abstract class AbstractEndpoint {
     protected final Oauth2Service oauth2Service;
-    protected IdsConfig idsConfig;
 
     public AbstractEndpoint() {
-        this.idsConfig = JapIds.getIdsConfig();
         this.oauth2Service = new Oauth2ServiceImpl();
     }
+
 }

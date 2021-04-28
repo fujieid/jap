@@ -17,7 +17,6 @@ package com.fujieid.jap.ids.endpoint;
 
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.model.IdsResponse;
-import com.fujieid.jap.ids.util.TokenUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,6 +33,6 @@ public class LogoutEndpoint extends AbstractEndpoint {
         JapIds.removeUserInfo(request);
         request.getSession().invalidate();
         return new IdsResponse<String, Object>()
-            .data(idsConfig.getLogoutRedirectUrl());
+            .data(JapIds.getIdsConfig().getLogoutRedirectUrl());
     }
 }
