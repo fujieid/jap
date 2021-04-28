@@ -71,9 +71,7 @@ public class Oauth2UtilTest {
     public void checkOauthResponseNoError() {
         Kv kv = new Kv();
         String errorMsg = "errorMsg";
-        Oauth2Util.checkOauthResponse(kv, errorMsg);
-        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
-            .setResponseType(Oauth2ResponseType.token)));
+        Assert.assertThrows(JapOauth2Exception.class, () -> Oauth2Util.checkOauthResponse(kv, errorMsg));
     }
 
     @Test

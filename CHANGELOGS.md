@@ -2,8 +2,27 @@
 
 ### New features
 
-- **Complete the development of the `jap-ids` module, and provide oauth services externally based on `jap-ids`**
 - Add `com.fujieid.jap.core.util.RequestUtil`
+- **Complete the development of the `jap-ids` module, and provide oauth services externally based on `jap-ids`**
+  - **Supported features**：
+    - Authorization Code Grant
+    - Proof Key for Code Exchange
+    - Implicit Grant
+    - Resource Owner Password Credentials Grant
+    - Client Credentials Grant
+    - Refresh access token
+    - Revoke access token
+    - Get the currently authorized user
+    - Verify login status
+    - Abnormal prompt
+    - Sign out
+    - OpenID Connect Discovery
+    - JWK Endpoint
+    - Custom jwt encryption and decryption certificate
+    - Support multiple response types, such as: `code`, `token`, `id token`, `id token token`, `code id token`, `code token`, `code id token token`
+    - ...
+  
+For more details about the use of `jap-ids`, please refer to the sample project: [jap-ids-demo](https://gitee.com/fujieid/jap-ids-demo), or refer to the document: [IDS OAuth 2.0 服务端]( https://justauth.plus/ids/)
 
 ### Modified
 
@@ -16,6 +35,10 @@
 ### PR
 
 - Merge Gitee PR [#9](https://gitee.com/fujieid/jap/pulls/9) by [@dreamlu](https://gitee.com/dreamlu)
+
+### Issue
+
+- Fix Gitee Issue [#I3DC7N](https://gitee.com/fujieid/jap/issues/I3DC7N)
 
 ## v1.0.1-alpha.1（2021-03-07）
 

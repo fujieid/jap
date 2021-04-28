@@ -155,7 +155,7 @@ public class JwtUtil {
             // allow some leeway in validating time based claims to account for clock skew
             .setAllowedClockSkewInSeconds(30)
             // verify the signature with the public key
-//            .setVerificationKey(publicJsonWebKey.getPublicKey())
+            .setVerificationKey(publicJsonWebKey.getPublicKey())
             // create the JwtConsumer instance
             .build();
 
