@@ -22,20 +22,33 @@ import com.fujieid.jap.ids.model.AccessToken;
 import com.fujieid.jap.ids.model.IdsResponse;
 import com.fujieid.jap.ids.model.UserInfo;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
+import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.TokenUtil;
 import com.xkcoding.json.JsonUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * userinfo endpoint
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
+ * @see <a href="https://openid.net/specs/openid-connect-core-1_0.html#UserInfo" target="_blank">5.3.  UserInfo Endpoint</a>
  * @since 1.0.0
  */
 public class UserInfoEndpoint extends AbstractEndpoint {
 
+    /**
+     * Get the currently logged-in user information through the access token
+     *
+     * @param request current request
+     * @return IdsResponse
+     * @see <a href="https://openid.net/specs/openid-connect-core-1_0.html#UserInfo" target="_blank">5.3.  UserInfo Endpoint</a>
+     * @see <a href="https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse" target="_blank">5.3.2.  Successful UserInfo Response</a>
+     * @see <a href="https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims" target="_blank">5.4.  Requesting Claims using Scope Values</a>
+     */
     public IdsResponse<String, Object> getCurrentUserInfo(HttpServletRequest request) {
 
         String accessTokenStr = TokenUtil.getAccessToken(request);
@@ -51,8 +64,40 @@ public class UserInfoEndpoint extends AbstractEndpoint {
             throw new IdsException(ErrorResponse.ACCESS_DENIED);
         }
 
-        user.setEmail(null);
-        user.setPhone_number(null);
+        String scope = accessToken.getScope();
+        Set<String> scopes = OauthUtil.convertStrToList(scope);
+        // This scope value requests access to the End-User's default profile Claims,
+        // which are: name, family_name, given_name, middle_name, nickname, preferred_username, profile, picture, website, gender, birthdate, zoneinfo, locale, and updated_at.
+        if (!scopes.contains("profile")) {
+            user.setName(null);
+            user.setFamily_name(null);
+            user.setGiven_name(null);
+            user.setMiddle_name(null);
+            user.setNickname(null);
+            user.setPreferred_username(null);
+            user.setProfile(null);
+            user.setPicture(null);
+            user.setWebsite(null);
+            user.setGender(null);
+            user.setBirthdate(null);
+            user.setZoneinfo(null);
+            user.setLocale(null);
+            user.setUpdated_at(null);
+        }
+        // This scope value requests access to the email and email_verified Claims.
+        if (!scopes.contains("email")) {
+            user.setEmail(null);
+            user.setEmail_verified("false");
+        }
+        // This scope value requests access to the phone_number and phone_number_verified Claims.
+        if (!scopes.contains("phone")) {
+            user.setPhone_number(null);
+            user.setPhone_number_verified("false");
+        }
+        // This scope value requests access to the address Claim.
+        if (!scopes.contains("address")) {
+            user.setAddress(new HashMap<>(0));
+        }
         IdsResponse<String, Object> idsResponse = new IdsResponse<>();
         idsResponse.putAll(JsonUtil.parseKv(JsonUtil.toJsonString(user)));
         return idsResponse;
