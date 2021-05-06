@@ -27,102 +27,97 @@ public class ClientDetail implements Serializable {
     private String id;
 
     /**
-     * 应用名
+     * Application name
      */
     private String appName;
 
     /**
-     * 应用ID
+     * client id, A unique random string
      */
     private String clientId;
 
     /**
-     * 应用密钥
+     * client secret, A random string
      */
     private String clientSecret;
 
     /**
-     * 自定义二级域名
+     * Custom second-level domain name
      */
     private String siteDomain;
 
     /**
-     * 认证成功后跳转的地址
+     * Callback url after successful login
      */
     private String redirectUri;
 
     /**
-     * 退出成功后跳转的地址
+     * Callback url after successful logout
      */
     private String logoutRedirectUri;
 
     /**
-     * 应用图标
+     * Application logo
      */
     private String logo;
 
     /**
-     * 是否可用
+     * The status of the application, when it is false, login is not allowed
      */
     private Boolean available;
 
     /**
-     * 应用描述
+     * Application description
      */
     private String description;
 
     /**
-     * 权限范围
+     * The scope of permissions granted to the application, separated by spaces, for example: `openid email phone`
      */
     private String scopes;
 
     /**
-     * 授权类型
+     * The type of authorization granted to the application, separated by spaces
      */
     private String grantTypes;
 
     /**
-     * 返回类型
+     * The response type granted by the application, separated by spaces
      */
     private String responseTypes;
 
     /**
-     * code 授权码有效时间（秒）
+     * code authorization code valid time (seconds)
      */
     private Long codeExpiresIn;
 
     /**
-     * id token有效时间（秒）
+     * id token valid time (seconds)
      */
     private Long idTokenExpiresIn;
 
     /**
-     * access token有效时间（秒）
+     * Access token valid time (seconds)
      */
     private Long accessTokenExpiresIn;
 
     /**
-     * refresh token有效时间（秒）
+     * Refresh token valid time (seconds)
      */
     private Long refreshTokenExpiresIn;
 
     /**
-     * 附加信息
-     */
-    private String additionalInformation;
-
-    /**
-     * 自动批准(不显示确认页面)
+     * When {@code autoApprove} is {@code true}, the authorization is automatically approved (the page to confirm the authorization is not displayed)
      */
     private Boolean autoApprove;
 
     /**
-     * 启用 PKCE 增强协议
+     * Enable pkce enhanced protocol
      */
     private Boolean enablePkce;
 
     /**
-     * PKCE 质询码的加密方式
+     * Encryption method of pkce challenge code
      */
     private String codeChallengeMethod;
 
@@ -276,15 +271,6 @@ public class ClientDetail implements Serializable {
 
     public ClientDetail setRefreshTokenExpiresIn(Long refreshTokenExpiresIn) {
         this.refreshTokenExpiresIn = refreshTokenExpiresIn;
-        return this;
-    }
-
-    public String getAdditionalInformation() {
-        return additionalInformation;
-    }
-
-    public ClientDetail setAdditionalInformation(String additionalInformation) {
-        this.additionalInformation = additionalInformation;
         return this;
     }
 
