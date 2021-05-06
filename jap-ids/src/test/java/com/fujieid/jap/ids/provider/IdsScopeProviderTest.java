@@ -10,13 +10,6 @@ import java.util.List;
 public class IdsScopeProviderTest {
 
     @Test
-    public void initScopes() {
-        IdsScopeProvider.initScopes(Collections.singletonList(new IdsScope().setCode("code").setDescription("aasdasd")));
-        Assert.assertEquals(1, IdsScopeProvider.getScopes().size());
-        Assert.assertEquals("code", IdsScopeProvider.getScopes().get(0).getCode());
-    }
-
-    @Test
     public void addScope() {
         IdsScopeProvider.addScope(new IdsScope().setCode("code").setDescription("aasdasd"));
         List<IdsScope> scopeList = IdsScopeProvider.getScopeByCodes(Collections.singletonList("code"));

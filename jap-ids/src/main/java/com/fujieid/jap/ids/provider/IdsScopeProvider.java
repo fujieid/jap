@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
  * Read, write, openid, email, and phone are supported by default.
  * If developers need to modify the scope, they can use the following methods:
  * <p>
- * {@link com.fujieid.jap.ids.provider.IdsScopeProvider#initScopes(List)}
- * <p>
  * {@link com.fujieid.jap.ids.provider.IdsScopeProvider#addScope(IdsScope)}
  * <p>
  * Note: Whether it is a custom scope or a system built-in scope, openid must be included, which is a required option for enabling OIDC
@@ -38,29 +36,14 @@ import java.util.stream.Collectors;
  */
 public class IdsScopeProvider {
 
-    private static List<IdsScope> scopes = new ArrayList<>();
+    private static final List<IdsScope> SCOPES = new ArrayList<>();
 
     static {
-        addScope(new IdsScope().setCode("read").setDescription("Allows to read resources, including users, protected resources, etc."));
-        addScope(new IdsScope().setCode("write").setDescription("Allows to modify resources, including adding, deleting, and modifying resources such as users and protected resources."));
         addScope(new IdsScope().setCode("openid").setDescription("OpenID connect must include scope."));
         addScope(new IdsScope().setCode("profile").setDescription("Allow access to user's basic information."));
         addScope(new IdsScope().setCode("email").setDescription("Allow access to user's mailbox."));
         addScope(new IdsScope().setCode("phone").setDescription("Allow access to the user’s phone number."));
         addScope(new IdsScope().setCode("address").setDescription("Allow access to the user's address."));
-    }
-
-    /**
-     * Initialize scope
-     * <p>
-     * Note: This method will reset the existing scope collection
-     *
-     * @param idsScopes scope collection
-     */
-    public static void initScopes(List<IdsScope> idsScopes) {
-        if (ObjectUtil.isNotEmpty(idsScopes)) {
-            scopes = idsScopes;
-        }
     }
 
     /**
@@ -70,7 +53,7 @@ public class IdsScopeProvider {
      * @param idsScope single scope
      */
     public static void addScope(IdsScope idsScope) {
-        scopes.add(idsScope);
+        SCOPES.add(idsScope);
     }
 
     /**
@@ -79,7 +62,7 @@ public class IdsScopeProvider {
      * @return Unique scope collection
      */
     public static List<IdsScope> getScopes() {
-        return scopes.stream().collect(Collectors.collectingAndThen(
+        return SCOPES.stream().collect(Collectors.collectingAndThen(
             Collectors.toCollection(() -> new TreeSet<>(
                 Comparator.comparing(
                     IdsScope::getCode))), ArrayList::new));
@@ -95,7 +78,7 @@ public class IdsScopeProvider {
         if (ObjectUtil.isEmpty(codes)) {
             return new ArrayList<>(0);
         }
-        return Optional.ofNullable(scopes.stream().filter((scope) -> codes.contains(scope.getCode()))
+        return Optional.ofNullable(SCOPES.stream().filter((scope) -> codes.contains(scope.getCode()))
             .collect(Collectors.collectingAndThen(
                 Collectors.toCollection(() -> new TreeSet<>(
                     Comparator.comparing(
@@ -109,7 +92,7 @@ public class IdsScopeProvider {
      * @return code of all scopes
      */
     public static List<String> getScopeCodes() {
-        return scopes.stream().map(IdsScope::getCode).distinct().collect(Collectors.toList());
+        return SCOPES.stream().map(IdsScope::getCode).distinct().collect(Collectors.toList());
     }
 
 }
