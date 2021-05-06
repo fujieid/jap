@@ -15,6 +15,7 @@
  */
 package com.fujieid.jap.ids.util;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.fujieid.jap.ids.JapIds;
@@ -25,9 +26,7 @@ import com.fujieid.jap.ids.exception.InvalidJwksException;
 import com.fujieid.jap.ids.exception.InvalidTokenException;
 import com.fujieid.jap.ids.model.IdsConsts;
 import com.fujieid.jap.ids.model.UserInfo;
-import com.fujieid.jap.ids.model.enums.ErrorResponse;
-import com.fujieid.jap.ids.model.enums.JwtVerificationType;
-import com.fujieid.jap.ids.model.enums.TokenSigningAlg;
+import com.fujieid.jap.ids.model.enums.*;
 import com.xkcoding.json.JsonUtil;
 import com.xkcoding.json.util.StringUtil;
 import org.jose4j.jwk.*;
@@ -45,7 +44,9 @@ import org.jose4j.keys.resolvers.JwksVerificationKeyResolver;
 import org.jose4j.keys.resolvers.VerificationKeyResolver;
 import org.jose4j.lang.JoseException;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * simple JSON Web Key generator：https://mkjwk.org/?spm=a2c4g.11186623.2.33.4b2040ecxvsKD7
@@ -70,6 +71,20 @@ public class JwtUtil {
      * @return jwt token
      */
     public static String createJwtToken(String clientId, UserInfo userinfo, Long tokenExpireIn, String nonce) {
+        return createJwtToken(clientId, userinfo, tokenExpireIn, nonce, null, null);
+    }
+
+    /**
+     * https://bitbucket.org/b_c/jose4j/wiki/JWT%20Examples
+     *
+     * @param clientId      Client Identifier
+     * @param userinfo      User Profile
+     * @param tokenExpireIn Id Token validity (seconds)
+     * @param nonce         noncestr
+     * @param scopes        scopes
+     * @return jwt token
+     */
+    public static String createJwtToken(String clientId, UserInfo userinfo, Long tokenExpireIn, String nonce, Set<String> scopes, String responseType) {
         String issuer = JapIds.getIdsConfig().getIssuer();
         JwtClaims claims = new JwtClaims();
 
@@ -90,12 +105,10 @@ public class JwtUtil {
         if (!StringUtil.isEmpty(nonce)) {
             claims.setStringClaim(IdsConsts.NONCE, nonce);
         }
-        if (null != userinfo) {
-            // Time of completion of EU certification. This Claim is required if the RP carries the max_AGE parameter when sending the AuthN request
+        // Time of completion of EU certification. This Claim is required if the RP carries the max_AGE parameter when sending the AuthN request
 //        claims.setClaim("auth_time", "auth_time");
-            // If you include other claim reference: https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
-            claims.setStringClaim("username", userinfo.getUsername());
-        }
+
+        setUserInfoClaim(userinfo, scopes, responseType, claims);
 
         // A JWT is a JWS and/or a JWE with JSON claims as the payload.
         // In this example it is a JWS so we create a JsonWebSignature object.
@@ -137,6 +150,57 @@ public class JwtUtil {
         }
 
         return idToken;
+    }
+
+    private static void setUserInfoClaim(UserInfo userinfo, Set<String> scopes, String responseType, JwtClaims claims) {
+        if (null != userinfo) {
+            // If you include other claim reference: https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
+            claims.setStringClaim("username", userinfo.getUsername());
+            if (ObjectUtil.isNotNull(scopes) && ResponseType.ID_TOKEN.getType().equalsIgnoreCase(responseType)) {
+                // This scope value requests access to the End-User's default profile Claims,
+                // which are: name, family_name, given_name, middle_name, nickname, preferred_username, profile, picture, website, gender, birthdate, zoneinfo, locale, and updated_at.
+                Map<String, Object> userInfoMap = JsonUtil.parseKv(JsonUtil.toJsonString(userinfo));
+                if (scopes.contains("profile")) {
+                    ScopeClaimsMapping scopeClaimsMapping = ScopeClaimsMapping.profile;
+                    List<String> claimList = scopeClaimsMapping.getClaims();
+                    for (String claim : claimList) {
+                        if (userInfoMap.containsKey(claim) && null != userInfoMap.get(claim)) {
+                            claims.setClaim(claim, userInfoMap.get(claim));
+                        }
+                    }
+                }
+                // This scope value requests access to the email and email_verified Claims.
+                if (scopes.contains("email")) {
+                    ScopeClaimsMapping scopeClaimsMapping = ScopeClaimsMapping.email;
+                    List<String> claimList = scopeClaimsMapping.getClaims();
+                    for (String claim : claimList) {
+                        if (userInfoMap.containsKey(claim) && null != userInfoMap.get(claim)) {
+                            claims.setClaim(claim, userInfoMap.get(claim));
+                        }
+                    }
+                }
+                // This scope value requests access to the phone_number and phone_number_verified Claims.
+                if (scopes.contains("phone")) {
+                    ScopeClaimsMapping scopeClaimsMapping = ScopeClaimsMapping.phone;
+                    List<String> claimList = scopeClaimsMapping.getClaims();
+                    for (String claim : claimList) {
+                        if (userInfoMap.containsKey(claim) && null != userInfoMap.get(claim)) {
+                            claims.setClaim(claim, userInfoMap.get(claim));
+                        }
+                    }
+                }
+                // This scope value requests access to the address Claim.
+                if (scopes.contains("address")) {
+                    ScopeClaimsMapping scopeClaimsMapping = ScopeClaimsMapping.address;
+                    List<String> claimList = scopeClaimsMapping.getClaims();
+                    for (String claim : claimList) {
+                        if (userInfoMap.containsKey(claim) && null != userInfoMap.get(claim)) {
+                            claims.setClaim(claim, userInfoMap.get(claim));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static Map<String, Object> parseJwtToken(String jwtToken) {

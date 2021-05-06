@@ -20,10 +20,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.fujieid.jap.core.util.RequestUtil;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.InvalidTokenException;
-import com.fujieid.jap.ids.model.AccessToken;
-import com.fujieid.jap.ids.model.ClientDetail;
-import com.fujieid.jap.ids.model.IdsConsts;
-import com.fujieid.jap.ids.model.UserInfo;
+import com.fujieid.jap.ids.model.*;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.model.enums.TokenAuthMethod;
 import com.xkcoding.json.util.StringUtil;
@@ -101,6 +98,11 @@ public class TokenUtil {
     public static String createIdToken(ClientDetail clientDetail, UserInfo user, String nonce) {
         long idTokenExpiresIn = OauthUtil.getIdTokenExpiresIn(clientDetail.getIdTokenExpiresIn());
         return JwtUtil.createJwtToken(clientDetail.getClientId(), user, idTokenExpiresIn, nonce);
+    }
+
+    public static String createIdToken(ClientDetail clientDetail, UserInfo user, IdsRequestParam param) {
+        long idTokenExpiresIn = OauthUtil.getIdTokenExpiresIn(clientDetail.getIdTokenExpiresIn());
+        return JwtUtil.createJwtToken(clientDetail.getClientId(), user, idTokenExpiresIn, param.getNonce(), OauthUtil.convertStrToList(param.getScope()), param.getResponseType());
     }
 
     public static AccessToken createAccessToken(UserInfo user, ClientDetail clientDetail, String grantType, String scope, String nonce) {

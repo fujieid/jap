@@ -110,7 +110,7 @@ public class IdsAuthorizationProvider {
      * @return String
      */
     public String generateIdTokenAuthorizationResponse(UserInfo userInfo, IdsRequestParam param, ClientDetail clientDetail) {
-        String params = "?id_token=" + TokenUtil.createIdToken(clientDetail, userInfo, param.getNonce());
+        String params = "?id_token=" + TokenUtil.createIdToken(clientDetail, userInfo, param);
         return param.getRedirectUri() + params;
     }
 
