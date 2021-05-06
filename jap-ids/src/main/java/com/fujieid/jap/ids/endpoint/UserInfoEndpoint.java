@@ -22,12 +22,14 @@ import com.fujieid.jap.ids.model.AccessToken;
 import com.fujieid.jap.ids.model.IdsResponse;
 import com.fujieid.jap.ids.model.UserInfo;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
+import com.fujieid.jap.ids.model.enums.ScopeClaimsMapping;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.TokenUtil;
 import com.xkcoding.json.JsonUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -66,40 +68,42 @@ public class UserInfoEndpoint extends AbstractEndpoint {
 
         String scope = accessToken.getScope();
         Set<String> scopes = OauthUtil.convertStrToList(scope);
+        Map<String, Object> userInfoMap = JsonUtil.parseKv(JsonUtil.toJsonString(user));
         // This scope value requests access to the End-User's default profile Claims,
         // which are: name, family_name, given_name, middle_name, nickname, preferred_username, profile, picture, website, gender, birthdate, zoneinfo, locale, and updated_at.
         if (!scopes.contains("profile")) {
-            user.setName(null);
-            user.setFamily_name(null);
-            user.setGiven_name(null);
-            user.setMiddle_name(null);
-            user.setNickname(null);
-            user.setPreferred_username(null);
-            user.setProfile(null);
-            user.setPicture(null);
-            user.setWebsite(null);
-            user.setGender(null);
-            user.setBirthdate(null);
-            user.setZoneinfo(null);
-            user.setLocale(null);
-            user.setUpdated_at(null);
+            ScopeClaimsMapping scopeClaimsMapping = ScopeClaimsMapping.profile;
+            List<String> claims = scopeClaimsMapping.getClaims();
+            for (String claim : claims) {
+                userInfoMap.remove(claim);
+            }
         }
         // This scope value requests access to the email and email_verified Claims.
-        if (!scopes.contains("email")) {
-            user.setEmail(null);
-            user.setEmail_verified("false");
+        if (scopes.contains("email")) {
+            ScopeClaimsMapping scopeClaimsMapping = ScopeClaimsMapping.email;
+            List<String> claims = scopeClaimsMapping.getClaims();
+            for (String claim : claims) {
+                userInfoMap.remove(claim);
+            }
         }
         // This scope value requests access to the phone_number and phone_number_verified Claims.
-        if (!scopes.contains("phone")) {
-            user.setPhone_number(null);
-            user.setPhone_number_verified("false");
+        if (scopes.contains("phone")) {
+            ScopeClaimsMapping scopeClaimsMapping = ScopeClaimsMapping.phone;
+            List<String> claims = scopeClaimsMapping.getClaims();
+            for (String claim : claims) {
+                userInfoMap.remove(claim);
+            }
         }
         // This scope value requests access to the address Claim.
-        if (!scopes.contains("address")) {
-            user.setAddress(new HashMap<>(0));
+        if (scopes.contains("address")) {
+            ScopeClaimsMapping scopeClaimsMapping = ScopeClaimsMapping.address;
+            List<String> claims = scopeClaimsMapping.getClaims();
+            for (String claim : claims) {
+                userInfoMap.remove(claim);
+            }
         }
         IdsResponse<String, Object> idsResponse = new IdsResponse<>();
-        idsResponse.putAll(JsonUtil.parseKv(JsonUtil.toJsonString(user)));
+        idsResponse.putAll(userInfoMap);
         return idsResponse;
     }
 
