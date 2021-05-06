@@ -5,8 +5,10 @@
 ### Modified
 
 - [jap-ids] Add `loginPageUrl` attribute in `IdsConfig` to distinguish it from `loginUrl`.
+- [jap-ids] Modify `IdsConfig.confirmUrl` to `confirmPageUrl`.
 - [jap-ids] The return type of `ApprovalEndpoint#getAuthClientInfo(HttpServletRequest)` is changed from` IdsResponse<String, Object>` to `IdsResponse<String, Map<String, Object>>`
 - [jap-ids] Modify the comment content of `ClientDetail`
+- [jap-ids] Modify the return type of `IdsResponse#getData()` to the specified generic
 
 ### PR
 
