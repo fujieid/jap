@@ -58,7 +58,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
      * @return Callback url or authorization url
      * @throws IOException IOException
      */
-    public IdsResponse<String, Object> authorize(HttpServletRequest request) throws IOException {
+    public IdsResponse<String, String> authorize(HttpServletRequest request) throws IOException {
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
 
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(param.getClientId());
@@ -71,10 +71,10 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
         if (JapIds.isAuthenticated(request)) {
             UserInfo userInfo = JapIds.getUserInfo(request);
             String url = generateResponseUrl(param, param.getResponseType(), clientDetail, userInfo);
-            return new IdsResponse<String, Object>().data(url);
+            return new IdsResponse<String, String>().data(url);
         }
 
-        return new IdsResponse<String, Object>()
+        return new IdsResponse<String, String>()
             .data(OauthUtil.createAuthorizeUrl(JapIds.getIdsConfig().getLoginPageUrl(), param));
     }
 
@@ -84,7 +84,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
      * @param request current request
      * @return Return the callback url (with parameters such as code)
      */
-    public IdsResponse<String, Object> agree(HttpServletRequest request) {
+    public IdsResponse<String, String> agree(HttpServletRequest request) {
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
 
         // The scope checked by the user may be inconsistent with the scope passed in the current request
@@ -107,7 +107,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
         String responseType = param.getResponseType();
         UserInfo userInfo = JapIds.getUserInfo(request);
         String url = generateResponseUrl(param, responseType, clientDetail, userInfo);
-        return new IdsResponse<String, Object>().data(url);
+        return new IdsResponse<String, String>().data(url);
     }
 
     /**

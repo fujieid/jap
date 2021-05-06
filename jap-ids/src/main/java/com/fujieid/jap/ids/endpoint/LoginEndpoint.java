@@ -98,7 +98,7 @@ public class LoginEndpoint extends AbstractEndpoint {
      * @param request current request
      * @return Confirm authorization page
      */
-    public IdsResponse<String, Object> signin(HttpServletRequest request) {
+    public IdsResponse<String, String> signin(HttpServletRequest request) {
         IdsConfig idsConfig = JapIds.getIdsConfig();
         String username = request.getParameter(idsConfig.getUsernameField());
         String password = request.getParameter(idsConfig.getPasswordField());
@@ -124,7 +124,7 @@ public class LoginEndpoint extends AbstractEndpoint {
             redirectUri = JapIds.getIdsConfig().getConfirmPageUrl();
         }
 
-        return new IdsResponse<String, Object>()
+        return new IdsResponse<String, String>()
             .data(ObjectUtils.appendIfNotEndWith(redirectUri, "?") + request.getQueryString());
     }
 }

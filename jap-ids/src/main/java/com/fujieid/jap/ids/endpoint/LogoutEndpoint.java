@@ -29,10 +29,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class LogoutEndpoint extends AbstractEndpoint {
 
-    public IdsResponse<String, Object> logout(HttpServletRequest request) {
+    public IdsResponse<String, String> logout(HttpServletRequest request) {
         JapIds.removeUserInfo(request);
         request.getSession().invalidate();
-        return new IdsResponse<String, Object>()
+        return new IdsResponse<String, String>()
             .data(JapIds.getIdsConfig().getLogoutRedirectUrl());
     }
 }
