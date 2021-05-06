@@ -7,9 +7,17 @@
 - [jap-ids] Add `loginPageUrl` attribute in `IdsConfig` to distinguish it from `loginUrl`.
 - [jap-ids] Add `authorizeAutoApproveUrl` attribute in `IdsConfig`, When the authorize url contains `autoapprove=true`, it will not jump to the `confirmPageUrl`, but will jump directly to the `authorizeAutoApproveUrl`.
 - [jap-ids] Modify `IdsConfig.confirmUrl` to `confirmPageUrl`.
-- [jap-ids] The return type of `ApprovalEndpoint#getAuthClientInfo(HttpServletRequest)` is changed from` IdsResponse<String, Object>` to `IdsResponse<String, Map<String, Object>>`
-- [jap-ids] Modify the comment content of `ClientDetail`
-- [jap-ids] Modify the return type of `IdsResponse#getData()` to the specified generic
+- [jap-ids] Modify the return value of `ApprovalEndpoint#getAuthClientInfo(HttpServletRequest)` to `IdsResponse<String, Map<String, Object>>`.
+- [jap-ids] Modify the return value of `Ap provalEndpoint#authorize(HttpServletRequest)` to `IdsResponse<String, String>`.
+- [jap-ids] Modify the return value of `AuthorizationEndpoint#agree(HttpServletRequest)` to `IdsResponse<String, String>`.
+- [jap-ids] Modify the return value of `LoginEndpoint#signin(HttpServletRequest)` to `IdsResponse<String, String>`.
+- [jap-ids] Modify the return value of `LogoutEndpoint#logout(HttpServletRequest)` to `IdsResponse<String, String>`.
+- [jap-ids] Modify the comment content of `ClientDetail`.
+- [jap-ids] Modify the return type of `IdsResponse#getData()` to the specified generic.
+- [jap-ids] Add two scopes: `profile` and `address`.
+- [jap-ids] Remove `IdsScopeProvider#initScopes(List<IdsScope>)`.
+- [jap-ids] When `response_type=id_token`, the resulting Claims are returned in the ID Token.
+- [jap-ids] Optimize the process of `UserInfoEndpoint#getCurrentUserInfo(HttpServletRequest)`, Response UserInfo Claims using Scope Values
 
 ### PR
 
