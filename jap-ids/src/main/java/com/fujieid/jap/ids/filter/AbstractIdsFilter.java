@@ -80,6 +80,7 @@ public class AbstractIdsFilter {
             IdsConfig config = JapIds.getIdsConfig();
             String issuer = config.getIssuer();
             String authorizeUrl = config.getAuthorizeUrl();
+            String authorizeAutoApproveUrl = config.getAuthorizeAutoApproveUrl();
             String loginUrl = config.getLoginUrl();
             String loginPageUrl = config.getLoginPageUrl();
             String errorUrl = config.getErrorUrl();
@@ -91,8 +92,8 @@ public class AbstractIdsFilter {
             String discoveryUrl = config.getDiscoveryUrl();
             String logoutUrl = config.getLoginUrl();
             String logoutRedirectUrl = config.getLogoutRedirectUrl();
-            String[] urls = {authorizeUrl, loginUrl, loginPageUrl, errorUrl, confirmPageUrl, tokenUrl,
-                registrationUrl, jwksUrl, discoveryUrl, logoutUrl, logoutRedirectUrl, checkSessionUrl};
+            String[] urls = {authorizeUrl, authorizeAutoApproveUrl, loginUrl, loginPageUrl, errorUrl, confirmPageUrl,
+                tokenUrl, registrationUrl, jwksUrl, discoveryUrl, logoutUrl, logoutRedirectUrl, checkSessionUrl};
             for (String url : urls) {
                 if (StringUtil.isNotEmpty(url) && url.startsWith(issuer)) {
                     this.ignoreUrls.add(url.substring(issuer.length()));

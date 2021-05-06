@@ -16,12 +16,17 @@
 package com.fujieid.jap.ids.endpoint;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.exception.IdsException;
+import com.fujieid.jap.ids.model.ClientDetail;
+import com.fujieid.jap.ids.model.IdsRequestParam;
 import com.fujieid.jap.ids.model.IdsResponse;
 import com.fujieid.jap.ids.model.UserInfo;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
+import com.fujieid.jap.ids.provider.IdsRequestParamProvider;
+import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -106,7 +111,20 @@ public class LoginEndpoint extends AbstractEndpoint {
         }
         JapIds.saveUserInfo(userInfo, request);
 
+        IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
+        ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(param.getClientId());
+        OauthUtil.validClientDetail(clientDetail);
+
+        String redirectUri = null;
+        // When the client supports automatic authorization, it will judge whether the {@code autoapprove} function is enabled
+        if (null != clientDetail.getAutoApprove() && clientDetail.getAutoApprove() &&
+            StrUtil.isNotEmpty(param.getAutoapprove()) && "TRUE".equalsIgnoreCase(param.getAutoapprove())) {
+            redirectUri = JapIds.getIdsConfig().getAuthorizeAutoApproveUrl();
+        } else {
+            redirectUri = JapIds.getIdsConfig().getConfirmPageUrl();
+        }
+
         return new IdsResponse<String, Object>()
-            .data(ObjectUtils.appendIfNotEndWith(JapIds.getIdsConfig().getConfirmPageUrl(), "?") + request.getQueryString());
+            .data(ObjectUtils.appendIfNotEndWith(redirectUri, "?") + request.getQueryString());
     }
 }

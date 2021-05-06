@@ -65,6 +65,11 @@ public class IdsConfig {
      */
     private String authorizeUrl;
     /**
+     * Automatically authorized url (do not display the authorization page), Must support get request method,
+     * the default is {@code issuer + /oauth/authorize/auto}
+     */
+    private String authorizeAutoApproveUrl;
+    /**
      * token url, the default is {@code issuer + /oauth/token}
      */
     private String tokenUrl;
@@ -187,6 +192,15 @@ public class IdsConfig {
 
     public IdsConfig setAuthorizeUrl(String authorizeUrl) {
         this.authorizeUrl = authorizeUrl;
+        return this;
+    }
+
+    public String getAuthorizeAutoApproveUrl() {
+        return null == authorizeAutoApproveUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/authorize/auto" : authorizeAutoApproveUrl;
+    }
+
+    public IdsConfig setAuthorizeAutoApproveUrl(String authorizeAutoApproveUrl) {
+        this.authorizeAutoApproveUrl = authorizeAutoApproveUrl;
         return this;
     }
 
