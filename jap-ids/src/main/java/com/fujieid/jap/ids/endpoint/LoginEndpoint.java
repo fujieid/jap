@@ -107,6 +107,6 @@ public class LoginEndpoint extends AbstractEndpoint {
         JapIds.saveUserInfo(userInfo, request);
 
         return new IdsResponse<String, Object>()
-            .data(ObjectUtils.appendIfNotEndWith(JapIds.getIdsConfig().getConfirmUrl(), "?") + request.getQueryString());
+            .data(ObjectUtils.appendIfNotEndWith(JapIds.getIdsConfig().getConfirmPageUrl(), "?") + request.getQueryString());
     }
 }

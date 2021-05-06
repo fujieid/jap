@@ -59,7 +59,7 @@ public class IdsConfig {
     /**
      * The user confirms the authorized url, the default is {@code issuer + /oauth/confirm}
      */
-    private String confirmUrl;
+    private String confirmPageUrl;
     /**
      * Authorized url, the default is {@code issuer + /oauth/authorize}
      */
@@ -172,12 +172,12 @@ public class IdsConfig {
         return this;
     }
 
-    public String getConfirmUrl() {
-        return null == confirmUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/confirm" : confirmUrl;
+    public String getConfirmPageUrl() {
+        return null == confirmPageUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/confirm" : confirmPageUrl;
     }
 
-    public IdsConfig setConfirmUrl(String confirmUrl) {
-        this.confirmUrl = confirmUrl;
+    public IdsConfig setConfirmPageUrl(String confirmPageUrl) {
+        this.confirmPageUrl = confirmPageUrl;
         return this;
     }
 
