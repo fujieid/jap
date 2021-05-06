@@ -5,6 +5,7 @@
 ### Modified
 
 - [jap-ids] Add `loginPageUrl` attribute in `IdsConfig` to distinguish it from `loginUrl`.
+- [jap-ids] Add `authorizeAutoApproveUrl` attribute in `IdsConfig`, When the authorize url contains `autoapprove=true`, it will not jump to the `confirmPageUrl`, but will jump directly to the `authorizeAutoApproveUrl`.
 - [jap-ids] Modify `IdsConfig.confirmUrl` to `confirmPageUrl`.
 - [jap-ids] The return type of `ApprovalEndpoint#getAuthClientInfo(HttpServletRequest)` is changed from` IdsResponse<String, Object>` to `IdsResponse<String, Map<String, Object>>`
 - [jap-ids] Modify the comment content of `ClientDetail`
