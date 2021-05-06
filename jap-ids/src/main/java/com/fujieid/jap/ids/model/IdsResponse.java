@@ -96,7 +96,7 @@ public class IdsResponse<K, V> extends HashMap<String, Object> {
         return ObjectUtil.isEmpty(this.get(state)) ? null : String.valueOf(this.get(state));
     }
 
-    public Object getData() {
-        return this.get(data);
+    public V getData() {
+        return (V) this.get(data);
     }
 }
