@@ -49,6 +49,10 @@ public class IdsConfig {
      */
     private String loginUrl;
     /**
+     * Login page url, the default is {@link com.fujieid.jap.ids.config.IdsConfig#loginUrl}
+     */
+    private String loginPageUrl;
+    /**
      * error url
      */
     private String errorUrl;
@@ -147,6 +151,15 @@ public class IdsConfig {
 
     public IdsConfig setLoginUrl(String loginUrl) {
         this.loginUrl = loginUrl;
+        return this;
+    }
+
+    public String getLoginPageUrl() {
+        return null == loginPageUrl ? this.getLoginUrl() : loginPageUrl;
+    }
+
+    public IdsConfig setLoginPageUrl(String loginPageUrl) {
+        this.loginPageUrl = loginPageUrl;
         return this;
     }
 
