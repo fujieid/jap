@@ -58,7 +58,7 @@ public class ApprovalEndpoint extends AbstractEndpoint {
      * @param request HttpServletRequest
      * @return IdsResponse
      */
-    public IdsResponse<String, Object> getAuthClientInfo(HttpServletRequest request) {
+    public IdsResponse<String, Map<String, Object>> getAuthClientInfo(HttpServletRequest request) {
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(param.getClientId());
         OauthUtil.validClientDetail(clientDetail);
@@ -70,7 +70,7 @@ public class ApprovalEndpoint extends AbstractEndpoint {
         result.put("scopes", scopeInfo);
         result.put("params", param);
 
-        return new IdsResponse<String, Object>().data(result);
+        return new IdsResponse<String, Map<String, Object>>().data(result);
     }
 
     /**
