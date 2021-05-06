@@ -1,4 +1,18 @@
-## v1.0.1（2021-04-**）
+## v1.0.2 (2021-05-**)
+
+### New features
+
+### Modified
+
+- [jap-ids] Add `loginPageUrl` attribute in `IdsConfig` to distinguish it from `loginUrl`.
+- [jap-ids] The return type of `ApprovalEndpoint#getAuthClientInfo(HttpServletRequest)` is changed from` IdsResponse<String, Object>` to `IdsResponse<String, Map<String, Object>>`
+- [jap-ids] Modify the comment content of `ClientDetail`
+
+### PR
+
+### Issue
+
+## v1.0.1（2021-04-21）
 
 ### New features
 
