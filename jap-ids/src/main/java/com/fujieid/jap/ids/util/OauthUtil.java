@@ -303,6 +303,10 @@ public class OauthUtil {
             model.put("state", param.getState());
         }
 
+        if (StringUtil.isNotEmpty(param.getUid())) {
+            model.put("uid", param.getUid());
+        }
+
         if (StringUtil.isNotEmpty(param.getNonce())) {
             model.put("nonce", param.getNonce());
         }
