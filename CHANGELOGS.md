@@ -18,6 +18,7 @@
 - [jap-ids] Remove `IdsScopeProvider#initScopes(List<IdsScope>)`.
 - [jap-ids] When `response_type=id_token`, the resulting Claims are returned in the ID Token.
 - [jap-ids] Optimize the process of `UserInfoEndpoint#getCurrentUserInfo(HttpServletRequest)`, Response UserInfo Claims using Scope Values
+- [jap-ids] Add the `uid` parameter to the `OauthUtil#createAuthorizeUrl(String, IdsRequestParam)`
 
 ### PR
 
