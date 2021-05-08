@@ -44,7 +44,7 @@ public enum ErrorResponse {
     INVALID_REDIRECT_URI("invalid_redirect_uri", "The requested callback URL is incorrect."),
     UNSUPPORTED_GRANT_TYPE("unsupported_grant_type", "The grant type is not supported by the authorization server, or the current client is not authorized for the grant type."),
     UNSUPPORTED_RESPONSE_TYPE("unsupported_response_type", "The response type is not supported by the authorization server, or the current client does not allow the response type."),
-    ACCESS_DENIED("access_denied", "The authorization server rejected the current request。"),
+    ACCESS_DENIED("access_denied", "The authorization server rejected the current HTTP request。"),
     SERVER_ERROR("server_error", "The authorization server is temporarily unavailable. Please try again later."),
     AUTHORIZATION_FAILED("authorization_failed", "Authorization failed, please contact the systems administrator."),
     EXPIRED_TOKEN("expired_token", "The requested token has expired (access token, refresh token, or id token)."),

@@ -47,8 +47,8 @@ public class ErrorEndpoint extends AbstractEndpoint {
     /**
      * Obtain exception information from the request url and display the exception page
      *
-     * @param request  Current request
-     * @param response Current response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @throws IOException IOException
      */
     public void showErrorPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -64,7 +64,7 @@ public class ErrorEndpoint extends AbstractEndpoint {
      *
      * @param error            error type
      * @param errorDescription error description
-     * @param response         Current response
+     * @param response         current HTTP response
      * @throws IOException IOException
      */
     public void showErrorPage(String error, String errorDescription, HttpServletResponse response) throws IOException {

@@ -87,7 +87,7 @@ public class IdsTokenProvider {
      * RFC6749 4.3.  Resource Owner Password Credentials Grant
      *
      * @param param   request params
-     * @param request current request
+     * @param request current HTTP request
      * @return IdsResponse
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">4.3.  Resource Owner Password Credentials Grant</a>
      */

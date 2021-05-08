@@ -42,8 +42,8 @@ public class ApprovalEndpoint extends AbstractEndpoint {
     /**
      * The default authorization confirmation page pops up
      *
-     * @param request  Current request
-     * @param response Current response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @throws IOException IOException
      */
     public void showConfirmPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -76,7 +76,7 @@ public class ApprovalEndpoint extends AbstractEndpoint {
     /**
      * Generate the html of the authorization confirmation page
      *
-     * @param request Current request
+     * @param request current HTTP request
      * @return Confirm the html of the authorization page
      */
     private String createConfirmPageHtml(HttpServletRequest request) {
@@ -127,8 +127,8 @@ public class ApprovalEndpoint extends AbstractEndpoint {
     /**
      * Generate the scope list of the authorization confirmation page
      *
-     * @param param   Parameters of the current request
-     * @param request Current request
+     * @param param   Parameters of the current HTTP request
+     * @param request current HTTP request
      * @return the scope list of the authorization confirmation page
      */
     private String createScopes(IdsRequestParam param, HttpServletRequest request) {
@@ -152,7 +152,7 @@ public class ApprovalEndpoint extends AbstractEndpoint {
     /**
      * Reorganize scope information
      *
-     * @param param Parameters of the current request
+     * @param param Parameters of the current HTTP request
      * @return List
      */
     private List<Map<String, Object>> getScopeInfo(IdsRequestParam param) {

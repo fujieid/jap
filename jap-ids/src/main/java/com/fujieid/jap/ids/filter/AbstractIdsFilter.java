@@ -40,7 +40,7 @@ public class AbstractIdsFilter {
     /**
      * Whether it is a servlet request that needs to be ignored
      *
-     * @param request The current request to be intercepted
+     * @param request The current HTTP request to be intercepted
      * @return boolean, the request does not need to be intercepted when true is returned
      */
     protected boolean isIgnoredServletPath(HttpServletRequest request) {

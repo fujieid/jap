@@ -69,7 +69,7 @@ public class OauthUtil {
     }
 
     /**
-     * @param requestScopes The scope parameter in the current request
+     * @param requestScopes The scope parameter in the current HTTP request
      * @param clientScopes  Scope in client detail
      * @return After the verification is passed, return the scope list
      */
@@ -111,7 +111,7 @@ public class OauthUtil {
     /**
      * Verify the callback url
      *
-     * @param requestRedirectUri The callback url passed in the current request
+     * @param requestRedirectUri The callback url passed in the current HTTP request
      * @param clientDetail       client detail
      */
     public static void validateRedirectUri(String requestRedirectUri, ClientDetail clientDetail) {
@@ -160,7 +160,7 @@ public class OauthUtil {
     /**
      * Verify the response type
      *
-     * @param requestResponseType The response type in the current request
+     * @param requestResponseType The response type in the current HTTP request
      * @param clientResponseTypes Response type in client detail
      */
     public static void validateResponseType(String requestResponseType, String clientResponseTypes) {
@@ -173,7 +173,7 @@ public class OauthUtil {
     /**
      * Verify the grant type
      *
-     * @param requestGrantType The grant type in the current request
+     * @param requestGrantType The grant type in the current HTTP request
      * @param clientGrantTypes Grant type in client detail
      * @param equalTo          {@code requestGrantType} Must match grant type value
      */

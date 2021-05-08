@@ -48,13 +48,13 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
     private final IdsAuthorizationProvider idsAuthorizationProvider = new IdsAuthorizationProvider(oauth2Service);
 
     /**
-     * Authorize current request
+     * Authorize current HTTP request
      * <p>
      * When logged in, the method returns the callback url (with parameters such as code)
      * <p>
-     * When not logged in, the method returns the login url (with the parameters of the current request)
+     * When not logged in, the method returns the login url (with the parameters of the current HTTP request)
      *
-     * @param request Current request
+     * @param request current HTTP request
      * @return Callback url or authorization url
      * @throws IOException IOException
      */
@@ -81,13 +81,13 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
     /**
      * User-initiated consent authorization
      *
-     * @param request current request
+     * @param request current HTTP request
      * @return Return the callback url (with parameters such as code)
      */
     public IdsResponse<String, String> agree(HttpServletRequest request) {
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
 
-        // The scope checked by the user may be inconsistent with the scope passed in the current request
+        // The scope checked by the user may be inconsistent with the scope passed in the current HTTP request
         String[] requestScopes = request.getParameterValues("scopes");
         Set<String> scopes = null;
         if (ArrayUtil.isEmpty(requestScopes)) {
@@ -113,7 +113,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
     /**
      * Generate callback url
      *
-     * @param param        Parameters in the current request
+     * @param param        Parameters in the current HTTP request
      * @param responseType oauth authorized response type
      * @param clientDetail Currently authorized client
      * @return Callback url
