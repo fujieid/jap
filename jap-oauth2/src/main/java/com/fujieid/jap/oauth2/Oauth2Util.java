@@ -184,7 +184,7 @@ public class Oauth2Util {
      *
      * @param request     callback request
      * @param oAuthConfig OAuthConfig
-     * @return When true is returned, the current request is a callback request
+     * @return When true is returned, the current HTTP request is a callback request
      */
     public static boolean isCallback(HttpServletRequest request, OAuthConfig oAuthConfig) {
         if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {

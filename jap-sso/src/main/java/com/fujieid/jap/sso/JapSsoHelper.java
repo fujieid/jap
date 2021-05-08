@@ -39,8 +39,8 @@ public class JapSsoHelper {
      * @param userId       The ID of the current login user
      * @param username     The name of the current login user
      * @param japSsoConfig sso config
-     * @param request      current request
-     * @param response     current response
+     * @param request      current HTTP request
+     * @param response     current HTTP response
      * @return String
      */
     public static String login(Object userId, String username, JapSsoConfig japSsoConfig, HttpServletRequest request, HttpServletResponse response) {
@@ -85,7 +85,7 @@ public class JapSsoHelper {
     /**
      * Check the login status to determine whether the current user exists in the cookie
      *
-     * @param request current request
+     * @param request current HTTP request
      * @return The ID of the current login user
      */
     public static String checkLogin(HttpServletRequest request) {
@@ -96,8 +96,8 @@ public class JapSsoHelper {
     /**
      * Log out and clear cookie content
      *
-     * @param request  current request
-     * @param response current response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      */
     public static void logout(HttpServletRequest request, HttpServletResponse response) {
         KiSsoHelper.clearLogin(request, response);

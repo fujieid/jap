@@ -41,7 +41,7 @@ public class RequestUtil {
      * Get the url parameter value of the request through {@code request.getParameter(paramName)}
      *
      * @param paramName parameter name
-     * @param request   Current request
+     * @param request   current HTTP request
      * @return string
      */
     public static String getParam(String paramName, HttpServletRequest request) {
@@ -55,7 +55,7 @@ public class RequestUtil {
      * Get request header
      *
      * @param headerName request header name
-     * @param request    Current request
+     * @param request    current HTTP request
      * @return string
      */
     public static String getHeader(String headerName, HttpServletRequest request) {
@@ -66,9 +66,9 @@ public class RequestUtil {
     }
 
     /**
-     * Get the referer of the current request
+     * Get the referer of the current HTTP request
      *
-     * @param request Current request
+     * @param request current HTTP request
      * @return string
      */
     public static String getReferer(HttpServletRequest request) {
@@ -76,9 +76,9 @@ public class RequestUtil {
     }
 
     /**
-     * Get the User-Agent of the current request
+     * Get the User-Agent of the current HTTP request
      *
-     * @param request Current request
+     * @param request current HTTP request
      * @return string
      */
     public static String getUa(HttpServletRequest request) {
@@ -86,9 +86,9 @@ public class RequestUtil {
     }
 
     /**
-     * Get the IP of the current request
+     * Get the IP of the current HTTP request
      *
-     * @param request Current request
+     * @param request current HTTP request
      * @return string
      */
     public static String getIp(HttpServletRequest request) {
@@ -140,7 +140,7 @@ public class RequestUtil {
      * Get the request url
      *
      * @param encode  Whether to encode url
-     * @param request Current request
+     * @param request current HTTP request
      * @return string
      */
     public static String getRequestUrl(boolean encode, HttpServletRequest request) {
@@ -169,7 +169,7 @@ public class RequestUtil {
     /**
      * Get the value of the cookie
      *
-     * @param request current request
+     * @param request current HTTP request
      * @param name    cookie name
      * @return String
      */
@@ -181,7 +181,7 @@ public class RequestUtil {
     /**
      * Get cookie
      *
-     * @param request current request
+     * @param request current HTTP request
      * @param name    cookie name
      * @return Cookie
      */
@@ -200,7 +200,7 @@ public class RequestUtil {
     /**
      * Get all the cookies, and use the cookie name as the key to form a map
      *
-     * @param request current request
+     * @param request current HTTP request
      * @return Map
      */
     public static Map<String, Cookie> getCookieMap(HttpServletRequest request) {
@@ -215,7 +215,7 @@ public class RequestUtil {
     /**
      * Set cookie
      *
-     * @param response current response
+     * @param response current HTTP response
      * @param name     cookie name
      * @param value    cookie value
      * @param maxAge   maxAge

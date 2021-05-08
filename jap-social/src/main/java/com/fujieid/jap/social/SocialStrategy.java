@@ -144,7 +144,7 @@ public class SocialStrategy extends AbstractJapStrategy {
      * Login with third party authorization
      *
      * @param request      Third party callback request
-     * @param response     current response
+     * @param response     current HTTP response
      * @param source       Third party platform name
      * @param authRequest  AuthRequest of justauth
      * @param authCallback Parse the parameters obtained by the third party callback request
@@ -180,7 +180,7 @@ public class SocialStrategy extends AbstractJapStrategy {
      *
      * @param source       Third party platform name
      * @param authCallback Parameters resolved by callback request
-     * @return When true is returned, the current request is a callback request
+     * @return When true is returned, the current HTTP request is a callback request
      */
     private boolean isCallback(String source, AuthCallback authCallback) {
         if (source.equals(AuthDefaultSource.TWITTER.name()) && ObjectUtil.isNotNull(authCallback.getOauth_token())) {

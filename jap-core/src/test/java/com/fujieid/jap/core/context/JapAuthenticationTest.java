@@ -218,8 +218,8 @@ public class JapAuthenticationTest {
         /**
          * Login completed, save user information to the cache
          *
-         * @param request  current request
-         * @param response current response
+         * @param request  current HTTP request
+         * @param response current HTTP response
          * @param japUser  User information after successful login
          * @return JapUser
          */
@@ -232,8 +232,8 @@ public class JapAuthenticationTest {
         /**
          * Clear user information from cache
          *
-         * @param request  current request
-         * @param response current response
+         * @param request  current HTTP request
+         * @param response current HTTP response
          */
         @Override
         public void remove(HttpServletRequest request, HttpServletResponse response) {
@@ -244,8 +244,8 @@ public class JapAuthenticationTest {
          * Get the login user information from the cache, return {@code JapUser} if it exists,
          * return {@code null} if it is not logged in or the login has expired
          *
-         * @param request  current request
-         * @param response current response
+         * @param request  current HTTP request
+         * @param response current HTTP response
          * @return JapUser
          */
         @Override

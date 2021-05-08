@@ -103,7 +103,7 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      * Verify whether the user logs in. If so, jump to {@code japConfig.getSuccessRedirect()}. Otherwise, return {@code false}
      *
      * @param request  Current JapAuthentication Request
-     * @param response Current response
+     * @param response current HTTP response
      * @return boolean
      */
     protected JapUser checkSession(HttpServletRequest request, HttpServletResponse response) {

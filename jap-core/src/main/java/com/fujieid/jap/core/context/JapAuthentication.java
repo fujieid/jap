@@ -70,8 +70,8 @@ public class JapAuthentication implements Serializable {
     /**
      * Get the currently logged in user
      *
-     * @param request  Current request
-     * @param response Current response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @return JapUser
      */
     public static JapUser getUser(HttpServletRequest request, HttpServletResponse response) {
@@ -103,8 +103,8 @@ public class JapAuthentication implements Serializable {
      * }
      * </code>
      *
-     * @param request  Current request
-     * @param response Current response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @return JapResponse
      */
     public static JapResponse checkUser(HttpServletRequest request, HttpServletResponse response) {
@@ -150,8 +150,8 @@ public class JapAuthentication implements Serializable {
     /**
      * sign out
      *
-     * @param request  Current request
-     * @param response Current response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @return boolean
      */
     public static boolean logout(HttpServletRequest request, HttpServletResponse response) {
