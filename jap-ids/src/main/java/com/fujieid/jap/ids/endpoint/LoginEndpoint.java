@@ -25,6 +25,7 @@ import com.fujieid.jap.ids.model.IdsRequestParam;
 import com.fujieid.jap.ids.model.IdsResponse;
 import com.fujieid.jap.ids.model.UserInfo;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
+import com.fujieid.jap.ids.pipeline.IdsPipeline;
 import com.fujieid.jap.ids.provider.IdsRequestParamProvider;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.ObjectUtils;
@@ -46,8 +47,8 @@ public class LoginEndpoint extends AbstractEndpoint {
     /**
      * 显示默认的登录页面
      *
-     * @param request  current request
-     * @param response current response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @throws IOException IOException
      */
     public void showLoginPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -95,20 +96,28 @@ public class LoginEndpoint extends AbstractEndpoint {
     /**
      * Login with account password
      *
-     * @param request current request
+     * @param request current HTTP request
      * @return Confirm authorization page
      */
     public IdsResponse<String, String> signin(HttpServletRequest request) {
-        IdsConfig idsConfig = JapIds.getIdsConfig();
-        String username = request.getParameter(idsConfig.getUsernameField());
-        String password = request.getParameter(idsConfig.getPasswordField());
-        if (ObjectUtil.hasEmpty(username, password)) {
-            throw new IdsException(ErrorResponse.INVALID_USER_CERTIFICATE);
+        IdsPipeline<UserInfo> idsSigninPipeline = JapIds.getContext().getSigninPipeline();
+        if (!idsSigninPipeline.preHandle(request)) {
+            throw new IdsException("IdsPipeline<UserInfo>.preHandle returns false, the process is blocked.");
         }
-        UserInfo userInfo = JapIds.getContext().getUserService().loginByUsernameAndPassword(username, password);
+        UserInfo userInfo = idsSigninPipeline.postHandle(request);
         if (null == userInfo) {
-            throw new IdsException(ErrorResponse.INVALID_USER_CERTIFICATE);
+            IdsConfig idsConfig = JapIds.getIdsConfig();
+            String username = request.getParameter(idsConfig.getUsernameField());
+            String password = request.getParameter(idsConfig.getPasswordField());
+            if (ObjectUtil.hasEmpty(username, password)) {
+                throw new IdsException(ErrorResponse.INVALID_USER_CERTIFICATE);
+            }
+            userInfo = JapIds.getContext().getUserService().loginByUsernameAndPassword(username, password);
+            if (null == userInfo) {
+                throw new IdsException(ErrorResponse.INVALID_USER_CERTIFICATE);
+            }
         }
+
         JapIds.saveUserInfo(userInfo, request);
 
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
@@ -123,8 +132,8 @@ public class LoginEndpoint extends AbstractEndpoint {
         } else {
             redirectUri = JapIds.getIdsConfig().getConfirmPageUrl();
         }
-
+        String fullUrl = OauthUtil.createAuthorizeUrl(redirectUri, param);
         return new IdsResponse<String, String>()
-            .data(ObjectUtils.appendIfNotEndWith(redirectUri, "?") + request.getQueryString());
+            .data(fullUrl);
     }
 }

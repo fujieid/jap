@@ -15,6 +15,10 @@
  */
 package com.fujieid.jap.ids.filter;
 
+import cn.hutool.log.Log;
+import cn.hutool.log.LogFactory;
+import com.fujieid.jap.ids.JapIds;
+import com.fujieid.jap.ids.pipeline.IdsPipeline;
 import com.fujieid.jap.ids.util.TokenUtil;
 
 import javax.servlet.*;
@@ -30,8 +34,11 @@ import java.io.IOException;
  */
 public class IdsAccessTokenFilter extends AbstractIdsFilter implements Filter {
 
+    private final static Log log = LogFactory.get();
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        IdsPipeline<Object> idsFilterErrorPipeline = JapIds.getContext().getFilterPipeline();
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
         boolean ignored = this.isIgnoredServletPath(request);
@@ -41,8 +48,12 @@ public class IdsAccessTokenFilter extends AbstractIdsFilter implements Filter {
         }
         log.debug("{} - {}", request.getMethod(), request.getRequestURI());
         String accessToken = TokenUtil.getAccessToken(request);
-        TokenUtil.validateAccessToken(accessToken);
-        filterChain.doFilter(servletRequest, servletResponse);
+        try {
+            TokenUtil.validateAccessToken(accessToken);
+            filterChain.doFilter(servletRequest, servletResponse);
+        } catch (Exception e) {
+            idsFilterErrorPipeline.errorHandle(servletRequest, servletResponse, e);
+        }
     }
 
     @Override

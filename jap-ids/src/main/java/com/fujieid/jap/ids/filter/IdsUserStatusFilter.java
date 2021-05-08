@@ -18,6 +18,7 @@ package com.fujieid.jap.ids.filter;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
+import com.fujieid.jap.ids.pipeline.IdsPipeline;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,7 @@ import java.io.IOException;
 public class IdsUserStatusFilter extends AbstractIdsFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        IdsPipeline<Object> idsFilterErrorPipeline = JapIds.getContext().getFilterPipeline();
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
         boolean ignored = this.isIgnoredServletPath(request);
@@ -44,7 +46,7 @@ public class IdsUserStatusFilter extends AbstractIdsFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        throw new IdsException(ErrorResponse.INVALID_USER_STATUS);
+        idsFilterErrorPipeline.errorHandle(servletRequest, servletResponse, new IdsException(ErrorResponse.INVALID_USER_STATUS));
     }
 
     @Override

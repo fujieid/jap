@@ -19,9 +19,11 @@ import com.fujieid.jap.core.cache.JapCache;
 import com.fujieid.jap.core.cache.JapLocalCache;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.model.UserInfo;
+import com.fujieid.jap.ids.pipeline.IdsPipeline;
 import com.fujieid.jap.ids.service.IdsClientDetailService;
 import com.fujieid.jap.ids.service.IdsIdentityService;
 import com.fujieid.jap.ids.service.IdsUserService;
+import com.fujieid.jap.ids.service.IdsUserStoreService;
 
 import java.io.Serializable;
 
@@ -42,7 +44,13 @@ public class IdsContext implements Serializable {
 
     private IdsIdentityService identityService;
 
+    private IdsUserStoreService userStoreService;
+
     private IdsConfig idsConfig;
+
+    private IdsPipeline<Object> filterPipeline;
+
+    private IdsPipeline<UserInfo> signinPipeline;
 
     public JapCache getCache() {
         return cache == null ? new JapLocalCache() : cache;
@@ -86,6 +94,33 @@ public class IdsContext implements Serializable {
 
     public IdsContext setIdentityService(IdsIdentityService identityService) {
         this.identityService = identityService;
+        return this;
+    }
+
+    public IdsUserStoreService getUserStoreService() {
+        return userStoreService;
+    }
+
+    public IdsContext setUserStoreService(IdsUserStoreService userStoreService) {
+        this.userStoreService = userStoreService;
+        return this;
+    }
+
+    public IdsPipeline<Object> getFilterPipeline() {
+        return filterPipeline;
+    }
+
+    public IdsContext setFilterPipeline(IdsPipeline<Object> filterPipeline) {
+        this.filterPipeline = filterPipeline;
+        return this;
+    }
+
+    public IdsPipeline<UserInfo> getSigninPipeline() {
+        return signinPipeline;
+    }
+
+    public IdsContext setSigninPipeline(IdsPipeline<UserInfo> signinPipeline) {
+        this.signinPipeline = signinPipeline;
         return this;
     }
 }
