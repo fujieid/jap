@@ -17,8 +17,12 @@
 - [jap-ids] Add two scopes: `profile` and `address`.
 - [jap-ids] Remove `IdsScopeProvider#initScopes(List<IdsScope>)`.
 - [jap-ids] When `response_type=id_token`, the resulting Claims are returned in the ID Token.
-- [jap-ids] Optimize the process of `UserInfoEndpoint#getCurrentUserInfo(HttpServletRequest)`, Response UserInfo Claims using Scope Values
-- [jap-ids] Add the `uid` parameter to the `OauthUtil#createAuthorizeUrl(String, IdsRequestParam)`
+- [jap-ids] Optimize the process of `UserInfoEndpoint#getCurrentUserInfo(HttpServletRequest)`, Response UserInfo Claims using Scope Values.
+- [jap-ids] Add the `uid` parameter to the `OauthUtil#createAuthorizeUrl(String, IdsRequestParam)`.
+- [jap-ids] Add the `IdsUserStoreService` interface to support custom operations on user data after login.
+- [jap-ids] Add the `IdsPipeline` interface, developers can customize the process, currently only supports the process of customizing `IdsxxFilter` and `LoginEndpoint`.
+- [jap-ids] Add `SPI` plugin mechanism
+- [jap] `javax.servlet-api` -> `jakarta.servlet-api`
 
 ### PR
 
