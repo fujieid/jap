@@ -52,6 +52,8 @@ public class IdsContext implements Serializable {
 
     private IdsPipeline<UserInfo> signinPipeline;
 
+    private IdsPipeline<UserInfo> logoutPipeline;
+
     public JapCache getCache() {
         return cache == null ? new JapLocalCache() : cache;
     }
@@ -121,6 +123,15 @@ public class IdsContext implements Serializable {
 
     public IdsContext setSigninPipeline(IdsPipeline<UserInfo> signinPipeline) {
         this.signinPipeline = signinPipeline;
+        return this;
+    }
+
+    public IdsPipeline<UserInfo> getLogoutPipeline() {
+        return logoutPipeline;
+    }
+
+    public IdsContext setLogoutPipeline(IdsPipeline<UserInfo> logoutPipeline) {
+        this.logoutPipeline = logoutPipeline;
         return this;
     }
 }

@@ -21,6 +21,7 @@ import com.fujieid.jap.ids.context.IdsContext;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.UserInfo;
 import com.fujieid.jap.ids.pipeline.IdsFilterPipeline;
+import com.fujieid.jap.ids.pipeline.IdsLogoutPipeline;
 import com.fujieid.jap.ids.pipeline.IdsSignInPipeline;
 import com.fujieid.jap.ids.service.IdsClientDetailService;
 import com.fujieid.jap.ids.service.IdsIdentityService;
@@ -76,6 +77,9 @@ public class JapIds implements Serializable {
         }
         if (null == context.getSigninPipeline()) {
             context.setSigninPipeline(JapServiceLoader.loadFirst(IdsSignInPipeline.class));
+        }
+        if (null == context.getLogoutPipeline()) {
+            context.setLogoutPipeline(JapServiceLoader.loadFirst(IdsLogoutPipeline.class));
         }
     }
 

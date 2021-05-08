@@ -102,7 +102,7 @@ public class LoginEndpoint extends AbstractEndpoint {
     public IdsResponse<String, String> signin(HttpServletRequest request) {
         IdsPipeline<UserInfo> idsSigninPipeline = JapIds.getContext().getSigninPipeline();
         if (!idsSigninPipeline.preHandle(request)) {
-            throw new IdsException("IdsPipeline<UserInfo>.preHandle returns false, the process is blocked.");
+            throw new IdsException("IdsSigninPipeline<UserInfo>.preHandle returns false, the process is blocked.");
         }
         UserInfo userInfo = idsSigninPipeline.postHandle(request);
         if (null == userInfo) {

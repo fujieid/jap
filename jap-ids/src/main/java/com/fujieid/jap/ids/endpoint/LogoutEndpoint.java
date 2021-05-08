@@ -16,7 +16,10 @@
 package com.fujieid.jap.ids.endpoint;
 
 import com.fujieid.jap.ids.JapIds;
+import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.IdsResponse;
+import com.fujieid.jap.ids.model.UserInfo;
+import com.fujieid.jap.ids.pipeline.IdsPipeline;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,8 +33,14 @@ import javax.servlet.http.HttpServletRequest;
 public class LogoutEndpoint extends AbstractEndpoint {
 
     public IdsResponse<String, String> logout(HttpServletRequest request) {
+        IdsPipeline<UserInfo> logoutPipeline = JapIds.getContext().getLogoutPipeline();
+        if (!logoutPipeline.preHandle(request)) {
+            throw new IdsException("IdsLogoutPipeline<UserInfo>.preHandle returns false, the process is blocked.");
+        }
         JapIds.removeUserInfo(request);
         request.getSession().invalidate();
+
+        logoutPipeline.afterHandle(request);
         return new IdsResponse<String, String>()
             .data(JapIds.getIdsConfig().getLogoutRedirectUrl());
     }
