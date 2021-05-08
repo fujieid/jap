@@ -15,11 +15,17 @@
  */
 package com.fujieid.jap.ids;
 
+import com.fujieid.jap.core.spi.JapServiceLoader;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.context.IdsContext;
 import com.fujieid.jap.ids.exception.IdsException;
-import com.fujieid.jap.ids.model.IdsConsts;
 import com.fujieid.jap.ids.model.UserInfo;
+import com.fujieid.jap.ids.pipeline.IdsFilterPipeline;
+import com.fujieid.jap.ids.pipeline.IdsSignInPipeline;
+import com.fujieid.jap.ids.service.IdsClientDetailService;
+import com.fujieid.jap.ids.service.IdsIdentityService;
+import com.fujieid.jap.ids.service.IdsUserService;
+import com.fujieid.jap.ids.service.IdsUserStoreService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
@@ -32,18 +38,50 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 public class JapIds implements Serializable {
+    private static final String UNREGISTERED_IDS_CONTEXT = "Unregistered ids context.Please use `JapIds.registerContext(IdsContext)` to register ids context.";
     private static IdsContext context;
 
     private JapIds() {
     }
 
     public static void registerContext(IdsContext idsContext) {
+        if (null == context) {
+            throw new IdsException(UNREGISTERED_IDS_CONTEXT);
+        }
         context = idsContext;
+
+        loadService();
+
+        loadPipeline();
+    }
+
+    private static void loadService() {
+        if (null == context.getClientDetailService()) {
+            context.setClientDetailService(JapServiceLoader.loadFirst(IdsClientDetailService.class));
+        }
+        if (null == context.getIdentityService()) {
+            context.setIdentityService(JapServiceLoader.loadFirst(IdsIdentityService.class));
+        }
+        if (null == context.getUserService()) {
+            context.setUserService(JapServiceLoader.loadFirst(IdsUserService.class));
+        }
+        if (null == context.getUserStoreService()) {
+            context.setUserStoreService(JapServiceLoader.loadFirst(IdsUserStoreService.class));
+        }
+    }
+
+    private static void loadPipeline() {
+        if (null == context.getFilterPipeline()) {
+            context.setFilterPipeline(JapServiceLoader.loadFirst(IdsFilterPipeline.class));
+        }
+        if (null == context.getSigninPipeline()) {
+            context.setSigninPipeline(JapServiceLoader.loadFirst(IdsSignInPipeline.class));
+        }
     }
 
     public static IdsContext getContext() {
         if (null == context) {
-            throw new IdsException("Unregistered ids context.Please use `JapIds.registerContext(IdsContext)` to register ids context.");
+            throw new IdsException(UNREGISTERED_IDS_CONTEXT);
         }
         return context;
     }
@@ -53,15 +91,18 @@ public class JapIds implements Serializable {
     }
 
     public static void saveUserInfo(UserInfo userInfo, HttpServletRequest request) {
-        request.getSession().setAttribute(IdsConsts.OAUTH_USERINFO_CACHE_KEY, userInfo);
+        IdsContext context = getContext();
+        context.getUserStoreService().save(userInfo, request);
     }
 
     public static UserInfo getUserInfo(HttpServletRequest request) {
-        return (UserInfo) request.getSession().getAttribute(IdsConsts.OAUTH_USERINFO_CACHE_KEY);
+        IdsContext context = getContext();
+        return context.getUserStoreService().get(request);
     }
 
     public static void removeUserInfo(HttpServletRequest request) {
-        request.getSession().removeAttribute(IdsConsts.OAUTH_USERINFO_CACHE_KEY);
+        IdsContext context = getContext();
+        context.getUserStoreService().remove(request);
     }
 
     public static IdsConfig getIdsConfig() {
