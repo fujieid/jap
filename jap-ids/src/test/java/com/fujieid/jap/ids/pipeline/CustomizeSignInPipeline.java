@@ -41,11 +41,12 @@ public class CustomizeSignInPipeline implements IdsSignInPipeline {
     /**
      * Operations before business process processing, such as initializing resources, etc.
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      * @return boolean
      */
     @Override
-    public boolean preHandle(ServletRequest servletRequest) {
+    public boolean preHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
         System.out.println("CustomizeSignInPipeline >> preHandle");
         return true;
     }
@@ -53,11 +54,12 @@ public class CustomizeSignInPipeline implements IdsSignInPipeline {
     /**
      * Intercept the execution of a handler
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      * @return UserInfo
      */
     @Override
-    public UserInfo postHandle(ServletRequest servletRequest) {
+    public UserInfo postHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
         System.out.println("CustomizeSignInPipeline >> postHandle");
         return null;
     }
@@ -65,10 +67,11 @@ public class CustomizeSignInPipeline implements IdsSignInPipeline {
     /**
      * Callback after business process processing is completed, such as recycling resources, recording status, etc.
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      */
     @Override
-    public void afterHandle(ServletRequest servletRequest) {
+    public void afterHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
         System.out.println("CustomizeSignInPipeline >> afterHandle");
     }
 }

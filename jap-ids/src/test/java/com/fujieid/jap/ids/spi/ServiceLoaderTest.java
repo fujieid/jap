@@ -36,7 +36,7 @@ public class ServiceLoaderTest {
         list.forEach(idsPipeline -> {
             System.out.println(idsPipeline);
             System.out.println(idsPipeline.getClass());
-            idsPipeline.postHandle(null);
+            idsPipeline.postHandle(null, null);
             System.out.println();
             System.out.println();
         });
@@ -48,7 +48,7 @@ public class ServiceLoaderTest {
         System.out.println(idsFilterPipeline);
         if (null != idsFilterPipeline) {
             System.out.println(idsFilterPipeline.getClass());
-            idsFilterPipeline.postHandle(null);
+            idsFilterPipeline.postHandle(null, null);
             System.out.println();
             System.out.println();
         }
@@ -60,7 +60,7 @@ public class ServiceLoaderTest {
         System.out.println(idsSignInPipeline);
         if (null != idsSignInPipeline) {
             System.out.println(idsSignInPipeline.getClass());
-            idsSignInPipeline.postHandle(null);
+            idsSignInPipeline.postHandle(null, null);
             System.out.println();
             System.out.println();
         }

@@ -39,11 +39,12 @@ public class CustomizeFilterPipeline implements IdsFilterPipeline {
     /**
      * Operations before business process processing, such as initializing resources, etc.
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      * @return boolean
      */
     @Override
-    public boolean preHandle(ServletRequest servletRequest) {
+    public boolean preHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
         System.out.println("CustomizeFilterPipeline >> preHandle");
         return true;
     }
@@ -51,11 +52,12 @@ public class CustomizeFilterPipeline implements IdsFilterPipeline {
     /**
      * Intercept the execution of a handler
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      * @return Object
      */
     @Override
-    public Object postHandle(ServletRequest servletRequest) {
+    public Object postHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
         System.out.println("CustomizeFilterPipeline >> postHandle");
         return null;
     }
@@ -63,10 +65,11 @@ public class CustomizeFilterPipeline implements IdsFilterPipeline {
     /**
      * Callback after business process processing is completed, such as recycling resources, recording status, etc.
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      */
     @Override
-    public void afterHandle(ServletRequest servletRequest) {
+    public void afterHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
         System.out.println("CustomizeFilterPipeline >> afterHandle");
     }
 }

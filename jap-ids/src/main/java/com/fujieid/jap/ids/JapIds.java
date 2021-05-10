@@ -46,7 +46,7 @@ public class JapIds implements Serializable {
     }
 
     public static void registerContext(IdsContext idsContext) {
-        if (null == context) {
+        if (null == idsContext) {
             throw new IdsException(UNREGISTERED_IDS_CONTEXT);
         }
         context = idsContext;

@@ -30,6 +30,8 @@ import com.fujieid.jap.ids.provider.IdsRequestParamProvider;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.ObjectUtils;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -96,15 +98,17 @@ public class LoginEndpoint extends AbstractEndpoint {
     /**
      * Login with account password
      *
-     * @param request current HTTP request
+     * @param servletRequest current HTTP request
+     * @param servletResponse current HTTP response
      * @return Confirm authorization page
      */
-    public IdsResponse<String, String> signin(HttpServletRequest request) {
+    public IdsResponse<String, String> signin(ServletRequest servletRequest, ServletResponse servletResponse) {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
         IdsPipeline<UserInfo> idsSigninPipeline = JapIds.getContext().getSigninPipeline();
-        if (!idsSigninPipeline.preHandle(request)) {
+        if (!idsSigninPipeline.preHandle(request, servletResponse)) {
             throw new IdsException("IdsSigninPipeline<UserInfo>.preHandle returns false, the process is blocked.");
         }
-        UserInfo userInfo = idsSigninPipeline.postHandle(request);
+        UserInfo userInfo = idsSigninPipeline.postHandle(request, servletResponse);
         if (null == userInfo) {
             IdsConfig idsConfig = JapIds.getIdsConfig();
             String username = request.getParameter(idsConfig.getUsernameField());

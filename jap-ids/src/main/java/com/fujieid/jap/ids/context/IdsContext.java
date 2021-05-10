@@ -20,10 +20,7 @@ import com.fujieid.jap.core.cache.JapLocalCache;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.model.UserInfo;
 import com.fujieid.jap.ids.pipeline.IdsPipeline;
-import com.fujieid.jap.ids.service.IdsClientDetailService;
-import com.fujieid.jap.ids.service.IdsIdentityService;
-import com.fujieid.jap.ids.service.IdsUserService;
-import com.fujieid.jap.ids.service.IdsUserStoreService;
+import com.fujieid.jap.ids.service.*;
 
 import java.io.Serializable;
 
@@ -44,7 +41,7 @@ public class IdsContext implements Serializable {
 
     private IdsIdentityService identityService;
 
-    private IdsUserStoreService userStoreService;
+    private IdsUserStoreService userStoreService = new IdsUserStoreServiceImpl();
 
     private IdsConfig idsConfig;
 

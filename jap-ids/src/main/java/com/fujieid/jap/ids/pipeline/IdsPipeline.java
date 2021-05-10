@@ -67,28 +67,31 @@ public interface IdsPipeline<T> {
     /**
      * Operations before business process processing, such as initializing resources, etc.
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      * @return boolean
      */
-    default boolean preHandle(ServletRequest servletRequest) {
+    default boolean preHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
         return true;
     }
 
     /**
      * Intercept the execution of a handler
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      * @return <T>
      */
-    default T postHandle(ServletRequest servletRequest) {
+    default T postHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
         return null;
     }
 
     /**
      * Callback after business process processing is completed, such as recycling resources, recording status, etc.
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      */
-    default void afterHandle(ServletRequest servletRequest) {
+    default void afterHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
     }
 }

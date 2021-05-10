@@ -54,35 +54,38 @@ public interface IdsFilterPipeline extends IdsPipeline<Object> {
     /**
      * Operations before business process processing, such as initializing resources, etc.
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      * @return boolean
      */
     @Deprecated
     @Override
-    default boolean preHandle(ServletRequest servletRequest) {
-        return IdsPipeline.super.preHandle(servletRequest);
+    default boolean preHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+        return IdsPipeline.super.preHandle(servletRequest, servletResponse);
     }
 
     /**
      * Intercept the execution of a handler
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      * @return <T>
      */
     @Deprecated
     @Override
-    default Object postHandle(ServletRequest servletRequest) {
-        return IdsPipeline.super.postHandle(servletRequest);
+    default Object postHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+        return IdsPipeline.super.postHandle(servletRequest, servletResponse);
     }
 
     /**
      * Callback after business process processing is completed, such as recycling resources, recording status, etc.
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
+     * @param servletResponse current HTTP response
      */
     @Deprecated
     @Override
-    default void afterHandle(ServletRequest servletRequest) {
-        IdsPipeline.super.afterHandle(servletRequest);
+    default void afterHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+        IdsPipeline.super.afterHandle(servletRequest, servletResponse);
     }
 }
