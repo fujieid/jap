@@ -80,8 +80,9 @@ public class JwtUtil {
      * @param clientId      Client Identifier
      * @param userinfo      User Profile
      * @param tokenExpireIn Id Token validity (seconds)
-     * @param nonce         noncestr
-     * @param scopes        scopes
+     * @param nonce         Random string
+     * @param scopes        Scopes
+     * @param responseType  Response Type
      * @return jwt token
      */
     public static String createJwtToken(String clientId, UserInfo userinfo, Long tokenExpireIn, String nonce, Set<String> scopes, String responseType) {

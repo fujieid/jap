@@ -80,7 +80,7 @@ public interface IdsPipeline<T> {
      *
      * @param servletRequest  current HTTP request
      * @param servletResponse current HTTP response
-     * @return <T>
+     * @return Object
      */
     default T postHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
         return null;

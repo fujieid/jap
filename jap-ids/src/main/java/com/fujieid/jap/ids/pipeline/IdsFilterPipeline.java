@@ -69,7 +69,7 @@ public interface IdsFilterPipeline extends IdsPipeline<Object> {
      *
      * @param servletRequest  current HTTP request
      * @param servletResponse current HTTP response
-     * @return <T>
+     * @return Object
      */
     @Deprecated
     @Override
