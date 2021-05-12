@@ -67,11 +67,12 @@ public class JwtUtil {
      * @param clientId      Client Identifier
      * @param userinfo      User Profile
      * @param tokenExpireIn Id Token validity (seconds)
-     * @param nonce         noncestr
+     * @param nonce         Random string
+     * @param issuer        The issuer name. This parameter cannot contain the colon (:) character.
      * @return jwt token
      */
-    public static String createJwtToken(String clientId, UserInfo userinfo, Long tokenExpireIn, String nonce) {
-        return createJwtToken(clientId, userinfo, tokenExpireIn, nonce, null, null);
+    public static String createJwtToken(String clientId, UserInfo userinfo, Long tokenExpireIn, String nonce, String issuer) {
+        return createJwtToken(clientId, userinfo, tokenExpireIn, nonce, null, null, issuer);
     }
 
     /**
@@ -83,10 +84,10 @@ public class JwtUtil {
      * @param nonce         Random string
      * @param scopes        Scopes
      * @param responseType  Response Type
+     * @param issuer        The issuer name. This parameter cannot contain the colon (:) character.
      * @return jwt token
      */
-    public static String createJwtToken(String clientId, UserInfo userinfo, Long tokenExpireIn, String nonce, Set<String> scopes, String responseType) {
-        String issuer = JapIds.getIdsConfig().getIssuer();
+    public static String createJwtToken(String clientId, UserInfo userinfo, Long tokenExpireIn, String nonce, Set<String> scopes, String responseType, String issuer) {
         JwtClaims claims = new JwtClaims();
 
         // required
@@ -240,7 +241,7 @@ public class JwtUtil {
         }
     }
 
-    public static Map<String, Object> validateJwtToken(String clientId, String userId, String jwtToken) {
+    public static Map<String, Object> validateJwtToken(String clientId, String userId, String jwtToken, String jwksUrl) {
         // Use JwtConsumerBuilder to construct an appropriate JwtConsumer, which will
         // be used to validate and process the JWT.
         // The specific validation requirements for a JWT are context dependent, however,
@@ -261,7 +262,7 @@ public class JwtUtil {
                 // The HttpsJwks retrieves and caches keys from a the given HTTPS JWKS endpoint.
                 // Because it retains the JWKs after fetching them, it can and should be reused
                 // to improve efficiency by reducing the number of outbound calls the the endpoint.
-                VerificationKeyResolver verificationKeyResolver = new HttpsJwksVerificationKeyResolver(new HttpsJwks(idsConfig.getJwksUrl()));
+                VerificationKeyResolver verificationKeyResolver = new HttpsJwksVerificationKeyResolver(new HttpsJwks(jwksUrl));
                 jwtConsumerBuilder.setVerificationKeyResolver(verificationKeyResolver);
             } else if (jwtVerificationType == JwtVerificationType.JWKS) {
                 // There's also a key resolver that selects from among a given list of JWKs using the Key ID

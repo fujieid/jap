@@ -55,7 +55,7 @@ public class IdsAuthorizationProviderTest extends BaseIdsTest {
 
     @Test
     public void generateImplicitGrantResponse() {
-        String url = idsAuthorizationProvider.generateImplicitGrantResponse(userInfo, idsRequestParam, clientDetail);
+        String url = idsAuthorizationProvider.generateImplicitGrantResponse(userInfo, idsRequestParam, clientDetail, issuer);
         System.out.println(url);
         Assert.assertNotNull(url);
         String params = url.substring(idsRequestParam.getRedirectUri().length() + 1);
@@ -71,7 +71,7 @@ public class IdsAuthorizationProviderTest extends BaseIdsTest {
 
     @Test
     public void generateCodeIdTokenAuthorizationResponse() {
-        String url = idsAuthorizationProvider.generateCodeIdTokenAuthorizationResponse(userInfo, idsRequestParam, clientDetail);
+        String url = idsAuthorizationProvider.generateCodeIdTokenAuthorizationResponse(userInfo, idsRequestParam, clientDetail, issuer);
         System.out.println(url);
         Assert.assertNotNull(url);
         String params = url.substring(idsRequestParam.getRedirectUri().length() + 1);
@@ -84,7 +84,7 @@ public class IdsAuthorizationProviderTest extends BaseIdsTest {
 
     @Test
     public void generateIdTokenAuthorizationResponse() {
-        String url = idsAuthorizationProvider.generateIdTokenAuthorizationResponse(userInfo, idsRequestParam, clientDetail);
+        String url = idsAuthorizationProvider.generateIdTokenAuthorizationResponse(userInfo, idsRequestParam, clientDetail, issuer);
         System.out.println(url);
         Assert.assertNotNull(url);
         String params = url.substring(idsRequestParam.getRedirectUri().length() + 1);
@@ -95,7 +95,7 @@ public class IdsAuthorizationProviderTest extends BaseIdsTest {
 
     @Test
     public void generateIdTokenTokenAuthorizationResponse() {
-        String url = idsAuthorizationProvider.generateIdTokenTokenAuthorizationResponse(userInfo, idsRequestParam, clientDetail);
+        String url = idsAuthorizationProvider.generateIdTokenTokenAuthorizationResponse(userInfo, idsRequestParam, clientDetail, issuer);
         System.out.println(url);
         Assert.assertNotNull(url);
         String params = url.substring(idsRequestParam.getRedirectUri().length() + 1);
@@ -107,7 +107,7 @@ public class IdsAuthorizationProviderTest extends BaseIdsTest {
 
     @Test
     public void generateCodeTokenAuthorizationResponse() {
-        String url = idsAuthorizationProvider.generateCodeTokenAuthorizationResponse(userInfo, idsRequestParam, clientDetail);
+        String url = idsAuthorizationProvider.generateCodeTokenAuthorizationResponse(userInfo, idsRequestParam, clientDetail, issuer);
         System.out.println(url);
         Assert.assertNotNull(url);
         String params = url.substring(idsRequestParam.getRedirectUri().length() + 1);
@@ -120,7 +120,7 @@ public class IdsAuthorizationProviderTest extends BaseIdsTest {
 
     @Test
     public void generateCodeIdTokenTokenAuthorizationResponse() {
-        String url = idsAuthorizationProvider.generateCodeIdTokenTokenAuthorizationResponse(userInfo, idsRequestParam, clientDetail);
+        String url = idsAuthorizationProvider.generateCodeIdTokenTokenAuthorizationResponse(userInfo, idsRequestParam, clientDetail, issuer);
         System.out.println(url);
         Assert.assertNotNull(url);
         String params = url.substring(idsRequestParam.getRedirectUri().length() + 1);

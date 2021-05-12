@@ -20,6 +20,7 @@ import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.IdsResponse;
 import com.fujieid.jap.ids.model.UserInfo;
 import com.fujieid.jap.ids.pipeline.IdsPipeline;
+import com.fujieid.jap.ids.util.EndpointUtil;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +44,6 @@ public class LogoutEndpoint extends AbstractEndpoint {
 
         logoutPipeline.afterHandle(request, response);
         return new IdsResponse<String, String>()
-            .data(JapIds.getIdsConfig().getLogoutRedirectUrl());
+            .data(EndpointUtil.getLogoutRedirectUrl(request));
     }
 }

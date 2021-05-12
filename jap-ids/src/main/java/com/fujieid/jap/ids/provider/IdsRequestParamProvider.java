@@ -16,6 +16,8 @@
 package com.fujieid.jap.ids.provider;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.fujieid.jap.ids.JapIds;
+import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.exception.InvalidRequestException;
 import com.fujieid.jap.ids.model.ClientCertificate;
 import com.fujieid.jap.ids.model.IdsConsts;
@@ -64,8 +66,9 @@ public class IdsRequestParamProvider {
         param.setAutoapprove(request.getParameter(IdsConsts.AUTOAPPROVE));
 
         // Get username and password Applies to:<a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">Resource Owner Password Credentials Grant</a>
-        param.setUsername(request.getParameter(IdsConsts.USERNAME));
-        param.setPassword(request.getParameter(IdsConsts.PASSWORD));
+        IdsConfig idsConfig = JapIds.getIdsConfig();
+        param.setUsername(request.getParameter(idsConfig.getUsernameField()));
+        param.setPassword(request.getParameter(idsConfig.getPasswordField()));
 
         /*
          * Applicable to open pkce enhanced protocol in authorization code mode

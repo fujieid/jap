@@ -2,25 +2,16 @@ package com.fujieid.jap.ids.oidc;
 
 import com.fujieid.jap.ids.BaseIdsTest;
 import com.fujieid.jap.ids.JapIds;
+import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.exception.InvalidJwksException;
-import com.fujieid.jap.ids.model.OidcDiscoveryDto;
-import com.xkcoding.json.JsonUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class OidcUtilTest extends BaseIdsTest {
 
     @Test
-    public void getOidcDiscoveryInfoNotNull() {
-        OidcDiscoveryDto discoveryDto = OidcUtil.getOidcDiscoveryInfo(null);
-        System.out.println(JsonUtil.toJsonString(discoveryDto));
-        Assert.assertNotNull(discoveryDto);
-    }
-
-    @Test
     public void getOidcDiscoveryInfoEqual() {
-        OidcDiscoveryDto discoveryDto = OidcUtil.getOidcDiscoveryInfo(null);
-        Assert.assertNotNull(discoveryDto);
+        Assert.assertThrows(IdsException.class, () -> OidcUtil.getOidcDiscoveryInfo(null));
     }
 
     @Test

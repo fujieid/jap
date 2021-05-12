@@ -139,7 +139,7 @@ public class JwtUtilTest extends BaseIdsTest {
     @Test
     public void createJwtTokenFromRs256() {
         JapIds.getIdsConfig().getJwtConfig().setJwksJson(rs256JwksJson);
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, issuer);
         System.out.println(jwtToken);
     }
 
@@ -157,7 +157,7 @@ public class JwtUtilTest extends BaseIdsTest {
             .getJwtConfig()
             .setJwksJson(rs384JwksJson)
             .setTokenSigningAlg(TokenSigningAlg.RS384);
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, issuer);
         System.out.println(jwtToken);
     }
 
@@ -179,7 +179,7 @@ public class JwtUtilTest extends BaseIdsTest {
             .getJwtConfig()
             .setJwksJson(rs512JwksJson)
             .setTokenSigningAlg(TokenSigningAlg.RS512);
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, issuer);
         System.out.println(jwtToken);
     }
 
@@ -200,7 +200,7 @@ public class JwtUtilTest extends BaseIdsTest {
             .getJwtConfig()
             .setJwksJson(es256JwksJson)
             .setTokenSigningAlg(TokenSigningAlg.ES256);
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, issuer);
         System.out.println(jwtToken);
     }
 
@@ -222,7 +222,7 @@ public class JwtUtilTest extends BaseIdsTest {
             .getJwtConfig()
             .setJwksJson(es384JwksJson)
             .setTokenSigningAlg(TokenSigningAlg.ES384);
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, issuer);
         System.out.println(jwtToken);
     }
 
@@ -244,7 +244,7 @@ public class JwtUtilTest extends BaseIdsTest {
             .getJwtConfig()
             .setJwksJson(es512JwksJson)
             .setTokenSigningAlg(TokenSigningAlg.ES512);
-        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce);
+        String jwtToken = JwtUtil.createJwtToken(clientId, userInfo, tokenExpireIn, nonce, issuer);
         System.out.println(jwtToken);
     }
 
@@ -268,7 +268,7 @@ public class JwtUtilTest extends BaseIdsTest {
             .setJwksJson(es512JwksJson)
             .setTokenSigningAlg(TokenSigningAlg.ES512)
             .setJwtVerificationType(JwtVerificationType.JWKS);
-        Map<String, Object> jwtInfo = JwtUtil.validateJwtToken(clientId, userInfo.getId(), jwt);
+        Map<String, Object> jwtInfo = JwtUtil.validateJwtToken(clientId, userInfo.getId(), jwt, EndpointUtil.getJwksUrl(null));
         System.out.println(jwtInfo);
     }
 }

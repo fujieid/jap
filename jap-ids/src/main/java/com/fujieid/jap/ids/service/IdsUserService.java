@@ -28,14 +28,19 @@ import com.fujieid.jap.ids.model.UserInfo;
 public interface IdsUserService {
 
     /**
-     * Login with account and password
+     * Login with account and password.
+     * <p>
+     * In the business system, if it is a multi-tenant business architecture, a user may exist in multiple systems,
+     * <p>
+     * and the client id can distinguish the system where the user is located
      *
      * @param username account number
      * @param password password
+     * @param clientId The unique code of the currently logged-in client
      * @return UserInfo
      */
-    default UserInfo loginByUsernameAndPassword(String username, String password) {
-        throw new IdsException("Not implemented `IdsUserService.loginByUsernameAndPassword(String, String)`");
+    default UserInfo loginByUsernameAndPassword(String username, String password, String clientId) {
+        throw new IdsException("Not implemented `IdsUserService.loginByUsernameAndPassword(String, String, String)`");
     }
 
     /**
@@ -50,11 +55,16 @@ public interface IdsUserService {
 
     /**
      * Get user info by username.
+     * <p>
+     * In the business system, if it is a multi-tenant business architecture, a user may exist in multiple systems,
+     * <p>
+     * and the client id can distinguish the system where the user is located
      *
      * @param username username of the business system
+     * @param clientId The unique code of the currently logged-in client
      * @return UserInfo
      */
-    default UserInfo getByName(String username) {
-        throw new IdsException("Not implemented `IdsUserService.getByName(String)`");
+    default UserInfo getByName(String username, String clientId) {
+        throw new IdsException("Not implemented `IdsUserService.getByName(String, String)`");
     }
 }

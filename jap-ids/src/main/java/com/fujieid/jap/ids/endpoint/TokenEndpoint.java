@@ -51,16 +51,16 @@ public class TokenEndpoint extends AbstractEndpoint {
             throw new UnsupportedGrantTypeException(ErrorResponse.UNSUPPORTED_GRANT_TYPE);
         }
         if (GrantType.AUTHORIZATION_CODE.getType().equals(param.getGrantType())) {
-            return idsTokenProvider.generateAuthorizationCodeResponse(param);
+            return idsTokenProvider.generateAuthorizationCodeResponse(param, request);
         }
         if (GrantType.PASSWORD.getType().equals(param.getGrantType())) {
             return idsTokenProvider.generatePasswordResponse(param, request);
         }
         if (GrantType.CLIENT_CREDENTIALS.getType().equals(param.getGrantType())) {
-            return idsTokenProvider.generateClientCredentialsResponse(param);
+            return idsTokenProvider.generateClientCredentialsResponse(param, request);
         }
         if (GrantType.REFRESH_TOKEN.getType().equals(param.getGrantType())) {
-            return idsTokenProvider.generateRefreshTokenResponse(param);
+            return idsTokenProvider.generateRefreshTokenResponse(param, request);
         }
         throw new UnsupportedGrantTypeException(ErrorResponse.UNSUPPORTED_GRANT_TYPE);
     }

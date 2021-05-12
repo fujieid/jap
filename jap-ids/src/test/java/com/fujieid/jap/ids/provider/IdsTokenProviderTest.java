@@ -36,7 +36,7 @@ public class IdsTokenProviderTest extends BaseIdsTest {
     @Test
     public void generateAuthorizationCodeResponse() {
         this.initParam();
-        Assert.assertThrows(InvalidCodeException.class, () -> idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam));
+        Assert.assertThrows(InvalidCodeException.class, () -> idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam, httpServletRequestMock));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class IdsTokenProviderTest extends BaseIdsTest {
         this.initParam();
         String code = oauth2Service.createAuthorizationCode(idsRequestParam, new UserInfo(), 100000L);
         idsRequestParam.setCode(code);
-        IdsResponse<String, Object> response = idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam);
+        IdsResponse<String, Object> response = idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam, httpServletRequestMock);
         System.out.println(response);
         Assert.assertNotNull(response);
     }
@@ -55,7 +55,7 @@ public class IdsTokenProviderTest extends BaseIdsTest {
         String code = oauth2Service.createAuthorizationCode(idsRequestParam, new UserInfo(), 100000L);
         idsRequestParam.setCode(code);
         idsRequestParam.setClientId("asdasd");
-        Assert.assertThrows(InvalidClientException.class, () -> idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam));
+        Assert.assertThrows(InvalidClientException.class, () -> idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam, httpServletRequestMock));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class IdsTokenProviderTest extends BaseIdsTest {
         String code = oauth2Service.createAuthorizationCode(idsRequestParam, new UserInfo(), 100000L);
         idsRequestParam.setCode(code);
         idsRequestParam.setGrantType("asdasd");
-        Assert.assertThrows(UnsupportedGrantTypeException.class, () -> idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam));
+        Assert.assertThrows(UnsupportedGrantTypeException.class, () -> idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam, httpServletRequestMock));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class IdsTokenProviderTest extends BaseIdsTest {
         String code = oauth2Service.createAuthorizationCode(idsRequestParam, new UserInfo(), 100000L);
         idsRequestParam.setCode(code);
         idsRequestParam.setRedirectUri("asdasd");
-        Assert.assertThrows(InvalidRedirectUriException.class, () -> idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam));
+        Assert.assertThrows(InvalidRedirectUriException.class, () -> idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam, httpServletRequestMock));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class IdsTokenProviderTest extends BaseIdsTest {
         String code = oauth2Service.createAuthorizationCode(idsRequestParam, new UserInfo(), 100000L);
         idsRequestParam.setCode(code);
         idsRequestParam.setClientSecret("asdasd");
-        Assert.assertThrows(InvalidClientException.class, () -> idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam));
+        Assert.assertThrows(InvalidClientException.class, () -> idsTokenProvider.generateAuthorizationCodeResponse(idsRequestParam, httpServletRequestMock));
     }
 
     @Test

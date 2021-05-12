@@ -26,6 +26,7 @@ import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.model.enums.ResponseType;
 import com.fujieid.jap.ids.provider.IdsAuthorizationProvider;
 import com.fujieid.jap.ids.provider.IdsRequestParamProvider;
+import com.fujieid.jap.ids.util.EndpointUtil;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.xkcoding.json.util.StringUtil;
 
@@ -70,12 +71,12 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 
         if (JapIds.isAuthenticated(request)) {
             UserInfo userInfo = JapIds.getUserInfo(request);
-            String url = generateResponseUrl(param, param.getResponseType(), clientDetail, userInfo);
+            String url = generateResponseUrl(param, param.getResponseType(), clientDetail, userInfo, EndpointUtil.getIssuer(request));
             return new IdsResponse<String, String>().data(url);
         }
 
         return new IdsResponse<String, String>()
-            .data(OauthUtil.createAuthorizeUrl(JapIds.getIdsConfig().getLoginPageUrl(), param));
+            .data(OauthUtil.createAuthorizeUrl(EndpointUtil.getLoginPageUrl(request), param));
     }
 
     /**
@@ -106,7 +107,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
 
         String responseType = param.getResponseType();
         UserInfo userInfo = JapIds.getUserInfo(request);
-        String url = generateResponseUrl(param, responseType, clientDetail, userInfo);
+        String url = generateResponseUrl(param, responseType, clientDetail, userInfo, EndpointUtil.getIssuer(request));
         return new IdsResponse<String, String>().data(url);
     }
 
@@ -118,27 +119,27 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
      * @param clientDetail Currently authorized client
      * @return Callback url
      */
-    private String generateResponseUrl(IdsRequestParam param, String responseType, ClientDetail clientDetail, UserInfo userInfo) {
+    private String generateResponseUrl(IdsRequestParam param, String responseType, ClientDetail clientDetail, UserInfo userInfo, String issuer) {
         if (ResponseType.CODE.getType().equalsIgnoreCase(responseType)) {
             return idsAuthorizationProvider.generateAuthorizationCodeResponse(userInfo, param, clientDetail);
         }
         if (ResponseType.TOKEN.getType().equalsIgnoreCase(responseType)) {
-            return idsAuthorizationProvider.generateImplicitGrantResponse(userInfo, param, clientDetail);
+            return idsAuthorizationProvider.generateImplicitGrantResponse(userInfo, param, clientDetail, issuer);
         }
         if (ResponseType.ID_TOKEN.getType().equalsIgnoreCase(responseType)) {
-            return idsAuthorizationProvider.generateIdTokenAuthorizationResponse(userInfo, param, clientDetail);
+            return idsAuthorizationProvider.generateIdTokenAuthorizationResponse(userInfo, param, clientDetail, issuer);
         }
         if (ResponseType.ID_TOKEN_TOKEN.getType().equalsIgnoreCase(responseType)) {
-            return idsAuthorizationProvider.generateIdTokenTokenAuthorizationResponse(userInfo, param, clientDetail);
+            return idsAuthorizationProvider.generateIdTokenTokenAuthorizationResponse(userInfo, param, clientDetail, issuer);
         }
         if (ResponseType.CODE_ID_TOKEN.getType().equalsIgnoreCase(responseType)) {
-            return idsAuthorizationProvider.generateCodeIdTokenAuthorizationResponse(userInfo, param, clientDetail);
+            return idsAuthorizationProvider.generateCodeIdTokenAuthorizationResponse(userInfo, param, clientDetail, issuer);
         }
         if (ResponseType.CODE_TOKEN.getType().equalsIgnoreCase(responseType)) {
-            return idsAuthorizationProvider.generateCodeTokenAuthorizationResponse(userInfo, param, clientDetail);
+            return idsAuthorizationProvider.generateCodeTokenAuthorizationResponse(userInfo, param, clientDetail, issuer);
         }
         if (ResponseType.CODE_ID_TOKEN_TOKEN.getType().equalsIgnoreCase(responseType)) {
-            return idsAuthorizationProvider.generateCodeIdTokenTokenAuthorizationResponse(userInfo, param, clientDetail);
+            return idsAuthorizationProvider.generateCodeIdTokenTokenAuthorizationResponse(userInfo, param, clientDetail, issuer);
         }
         // none
         return idsAuthorizationProvider.generateNoneAuthorizationResponse(param);

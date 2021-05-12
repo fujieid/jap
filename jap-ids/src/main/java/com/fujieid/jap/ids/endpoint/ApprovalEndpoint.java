@@ -22,6 +22,7 @@ import com.fujieid.jap.ids.model.IdsResponse;
 import com.fujieid.jap.ids.model.IdsScope;
 import com.fujieid.jap.ids.provider.IdsRequestParamProvider;
 import com.fujieid.jap.ids.provider.IdsScopeProvider;
+import com.fujieid.jap.ids.util.EndpointUtil;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.ObjectUtils;
 
@@ -102,7 +103,7 @@ public class ApprovalEndpoint extends AbstractEndpoint {
         builder.append("\" to access your protected resources?</p>");
         builder.append("<form id=\"confirmationForm\" name=\"confirmationForm\" action=\"");
 
-        String requestPath = ObjectUtils.appendIfNotEndWith(JapIds.getIdsConfig().getAuthorizeUrl(), "?") + request.getQueryString();
+        String requestPath = ObjectUtils.appendIfNotEndWith(EndpointUtil.getAuthorizeUrl(request), "?") + request.getQueryString();
         builder.append(requestPath).append("\" method=\"post\">");
         builder.append("<input name=\"user_oauth_approval\" value=\"true\" type=\"hidden\"/>");
 

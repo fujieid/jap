@@ -23,8 +23,20 @@ public class IdsUserServiceImpl implements IdsUserService {
         }
     }
 
+    /**
+     * Login with account and password.
+     * <p>
+     * In the business system, if it is a multi-tenant business architecture, a user may exist in multiple systems,
+     * <p>
+     * and the client id can distinguish the system where the user is located
+     *
+     * @param username account number
+     * @param password password
+     * @param clientId The unique code of the currently logged-in client
+     * @return UserInfo
+     */
     @Override
-    public UserInfo loginByUsernameAndPassword(String username, String password) {
+    public UserInfo loginByUsernameAndPassword(String username, String password, String clientId) {
         return userInfoList.stream().filter(userInfo -> userInfo.getUsername().equals(username)).findFirst().orElse(null);
     }
 
@@ -42,13 +54,16 @@ public class IdsUserServiceImpl implements IdsUserService {
     /**
      * Get user info by username.
      * <p>
-     * It is suitable for the {@code jap-simple} module
+     * In the business system, if it is a multi-tenant business architecture, a user may exist in multiple systems,
+     * <p>
+     * and the client id can distinguish the system where the user is located
      *
      * @param username username of the business system
-     * @return JapUser
+     * @param clientId The unique code of the currently logged-in client
+     * @return UserInfo
      */
     @Override
-    public UserInfo getByName(String username) {
+    public UserInfo getByName(String username, String clientId) {
         return userInfoList.stream().filter(userInfo -> userInfo.getUsername().equals(username)).findFirst().orElse(null);
     }
 }

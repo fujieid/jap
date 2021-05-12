@@ -15,15 +15,13 @@
  */
 package com.fujieid.jap.ids.provider;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.IdsException;
-import com.fujieid.jap.ids.exception.InvalidClientException;
-import com.fujieid.jap.ids.exception.InvalidRequestException;
 import com.fujieid.jap.ids.model.*;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.model.enums.GrantType;
 import com.fujieid.jap.ids.service.Oauth2Service;
+import com.fujieid.jap.ids.util.EndpointUtil;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.TokenUtil;
 import com.xkcoding.json.util.StringUtil;
@@ -48,11 +46,12 @@ public class IdsTokenProvider {
     /**
      * RFC6749 4.1. authorization code grant
      *
-     * @param param request params
+     * @param param   request params
+     * @param request current HTTP request
      * @return IdsResponse
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.1" target="_blank">4.1.  Authorization Code Grant</a>
      */
-    public IdsResponse<String, Object> generateAuthorizationCodeResponse(IdsRequestParam param) {
+    public IdsResponse<String, Object> generateAuthorizationCodeResponse(IdsRequestParam param, HttpServletRequest request) {
         AuthCode codeInfo = oauth2Service.validateAndGetAuthrizationCode(param.getGrantType(), param.getCode());
 
         String scope = codeInfo.getScope();
@@ -70,7 +69,7 @@ public class IdsTokenProvider {
 
         long expiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
 
-        AccessToken accessToken = TokenUtil.createAccessToken(userInfo, clientDetail, param.getGrantType(), scope, nonce);
+        AccessToken accessToken = TokenUtil.createAccessToken(userInfo, clientDetail, param.getGrantType(), scope, nonce, EndpointUtil.getIssuer(request));
         IdsResponse<String, Object> response = new IdsResponse<String, Object>()
             .add(IdsConsts.ACCESS_TOKEN, accessToken.getAccessToken())
             .add(IdsConsts.REFRESH_TOKEN, accessToken.getRefreshToken())
@@ -78,7 +77,7 @@ public class IdsTokenProvider {
             .add(IdsConsts.TOKEN_TYPE, IdsConsts.TOKEN_TYPE_BEARER)
             .add(IdsConsts.SCOPE, scope);
         if (OauthUtil.isOidcProtocol(scope)) {
-            response.add(IdsConsts.ID_TOKEN, TokenUtil.createIdToken(clientDetail, userInfo, nonce));
+            response.add(IdsConsts.ID_TOKEN, TokenUtil.createIdToken(clientDetail, userInfo, nonce, EndpointUtil.getIssuer(request)));
         }
         return response;
     }
@@ -94,7 +93,8 @@ public class IdsTokenProvider {
     public IdsResponse<String, Object> generatePasswordResponse(IdsRequestParam param, HttpServletRequest request) {
         String username = param.getUsername();
         String password = param.getPassword();
-        UserInfo userInfo = JapIds.getContext().getUserService().loginByUsernameAndPassword(username, password);
+        String clientId = param.getClientId();
+        UserInfo userInfo = JapIds.getContext().getUserService().loginByUsernameAndPassword(username, password, clientId);
         if (null == userInfo) {
             throw new IdsException(ErrorResponse.INVALID_USER_CERTIFICATE);
         }
@@ -110,7 +110,7 @@ public class IdsTokenProvider {
 
         long expiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
 
-        AccessToken accessToken = TokenUtil.createAccessToken(userInfo, clientDetail, param.getGrantType(), requestScope, param.getNonce());
+        AccessToken accessToken = TokenUtil.createAccessToken(userInfo, clientDetail, param.getGrantType(), requestScope, param.getNonce(), EndpointUtil.getIssuer(request));
         IdsResponse<String, Object> response = new IdsResponse<String, Object>()
             .add(IdsConsts.ACCESS_TOKEN, accessToken.getAccessToken())
             .add(IdsConsts.REFRESH_TOKEN, accessToken.getRefreshToken())
@@ -119,7 +119,7 @@ public class IdsTokenProvider {
             .add(IdsConsts.SCOPE, requestScope);
 
         if (OauthUtil.isOidcProtocol(requestScope)) {
-            response.add(IdsConsts.ID_TOKEN, TokenUtil.createIdToken(clientDetail, userInfo, param.getNonce()));
+            response.add(IdsConsts.ID_TOKEN, TokenUtil.createIdToken(clientDetail, userInfo, param.getNonce(), EndpointUtil.getIssuer(request)));
         }
         return response;
     }
@@ -127,11 +127,12 @@ public class IdsTokenProvider {
     /**
      * RFC6749 4.4.  Client Credentials Grant
      *
-     * @param param request params
+     * @param param   request params
+     * @param request current HTTP request
      * @return IdsResponse
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.4" target="_blank">4.4.  Client Credentials Grant</a>
      */
-    public IdsResponse<String, Object> generateClientCredentialsResponse(IdsRequestParam param) {
+    public IdsResponse<String, Object> generateClientCredentialsResponse(IdsRequestParam param, HttpServletRequest request) {
         String clientId = param.getClientId();
 
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(clientId);
@@ -144,7 +145,7 @@ public class IdsTokenProvider {
 
         long expiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
 
-        AccessToken accessToken = TokenUtil.createClientCredentialsAccessToken(clientDetail, param.getGrantType(), requestScope, param.getNonce());
+        AccessToken accessToken = TokenUtil.createClientCredentialsAccessToken(clientDetail, param.getGrantType(), requestScope, param.getNonce(), EndpointUtil.getIssuer(request));
 
         // https://tools.ietf.org/html/rfc6749#section-4.2.2
         // The authorization server MUST NOT issue a refresh token.
@@ -161,11 +162,12 @@ public class IdsTokenProvider {
     /**
      * RFC6749 6.  Refreshing an Access Token
      *
-     * @param param request params
+     * @param param   request params
+     * @param request current HTTP request
      * @return IdsResponse
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-6" target="_blank">6.  Refreshing an Access Token</a>
      */
-    public IdsResponse<String, Object> generateRefreshTokenResponse(IdsRequestParam param) {
+    public IdsResponse<String, Object> generateRefreshTokenResponse(IdsRequestParam param, HttpServletRequest request) {
         TokenUtil.validateRefreshToken(param.getRefreshToken());
 
         try {
@@ -183,7 +185,7 @@ public class IdsTokenProvider {
 
             long expiresIn = OauthUtil.getRefreshTokenExpiresIn(clientDetail.getRefreshTokenExpiresIn());
 
-            AccessToken accessToken = TokenUtil.refreshAccessToken(user, clientDetail, token, param.getNonce());
+            AccessToken accessToken = TokenUtil.refreshAccessToken(user, clientDetail, token, param.getNonce(), EndpointUtil.getIssuer(request));
             return new IdsResponse<String, Object>()
                 .add(IdsConsts.ACCESS_TOKEN, accessToken.getAccessToken())
                 .add(IdsConsts.REFRESH_TOKEN, accessToken.getRefreshToken())

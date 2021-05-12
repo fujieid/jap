@@ -18,7 +18,6 @@ package com.fujieid.jap.ids.endpoint;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fujieid.jap.ids.JapIds;
-import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.ClientDetail;
 import com.fujieid.jap.ids.model.IdsRequestParam;
@@ -27,6 +26,7 @@ import com.fujieid.jap.ids.model.UserInfo;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.pipeline.IdsPipeline;
 import com.fujieid.jap.ids.provider.IdsRequestParamProvider;
+import com.fujieid.jap.ids.util.EndpointUtil;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.ObjectUtils;
 
@@ -76,7 +76,7 @@ public class LoginEndpoint extends AbstractEndpoint {
             + "  <body>\n"
             + "     <div class=\"container\">\n");
 
-        String authenticationUrl = ObjectUtils.appendIfNotEndWith(JapIds.getIdsConfig().getLoginUrl(), "?") + request.getQueryString();
+        String authenticationUrl = ObjectUtils.appendIfNotEndWith(EndpointUtil.getLoginUrl(request), "?") + request.getQueryString();
         sb.append("      <form class=\"form-signin\" method=\"post\" action=\"").append(authenticationUrl).append("\">\n")
             .append("        <h2 class=\"form-signin-heading\">Please sign in</h2>\n")
             .append("        <p>\n")
@@ -98,7 +98,7 @@ public class LoginEndpoint extends AbstractEndpoint {
     /**
      * Login with account password
      *
-     * @param servletRequest current HTTP request
+     * @param servletRequest  current HTTP request
      * @param servletResponse current HTTP response
      * @return Confirm authorization page
      */
@@ -108,15 +108,15 @@ public class LoginEndpoint extends AbstractEndpoint {
         if (!idsSigninPipeline.preHandle(request, servletResponse)) {
             throw new IdsException("IdsSigninPipeline<UserInfo>.preHandle returns false, the process is blocked.");
         }
+        IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
         UserInfo userInfo = idsSigninPipeline.postHandle(request, servletResponse);
         if (null == userInfo) {
-            IdsConfig idsConfig = JapIds.getIdsConfig();
-            String username = request.getParameter(idsConfig.getUsernameField());
-            String password = request.getParameter(idsConfig.getPasswordField());
+            String username = param.getUsername();
+            String password = param.getPassword();
             if (ObjectUtil.hasEmpty(username, password)) {
                 throw new IdsException(ErrorResponse.INVALID_USER_CERTIFICATE);
             }
-            userInfo = JapIds.getContext().getUserService().loginByUsernameAndPassword(username, password);
+            userInfo = JapIds.getContext().getUserService().loginByUsernameAndPassword(username, password, param.getClientId());
             if (null == userInfo) {
                 throw new IdsException(ErrorResponse.INVALID_USER_CERTIFICATE);
             }
@@ -124,7 +124,6 @@ public class LoginEndpoint extends AbstractEndpoint {
 
         JapIds.saveUserInfo(userInfo, request);
 
-        IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(param.getClientId());
         OauthUtil.validClientDetail(clientDetail);
 
@@ -132,9 +131,9 @@ public class LoginEndpoint extends AbstractEndpoint {
         // When the client supports automatic authorization, it will judge whether the {@code autoapprove} function is enabled
         if (null != clientDetail.getAutoApprove() && clientDetail.getAutoApprove() &&
             StrUtil.isNotEmpty(param.getAutoapprove()) && "TRUE".equalsIgnoreCase(param.getAutoapprove())) {
-            redirectUri = JapIds.getIdsConfig().getAuthorizeAutoApproveUrl();
+            redirectUri = EndpointUtil.getAuthorizeAutoApproveUrl(request);
         } else {
-            redirectUri = JapIds.getIdsConfig().getConfirmPageUrl();
+            redirectUri = EndpointUtil.getConfirmPageUrl(request);
         }
         String fullUrl = OauthUtil.createAuthorizeUrl(redirectUri, param);
         return new IdsResponse<String, String>()

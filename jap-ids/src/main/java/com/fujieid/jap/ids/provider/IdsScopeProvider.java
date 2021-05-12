@@ -17,6 +17,7 @@ package com.fujieid.jap.ids.provider;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.fujieid.jap.ids.model.IdsScope;
+import com.xkcoding.json.util.StringUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,6 +40,8 @@ public class IdsScopeProvider {
     private static final List<IdsScope> SCOPES = new ArrayList<>();
 
     static {
+        addScope(new IdsScope().setCode("read").setDescription("Allow users to read protected resources."));
+        addScope(new IdsScope().setCode("write").setDescription("Allow users to operate (add, delete, modify) protected resources."));
         addScope(new IdsScope().setCode("openid").setDescription("OpenID connect must include scope."));
         addScope(new IdsScope().setCode("profile").setDescription("Allow access to user's basic information."));
         addScope(new IdsScope().setCode("email").setDescription("Allow access to user's mailbox."));
@@ -48,11 +51,24 @@ public class IdsScopeProvider {
 
     /**
      * Add a single scope.
-     * Note: This method is to add data to the existing scope collection
+     * Note: This method is to add data to the existing scope collection.
+     * <p>
+     * If the scope to be added already exists, the new scope will overwrite the original scope
      *
      * @param idsScope single scope
      */
     public static void addScope(IdsScope idsScope) {
+        if (null == idsScope || StringUtil.isEmpty(idsScope.getCode())) {
+            return;
+        }
+        long num = SCOPES.stream().filter(scope -> scope.getCode().equals(idsScope.getCode())).count();
+        if (num > 0) {
+            SCOPES.stream()
+                .filter(scope -> scope.getCode().equals(idsScope.getCode()))
+                .findFirst()
+                .map(scope -> scope.setDescription(idsScope.getDescription()));
+            return;
+        }
         SCOPES.add(idsScope);
     }
 

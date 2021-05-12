@@ -29,6 +29,7 @@ public class BaseIdsTest {
     protected HttpServletResponse httpServletResponseMock;
     @Mock
     protected HttpSession httpsSessionMock;
+    protected String issuer = "http://www.baidu.com";
 
     @Before
     public void init() {
@@ -42,7 +43,7 @@ public class BaseIdsTest {
             .setClientDetailService(new IdsClientDetailServiceImpl())
             .setIdentityService(new IdsIdentityServiceImpl())
             .setIdsConfig(new IdsConfig()
-                .setIssuer("http://www.baidu.com")
+                .setIssuer(issuer)
                 .setJwtConfig(new JwtConfig()
                     .setJwksKeyId("jap-jwk-keyid")
                     .setJwksJson("{\n" +

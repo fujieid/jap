@@ -26,12 +26,13 @@ import com.fujieid.jap.ids.model.enums.ClientSecretAuthMethod;
 import com.fujieid.jap.ids.model.enums.GrantType;
 import com.fujieid.jap.ids.model.enums.ResponseType;
 import com.fujieid.jap.ids.provider.IdsScopeProvider;
+import com.fujieid.jap.ids.util.EndpointUtil;
 import com.fujieid.jap.ids.util.JwtUtil;
-import com.fujieid.jap.ids.util.ObjectUtils;
 import org.jose4j.jwk.JsonWebKey;
 import org.jose4j.jwk.JsonWebKeySet;
 import org.jose4j.jwt.ReservedClaimNames;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,21 +43,22 @@ import java.util.stream.Collectors;
  */
 public class OidcUtil {
 
-    public static OidcDiscoveryDto getOidcDiscoveryInfo(String identity) {
+    public static OidcDiscoveryDto getOidcDiscoveryInfo(HttpServletRequest request) {
 
         IdsConfig config = JapIds.getIdsConfig();
         List<String> scopes = IdsScopeProvider.getScopeCodes();
 
+        String issuer = EndpointUtil.getIssuer(request);
+
         Map<String, Object> model = new HashMap<>();
-        String issuer = config.getIssuer();
         model.put("issuer", issuer);
-        model.put("authorization_endpoint", ObjectUtils.appendIfNotEndWith(config.getAuthorizeUrl(), identity));
-        model.put("token_endpoint", ObjectUtils.appendIfNotEndWith(config.getTokenUrl(), identity));
-        model.put("userinfo_endpoint", ObjectUtils.appendIfNotEndWith(config.getUserinfoUrl(), identity));
-        model.put("registration_endpoint", ObjectUtils.appendIfNotEndWith(config.getRegistrationUrl(), identity));
-        model.put("end_session_endpoint", ObjectUtils.appendIfNotEndWith(config.getEndSessionUrl(), identity));
-        model.put("check_session_iframe", ObjectUtils.appendIfNotEndWith(config.getCheckSessionUrl(), identity));
-        model.put("jwks_uri", ObjectUtils.appendIfNotEndWith(config.getJwksUrl(), identity));
+        model.put("authorization_endpoint", EndpointUtil.getAuthorizeUrl(request));
+        model.put("token_endpoint", EndpointUtil.getTokenUrl(request));
+        model.put("userinfo_endpoint", EndpointUtil.getUserinfoUrl(request));
+        model.put("registration_endpoint", EndpointUtil.getRegistrationUrl(request));
+        model.put("end_session_endpoint", EndpointUtil.getEndSessionUrl(request));
+        model.put("check_session_iframe", EndpointUtil.getCheckSessionUrl(request));
+        model.put("jwks_uri", EndpointUtil.getJwksUrl(request));
         model.put("grant_types_supported", GrantType.grantTypes());
         model.put("response_modes_supported", Arrays.asList(
             "fragment",

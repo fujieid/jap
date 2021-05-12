@@ -78,7 +78,6 @@ public class AbstractIdsFilter {
         } else {
             // Fault-tolerant processing
             IdsConfig config = JapIds.getIdsConfig();
-            String issuer = config.getIssuer();
             String authorizeUrl = config.getAuthorizeUrl();
             String authorizeAutoApproveUrl = config.getAuthorizeAutoApproveUrl();
             String loginUrl = config.getLoginUrl();
@@ -95,9 +94,11 @@ public class AbstractIdsFilter {
             String[] urls = {authorizeUrl, authorizeAutoApproveUrl, loginUrl, loginPageUrl, errorUrl, confirmPageUrl,
                 tokenUrl, registrationUrl, jwksUrl, discoveryUrl, logoutUrl, logoutRedirectUrl, checkSessionUrl};
             for (String url : urls) {
-                if (StringUtil.isNotEmpty(url) && url.startsWith(issuer)) {
-                    this.ignoreUrls.add(url.substring(issuer.length()));
+                if (StringUtil.isEmpty(url)) {
+                    continue;
                 }
+
+                this.ignoreUrls.add(url);
             }
         }
         this.ignoreUrls.add("/favicon.ico");

@@ -15,10 +15,8 @@
  */
 package com.fujieid.jap.ids.config;
 
-import com.fujieid.jap.ids.model.IdsConsts;
 import com.fujieid.jap.ids.model.enums.ClientSecretAuthMethod;
 import com.fujieid.jap.ids.model.enums.TokenAuthMethod;
-import com.fujieid.jap.ids.util.ObjectUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,53 +38,47 @@ public class IdsConfig {
      * Get the password from request through {@code request.getParameter(`passwordField`)}, which defaults to "password"
      */
     private String passwordField = "password";
+
+    private boolean enableDynamicIssuer;
     /**
      * Identity provider
      */
     private String issuer;
     /**
-     * Login url, the default is {@code issuer + /oauth/login}
+     * Login url, the default is {@code /oauth/login}
      */
     private String loginUrl;
-    /**
-     * Login page url, the default is {@link com.fujieid.jap.ids.config.IdsConfig#loginUrl}
-     */
-    private String loginPageUrl;
     /**
      * error url
      */
     private String errorUrl;
     /**
-     * The user confirms the authorized url, the default is {@code issuer + /oauth/confirm}
-     */
-    private String confirmPageUrl;
-    /**
-     * Authorized url, the default is {@code issuer + /oauth/authorize}
+     * Authorized url, the default is {@code /oauth/authorize}
      */
     private String authorizeUrl;
     /**
      * Automatically authorized url (do not display the authorization page), Must support get request method,
-     * the default is {@code issuer + /oauth/authorize/auto}
+     * the default is {@code /oauth/authorize/auto}
      */
     private String authorizeAutoApproveUrl;
     /**
-     * token url, the default is {@code issuer + /oauth/token}
+     * token url, the default is {@code /oauth/token}
      */
     private String tokenUrl;
     /**
-     * userinfo url, the default is {@code issuer + /oauth/userinfo}
+     * userinfo url, the default is {@code /oauth/userinfo}
      */
     private String userinfoUrl;
     /**
-     * Register the the client detail, the default is {@code issuer + /oauth/registration}
+     * Register the the client detail, the default is {@code /oauth/registration}
      */
     private String registrationUrl;
     /**
-     * logout url, the default is {@code issuer + /oauth/logout}
+     * logout url, the default is {@code /oauth/logout}
      */
     private String endSessionUrl;
     /**
-     * check session url, the default is {@code issuer + /oauth/check_session}
+     * check session url, the default is {@code /oauth/check_session}
      */
     private String checkSessionUrl;
     /**
@@ -94,13 +86,30 @@ public class IdsConfig {
      */
     private String logoutRedirectUrl;
     /**
-     * public key url, the default is {@code issuer + /.well-known/jwks.json}
+     * public key url, the default is {@code /.well-known/jwks.json}
      */
     private String jwksUrl;
     /**
-     * Get open id provider metadata, the default is {@code issuer + /.well-known/openid-configuration}
+     * Get open id provider metadata, the default is {@code /.well-known/openid-configuration}
      */
     private String discoveryUrl;
+    /**
+     * Login page url, the default is {@link com.fujieid.jap.ids.config.IdsConfig#loginUrl}
+     */
+    private String loginPageUrl;
+    /**
+     * When the login page is not provided by an authorized service (the login page is hosted by other services), this configuration needs to be turned on
+     */
+    private boolean externalLoginPageUrl;
+    /**
+     * The user confirms the authorized url, the default is {@code issuer + /oauth/confirm}
+     */
+    private String confirmPageUrl;
+    /**
+     * When the authorization confirmation page is not provided by an authorized service (the authorization confirmation page is hosted by other services),
+     * this configuration needs to be turned on
+     */
+    private boolean externalConfirmPageUrl;
     /**
      * When requesting api, the way to pass token
      */
@@ -141,6 +150,15 @@ public class IdsConfig {
         return this;
     }
 
+    public boolean isEnableDynamicIssuer() {
+        return enableDynamicIssuer;
+    }
+
+    public IdsConfig setEnableDynamicIssuer(boolean enableDynamicIssuer) {
+        this.enableDynamicIssuer = enableDynamicIssuer;
+        return this;
+    }
+
     public String getIssuer() {
         return issuer;
     }
@@ -151,11 +169,110 @@ public class IdsConfig {
     }
 
     public String getLoginUrl() {
-        return null == loginUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/login" : loginUrl;
+        return null == loginUrl ? "/oauth/login" : loginUrl;
     }
 
     public IdsConfig setLoginUrl(String loginUrl) {
         this.loginUrl = loginUrl;
+        return this;
+    }
+
+    public String getErrorUrl() {
+        return null == errorUrl ? "/oauth/error" : errorUrl;
+    }
+
+    public IdsConfig setErrorUrl(String errorUrl) {
+        this.errorUrl = errorUrl;
+        return this;
+    }
+
+    public String getAuthorizeUrl() {
+        return null == authorizeUrl ? "/oauth/authorize" : authorizeUrl;
+    }
+
+    public IdsConfig setAuthorizeUrl(String authorizeUrl) {
+        this.authorizeUrl = authorizeUrl;
+        return this;
+    }
+
+    public String getAuthorizeAutoApproveUrl() {
+        return null == authorizeAutoApproveUrl ? "/oauth/authorize/auto" : authorizeAutoApproveUrl;
+    }
+
+    public IdsConfig setAuthorizeAutoApproveUrl(String authorizeAutoApproveUrl) {
+        this.authorizeAutoApproveUrl = authorizeAutoApproveUrl;
+        return this;
+    }
+
+    public String getTokenUrl() {
+        return null == tokenUrl ? "/oauth/token" : tokenUrl;
+    }
+
+    public IdsConfig setTokenUrl(String tokenUrl) {
+        this.tokenUrl = tokenUrl;
+        return this;
+    }
+
+    public String getUserinfoUrl() {
+        return null == userinfoUrl ? "/oauth/userinfo" : userinfoUrl;
+    }
+
+    public IdsConfig setUserinfoUrl(String userinfoUrl) {
+        this.userinfoUrl = userinfoUrl;
+        return this;
+    }
+
+    public String getRegistrationUrl() {
+        return null == registrationUrl ? "/oauth/registration" : registrationUrl;
+    }
+
+    public IdsConfig setRegistrationUrl(String registrationUrl) {
+        this.registrationUrl = registrationUrl;
+        return this;
+    }
+
+    public String getEndSessionUrl() {
+        return null == endSessionUrl ? "/oauth/logout" : endSessionUrl;
+    }
+
+    public IdsConfig setEndSessionUrl(String endSessionUrl) {
+        this.endSessionUrl = endSessionUrl;
+        return this;
+    }
+
+    public String getCheckSessionUrl() {
+        return null == checkSessionUrl ? "/oauth/check_session" : checkSessionUrl;
+    }
+
+    public IdsConfig setCheckSessionUrl(String checkSessionUrl) {
+        this.checkSessionUrl = checkSessionUrl;
+        return this;
+    }
+
+    public String getLogoutRedirectUrl() {
+        return null == logoutRedirectUrl ? "/" : logoutRedirectUrl;
+    }
+
+    public IdsConfig setLogoutRedirectUrl(String logoutRedirectUrl) {
+        this.logoutRedirectUrl = logoutRedirectUrl;
+        return this;
+    }
+
+    public String getJwksUrl() {
+        return null == jwksUrl ? "/.well-known/jwks.json" : jwksUrl;
+    }
+
+    public IdsConfig setJwksUrl(String jwksUrl) {
+        this.jwksUrl = jwksUrl;
+        return this;
+    }
+
+    public String getDiscoveryUrl() {
+        return null == discoveryUrl ? "/.well-known/openid-configuration" : discoveryUrl;
+    }
+
+    public IdsConfig setDiscoveryUrl(String discoveryUrl) {
+        this.discoveryUrl = discoveryUrl;
         return this;
     }
 
@@ -168,17 +285,17 @@ public class IdsConfig {
         return this;
     }
 
-    public String getErrorUrl() {
-        return errorUrl;
+    public boolean isExternalLoginPageUrl() {
+        return externalLoginPageUrl;
     }
 
-    public IdsConfig setErrorUrl(String errorUrl) {
-        this.errorUrl = errorUrl;
+    public IdsConfig setExternalLoginPageUrl(boolean externalLoginPageUrl) {
+        this.externalLoginPageUrl = externalLoginPageUrl;
         return this;
     }
 
     public String getConfirmPageUrl() {
-        return null == confirmPageUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/confirm" : confirmPageUrl;
+        return null == confirmPageUrl ? "/oauth/confirm" : confirmPageUrl;
     }
 
     public IdsConfig setConfirmPageUrl(String confirmPageUrl) {
@@ -186,93 +303,12 @@ public class IdsConfig {
         return this;
     }
 
-    public String getAuthorizeUrl() {
-        return null == authorizeUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/authorize" : authorizeUrl;
+    public boolean isExternalConfirmPageUrl() {
+        return externalConfirmPageUrl;
     }
 
-    public IdsConfig setAuthorizeUrl(String authorizeUrl) {
-        this.authorizeUrl = authorizeUrl;
-        return this;
-    }
-
-    public String getAuthorizeAutoApproveUrl() {
-        return null == authorizeAutoApproveUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/authorize/auto" : authorizeAutoApproveUrl;
-    }
-
-    public IdsConfig setAuthorizeAutoApproveUrl(String authorizeAutoApproveUrl) {
-        this.authorizeAutoApproveUrl = authorizeAutoApproveUrl;
-        return this;
-    }
-
-    public String getTokenUrl() {
-        return null == tokenUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/token" : tokenUrl;
-    }
-
-    public IdsConfig setTokenUrl(String tokenUrl) {
-        this.tokenUrl = tokenUrl;
-        return this;
-    }
-
-    public String getUserinfoUrl() {
-        return null == userinfoUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/userinfo" : userinfoUrl;
-    }
-
-    public IdsConfig setUserinfoUrl(String userinfoUrl) {
-        this.userinfoUrl = userinfoUrl;
-        return this;
-    }
-
-    public String getRegistrationUrl() {
-        return null == registrationUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/registration" : registrationUrl;
-    }
-
-    public IdsConfig setRegistrationUrl(String registrationUrl) {
-        this.registrationUrl = registrationUrl;
-        return this;
-    }
-
-    public String getEndSessionUrl() {
-        return null == endSessionUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/logout" : endSessionUrl;
-    }
-
-    public IdsConfig setEndSessionUrl(String endSessionUrl) {
-        this.endSessionUrl = endSessionUrl;
-        return this;
-    }
-
-    public String getCheckSessionUrl() {
-        return null == checkSessionUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + "oauth/check_session" : checkSessionUrl;
-    }
-
-    public IdsConfig setCheckSessionUrl(String checkSessionUrl) {
-        this.checkSessionUrl = checkSessionUrl;
-        return this;
-    }
-
-    public String getLogoutRedirectUrl() {
-        return null == logoutRedirectUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) : logoutRedirectUrl;
-    }
-
-    public IdsConfig setLogoutRedirectUrl(String logoutRedirectUrl) {
-        this.logoutRedirectUrl = logoutRedirectUrl;
-        return this;
-    }
-
-    public String getJwksUrl() {
-        return null == jwksUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + ".well-known/jwks.json" : jwksUrl;
-    }
-
-    public IdsConfig setJwksUrl(String jwksUrl) {
-        this.jwksUrl = jwksUrl;
-        return this;
-    }
-
-    public String getDiscoveryUrl() {
-        return null == discoveryUrl ? ObjectUtils.appendIfNotEndWith(issuer, IdsConsts.SLASH) + ".well-known/openid-configuration" : discoveryUrl;
-    }
-
-    public IdsConfig setDiscoveryUrl(String discoveryUrl) {
-        this.discoveryUrl = discoveryUrl;
+    public IdsConfig setExternalConfirmPageUrl(boolean externalConfirmPageUrl) {
+        this.externalConfirmPageUrl = externalConfirmPageUrl;
         return this;
     }
 

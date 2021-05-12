@@ -95,23 +95,23 @@ public class TokenUtil {
         return RequestUtil.getCookieVal(request, IdsConsts.ACCESS_TOKEN);
     }
 
-    public static String createIdToken(ClientDetail clientDetail, UserInfo user, String nonce) {
+    public static String createIdToken(ClientDetail clientDetail, UserInfo user, String nonce, String issuer) {
         long idTokenExpiresIn = OauthUtil.getIdTokenExpiresIn(clientDetail.getIdTokenExpiresIn());
-        return JwtUtil.createJwtToken(clientDetail.getClientId(), user, idTokenExpiresIn, nonce);
+        return JwtUtil.createJwtToken(clientDetail.getClientId(), user, idTokenExpiresIn, nonce, issuer);
     }
 
-    public static String createIdToken(ClientDetail clientDetail, UserInfo user, IdsRequestParam param) {
+    public static String createIdToken(ClientDetail clientDetail, UserInfo user, IdsRequestParam param, String issuer) {
         long idTokenExpiresIn = OauthUtil.getIdTokenExpiresIn(clientDetail.getIdTokenExpiresIn());
-        return JwtUtil.createJwtToken(clientDetail.getClientId(), user, idTokenExpiresIn, param.getNonce(), OauthUtil.convertStrToList(param.getScope()), param.getResponseType());
+        return JwtUtil.createJwtToken(clientDetail.getClientId(), user, idTokenExpiresIn, param.getNonce(), OauthUtil.convertStrToList(param.getScope()), param.getResponseType(), issuer);
     }
 
-    public static AccessToken createAccessToken(UserInfo user, ClientDetail clientDetail, String grantType, String scope, String nonce) {
+    public static AccessToken createAccessToken(UserInfo user, ClientDetail clientDetail, String grantType, String scope, String nonce, String issuer) {
         String clientId = clientDetail.getClientId();
 
         long accessTokenExpiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
         long refreshTokenExpiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getRefreshTokenExpiresIn());
 
-        String accessTokenStr = JwtUtil.createJwtToken(clientId, user, accessTokenExpiresIn, nonce);
+        String accessTokenStr = JwtUtil.createJwtToken(clientId, user, accessTokenExpiresIn, nonce, issuer);
         String refreshTokenStr = SecureUtil.sha256(clientId.concat(scope).concat(System.currentTimeMillis() + ""));
 
         AccessToken accessToken = new AccessToken();
@@ -138,9 +138,9 @@ public class TokenUtil {
         return accessToken;
     }
 
-    public static AccessToken refreshAccessToken(UserInfo user, ClientDetail clientDetail, AccessToken accessToken, String nonce) {
+    public static AccessToken refreshAccessToken(UserInfo user, ClientDetail clientDetail, AccessToken accessToken, String nonce, String issuer) {
         String rawToken = accessToken.getAccessToken();
-        String accessTokenStr = JwtUtil.createJwtToken(clientDetail.getClientId(), user, clientDetail.getAccessTokenExpiresIn(), nonce);
+        String accessTokenStr = JwtUtil.createJwtToken(clientDetail.getClientId(), user, clientDetail.getAccessTokenExpiresIn(), nonce, issuer);
         accessToken.setAccessToken(accessTokenStr);
         accessToken.setAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
 
@@ -154,8 +154,8 @@ public class TokenUtil {
         return accessToken;
     }
 
-    public static AccessToken createClientCredentialsAccessToken(ClientDetail clientDetail, String grantType, String scope, String nonce) {
-        return createAccessToken(null, clientDetail, grantType, scope, nonce);
+    public static AccessToken createClientCredentialsAccessToken(ClientDetail clientDetail, String grantType, String scope, String nonce, String issuer) {
+        return createAccessToken(null, clientDetail, grantType, scope, nonce, issuer);
     }
 
 
