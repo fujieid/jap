@@ -76,6 +76,17 @@ public class RequestUtil {
     }
 
     /**
+     * Get subdomain name
+     *
+     * @param request current HTTP request
+     * @return string
+     */
+    public static String getFullDomainName(HttpServletRequest request) {
+        StringBuffer url = request.getRequestURL();
+        return url.delete(url.length() - request.getRequestURI().length(), url.length()).toString();
+    }
+
+    /**
      * Get the User-Agent of the current HTTP request
      *
      * @param request current HTTP request
