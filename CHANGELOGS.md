@@ -2,27 +2,38 @@
 
 ### New features
 
+- **jap-ids**
+  - Add the `enableDynamicIssuer` in `IdsConfig`. When `enableDynamicIssuer=true`, jap ids will automatically extract `issuer` from the currently requested domain name.
+  - Add the `loginPageUrl` in `IdsConfig`:
+    - `loginPageUrl`: login form page url
+    - `loginUrl`: The api url for login
+  - Add the `externalLoginPageUrl` in `IdsConfig`. when the login page is not provided by an authorized service (the login page is hosted by other services), you need to enable this configuration.
+  - Add the `externalConfirmPageUrl` in `IdsConfig`. When the authorization confirmation page is not provided by an authorized service (the authorization confirmation page is hosted by other services), you need to enable this configuration.
+  - Add the `authorizeAutoApproveUrl` in `IdsConfig`. When the authorize url contains `autoapprove=true`, it will not jump to the `confirmPageUrl`, but will jump directly to the `authorizeAutoApproveUrl`.
+  - Add two scopes: `profile` and `address`.
+  - Add the `uid` in the `OauthUtil#createAuthorizeUrl(String, IdsRequestParam)`.
+  - Add the `IdsUserStoreService` interface to support custom operations on user data after login.
+  - Add the `IdsPipeline` interface, developers can customize the process, currently only supports the process of customizing `IdsxxFilter` and `LoginEndpoint`.
+  - Add `SPI` plugin mechanism
+
 ### Modified
 
-- [jap-ids] Add `loginPageUrl` attribute in `IdsConfig` to distinguish it from `loginUrl`.
-- [jap-ids] Add `authorizeAutoApproveUrl` attribute in `IdsConfig`, When the authorize url contains `autoapprove=true`, it will not jump to the `confirmPageUrl`, but will jump directly to the `authorizeAutoApproveUrl`.
-- [jap-ids] Modify `IdsConfig.confirmUrl` to `confirmPageUrl`.
-- [jap-ids] Modify the return value of `ApprovalEndpoint#getAuthClientInfo(HttpServletRequest)` to `IdsResponse<String, Map<String, Object>>`.
-- [jap-ids] Modify the return value of `Ap provalEndpoint#authorize(HttpServletRequest)` to `IdsResponse<String, String>`.
-- [jap-ids] Modify the return value of `AuthorizationEndpoint#agree(HttpServletRequest)` to `IdsResponse<String, String>`.
-- [jap-ids] Modify the return value of `LoginEndpoint#signin(HttpServletRequest)` to `IdsResponse<String, String>`.
-- [jap-ids] Modify the return value of `LogoutEndpoint#logout(HttpServletRequest)` to `IdsResponse<String, String>`.
-- [jap-ids] Modify the comment content of `ClientDetail`.
-- [jap-ids] Modify the return type of `IdsResponse#getData()` to the specified generic.
-- [jap-ids] Add two scopes: `profile` and `address`.
-- [jap-ids] Remove `IdsScopeProvider#initScopes(List<IdsScope>)`.
-- [jap-ids] When `response_type=id_token`, the resulting Claims are returned in the ID Token.
-- [jap-ids] Optimize the process of `UserInfoEndpoint#getCurrentUserInfo(HttpServletRequest)`, Response UserInfo Claims using Scope Values.
-- [jap-ids] Add the `uid` parameter to the `OauthUtil#createAuthorizeUrl(String, IdsRequestParam)`.
-- [jap-ids] Add the `IdsUserStoreService` interface to support custom operations on user data after login.
-- [jap-ids] Add the `IdsPipeline` interface, developers can customize the process, currently only supports the process of customizing `IdsxxFilter` and `LoginEndpoint`.
-- [jap-ids] Add `SPI` plugin mechanism
-- [jap] `javax.servlet-api` -> `jakarta.servlet-api`
+- **jap**
+  - `javax.servlet-api` -> `jakarta.servlet-api`
+  
+- **jap-ids**
+  - Modify `IdsConfig.confirmUrl` to `confirmPageUrl`.
+  - Modify the return value of `ApprovalEndpoint#getAuthClientInfo(HttpServletRequest)` to `IdsResponse<String, Map<String, Object>>`.
+  - Modify the return value of `Ap provalEndpoint#authorize(HttpServletRequest)` to `IdsResponse<String, String>`.
+  - Modify the return value of `AuthorizationEndpoint#agree(HttpServletRequest)` to `IdsResponse<String, String>`.
+  - Modify the return value of `LoginEndpoint#signin(HttpServletRequest)` to `IdsResponse<String, String>`.
+  - Modify the return value of `LogoutEndpoint#logout(HttpServletRequest)` to `IdsResponse<String, String>`.
+  - Modify the comment content of `ClientDetail`.
+  - Modify the return type of `IdsResponse#getData()` to the specified generic.
+  - Remove `IdsScopeProvider#initScopes(List<IdsScope>)`.
+  - When `response_type=id_token`, the resulting Claims are returned in the ID Token.
+  - Optimize the process of `UserInfoEndpoint#getCurrentUserInfo(HttpServletRequest)`, Response UserInfo Claims using Scope Values.
+  - Modify the `loginByUsernameAndPassword` and `getByName` methods of the `IdsUserService` interface, and add the `clientId` parameter, which can be used to distinguish multi-tenant scenarios
 
 ### PR
 
