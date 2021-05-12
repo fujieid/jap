@@ -34,7 +34,7 @@ public class OidcUtil {
     /**
      * Get the IDP service configuration
      *
-     * @param issuer IDP identity providers, such as `https://sign.fujieid.com`
+     * @param issuer IDP identity providers
      * @return OidcDiscoveryDto
      */
     public static OidcDiscoveryDto getOidcDiscovery(String issuer) {
