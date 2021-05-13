@@ -17,6 +17,7 @@ package com.fujieid.jap.social;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.fujieid.jap.core.JapUser;
@@ -35,11 +36,13 @@ import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.config.AuthDefaultSource;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;
+import me.zhyd.oauth.model.AuthToken;
 import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -102,28 +105,14 @@ public class SocialStrategy extends AbstractJapStrategy {
             return JapResponse.success(sessionUser);
         }
 
-        // Convert AuthenticateConfig to SocialConfig
+        AuthRequest authRequest = null;
         try {
-            this.checkAuthenticateConfig(config, SocialConfig.class);
+            authRequest = this.getAuthRequest(config);
         } catch (JapException e) {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
         }
         SocialConfig socialConfig = (SocialConfig) config;
         String source = socialConfig.getPlatform();
-
-        // Get the AuthConfig of JustAuth
-        AuthConfig authConfig = socialConfig.getJustAuthConfig();
-        if (ObjectUtil.isNull(authConfig)) {
-            return JapResponse.error(JapErrorCode.MISS_AUTH_CONFIG);
-        }
-
-        // Instantiate the AuthRequest of JustAuth
-        AuthRequest authRequest = null;
-        try {
-            authRequest = JustAuthRequestContext.getRequest(source, socialConfig, authConfig, authStateCache);
-        } catch (JapSocialException e) {
-            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
-        }
 
         AuthCallback authCallback = this.parseRequest(request);
 
@@ -138,6 +127,98 @@ public class SocialStrategy extends AbstractJapStrategy {
         } catch (JapUserException e) {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
         }
+    }
+
+    public JapResponse refreshToken(AuthenticateConfig config, AuthToken authToken) {
+        AuthRequest authRequest = null;
+        try {
+            authRequest = this.getAuthRequest(config);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
+        SocialConfig socialConfig = (SocialConfig) config;
+        String source = socialConfig.getPlatform();
+
+        AuthResponse<?> authUserAuthResponse = null;
+        try {
+            authUserAuthResponse = authRequest.refresh(authToken);
+        } catch (Exception e) {
+            throw new JapSocialException("Third party refresh access token of `" + source + "` failed. " + e.getMessage());
+        }
+        if (!authUserAuthResponse.ok() || ObjectUtil.isNull(authUserAuthResponse.getData())) {
+            throw new JapUserException("Third party refresh access token of `" + source + "` failed. " + authUserAuthResponse.getMsg());
+        }
+
+        authToken = (AuthToken) authUserAuthResponse.getData();
+        return JapResponse.success(authToken);
+    }
+
+    public JapResponse revokeToken(AuthenticateConfig config, AuthToken authToken) {
+        AuthRequest authRequest = null;
+        try {
+            authRequest = this.getAuthRequest(config);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
+        SocialConfig socialConfig = (SocialConfig) config;
+        String source = socialConfig.getPlatform();
+
+        AuthResponse<?> authUserAuthResponse = null;
+        try {
+            authUserAuthResponse = authRequest.revoke(authToken);
+        } catch (Exception e) {
+            throw new JapSocialException("Third party refresh access token of `" + source + "` failed. " + e.getMessage());
+        }
+        if (!authUserAuthResponse.ok() || ObjectUtil.isNull(authUserAuthResponse.getData())) {
+            throw new JapUserException("Third party refresh access token of `" + source + "` failed. " + authUserAuthResponse.getMsg());
+        }
+
+        return JapResponse.success();
+    }
+
+    public JapResponse getUserInfo(AuthenticateConfig config, AuthToken authToken) {
+        AuthRequest authRequest = null;
+        try {
+            authRequest = this.getAuthRequest(config);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
+        SocialConfig socialConfig = (SocialConfig) config;
+        String source = socialConfig.getPlatform();
+
+        String funName = "getUserInfo";
+        Method method = null;
+        AuthUser res = null;
+        JapUserException japUserException = new JapUserException("Failed to obtain user information on the third-party platform `" + source + "`");
+        try {
+            if ((method = ReflectUtil.getMethod(authRequest.getClass(), funName, AuthToken.class)) != null) {
+                method.setAccessible(true);
+                res = ReflectUtil.invoke(authRequest, method, authToken);
+                if (null == res) {
+                    throw japUserException;
+                }
+            }
+        } catch (Exception e) {
+            throw japUserException;
+        }
+        AuthUser authUser = res;
+        return JapResponse.success(authUser);
+    }
+
+    private AuthRequest getAuthRequest(AuthenticateConfig config) {
+        // Convert AuthenticateConfig to SocialConfig
+        this.checkAuthenticateConfig(config, SocialConfig.class);
+        SocialConfig socialConfig = (SocialConfig) config;
+        String source = socialConfig.getPlatform();
+
+        // Get the AuthConfig of JustAuth
+        AuthConfig authConfig = socialConfig.getJustAuthConfig();
+        if (ObjectUtil.isNull(authConfig)) {
+            throw new JapException(JapErrorCode.MISS_AUTH_CONFIG);
+        }
+
+        // Instantiate the AuthRequest of JustAuth
+        return JustAuthRequestContext.getRequest(source, socialConfig, authConfig, authStateCache);
     }
 
     /**
