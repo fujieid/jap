@@ -15,8 +15,13 @@
  */
 package com.fujieid.jap.ids.endpoint;
 
+import com.fujieid.jap.ids.model.UserInfo;
+import com.fujieid.jap.ids.pipeline.IdsPipeline;
 import com.fujieid.jap.ids.service.Oauth2Service;
 import com.fujieid.jap.ids.service.Oauth2ServiceImpl;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 /**
  * Abstract classes common to various endpoints
@@ -32,4 +37,20 @@ public abstract class AbstractEndpoint {
         this.oauth2Service = new Oauth2ServiceImpl();
     }
 
+    protected IdsPipeline<UserInfo> getUserInfoIdsPipeline(IdsPipeline<UserInfo> idsSigninPipeline) {
+        if (null == idsSigninPipeline) {
+            idsSigninPipeline = new IdsPipeline<UserInfo>() {
+                @Override
+                public boolean preHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+                    return IdsPipeline.super.preHandle(servletRequest, servletResponse);
+                }
+
+                @Override
+                public UserInfo postHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+                    return IdsPipeline.super.postHandle(servletRequest, servletResponse);
+                }
+            };
+        }
+        return idsSigninPipeline;
+    }
 }

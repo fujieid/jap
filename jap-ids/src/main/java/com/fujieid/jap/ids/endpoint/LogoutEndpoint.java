@@ -36,6 +36,7 @@ public class LogoutEndpoint extends AbstractEndpoint {
 
     public IdsResponse<String, String> logout(HttpServletRequest request, ServletResponse response) {
         IdsPipeline<UserInfo> logoutPipeline = JapIds.getContext().getLogoutPipeline();
+        logoutPipeline = this.getUserInfoIdsPipeline(logoutPipeline);
         if (!logoutPipeline.preHandle(request, response)) {
             throw new IdsException("IdsLogoutPipeline<UserInfo>.preHandle returns false, the process is blocked.");
         }
