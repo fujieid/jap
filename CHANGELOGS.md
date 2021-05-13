@@ -40,6 +40,12 @@
 
 ### PR
 
+- Gitee
+  - Merge PR [#11](https://gitee.com/fujieid/jap/pulls/11) by [@dreamlu](https://gitee.com/dreamlu)
+  - Merge PR [#12](https://gitee.com/fujieid/jap/pulls/12) by [@sywd](https://gitee.com/sywd)
+  - Merge PR [#13](https://gitee.com/fujieid/jap/pulls/13) by [@dreamlu](https://gitee.com/dreamlu)
+  - Merge PR [#14](https://gitee.com/fujieid/jap/pulls/14) by [@dreamlu](https://gitee.com/dreamlu)
+
 ### Issue
 
 ## v1.0.1（2021-04-21）
