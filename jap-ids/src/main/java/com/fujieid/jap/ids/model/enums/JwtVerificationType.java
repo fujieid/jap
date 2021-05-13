@@ -19,7 +19,7 @@ import com.fujieid.jap.ids.config.IdsConfig;
 
 /**
  * The verification type when the user verifies the jwt token (access token, refresh token, id token)，
- * For specific usage, please refer to {@link com.fujieid.jap.ids.util.JwtUtil#validateJwtToken(String, String, String)}
+ * For specific usage, please refer to {@link com.fujieid.jap.ids.util.JwtUtil#validateJwtToken(String, String, String, String)}
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0

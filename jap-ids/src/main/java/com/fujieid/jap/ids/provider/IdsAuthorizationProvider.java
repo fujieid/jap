@@ -46,6 +46,7 @@ public class IdsAuthorizationProvider {
      * @param userInfo     Logged-in user information
      * @param param        Request parameter
      * @param clientDetail Application information
+     * @param issuer       The issuer name. This parameter cannot contain the colon (:) character.
      * @return String
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.2">4.2.  Implicit Grant</a>
      */
