@@ -16,6 +16,9 @@
   - Add the `IdsPipeline` interface, developers can customize the process, currently only supports the process of customizing `IdsxxFilter` and `LoginEndpoint`.
   - Add `SPI` plugin mechanism
 
+- **jap-social**
+  - `SocialStrategy` provides methods of `refreshToken`, `revokeToken`, and `getUserInfo`
+  
 ### Modified
 
 - **jap**
