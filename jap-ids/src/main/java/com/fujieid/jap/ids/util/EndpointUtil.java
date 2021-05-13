@@ -110,8 +110,8 @@ public class EndpointUtil {
 
     public static String getConfirmPageUrl(HttpServletRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
-        if (config.isExternalLoginPageUrl()) {
-            return config.getLoginPageUrl();
+        if (config.isExternalConfirmPageUrl()) {
+            return config.getConfirmPageUrl();
         }
         return getIssuer(request) + config.getConfirmPageUrl();
     }
