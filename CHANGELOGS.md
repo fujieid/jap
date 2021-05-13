@@ -10,7 +10,7 @@
   - Add the `externalLoginPageUrl` in `IdsConfig`. when the login page is not provided by an authorized service (the login page is hosted by other services), you need to enable this configuration.
   - Add the `externalConfirmPageUrl` in `IdsConfig`. When the authorization confirmation page is not provided by an authorized service (the authorization confirmation page is hosted by other services), you need to enable this configuration.
   - Add the `authorizeAutoApproveUrl` in `IdsConfig`. When the authorize url contains `autoapprove=true`, it will not jump to the `confirmPageUrl`, but will jump directly to the `authorizeAutoApproveUrl`.
-  - Add two scopes: `profile` and `address`.
+  - Add some scopes, such as `profile`, `address`, `read` and `write`.
   - Add the `uid` in the `OauthUtil#createAuthorizeUrl(String, IdsRequestParam)`.
   - Add the `IdsUserStoreService` interface to support custom operations on user data after login.
   - Add the `IdsPipeline` interface, developers can customize the process, currently only supports the process of customizing `IdsxxFilter` and `LoginEndpoint`.
