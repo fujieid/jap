@@ -46,7 +46,8 @@ public class IdsUserStatusFilter extends AbstractIdsFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        idsFilterErrorPipeline.errorHandle(servletRequest, servletResponse, new IdsException(ErrorResponse.INVALID_USER_STATUS));
+        this.getFilterErrorPipeline(idsFilterErrorPipeline).errorHandle(servletRequest, servletResponse,
+            new IdsException(ErrorResponse.INVALID_USER_STATUS));
     }
 
     @Override

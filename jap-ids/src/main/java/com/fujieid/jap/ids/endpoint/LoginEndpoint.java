@@ -105,6 +105,7 @@ public class LoginEndpoint extends AbstractEndpoint {
     public IdsResponse<String, String> signin(ServletRequest servletRequest, ServletResponse servletResponse) {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         IdsPipeline<UserInfo> idsSigninPipeline = JapIds.getContext().getSigninPipeline();
+        idsSigninPipeline = getUserInfoIdsPipeline(idsSigninPipeline);
         if (!idsSigninPipeline.preHandle(request, servletResponse)) {
             throw new IdsException("IdsSigninPipeline<UserInfo>.preHandle returns false, the process is blocked.");
         }
@@ -138,5 +139,22 @@ public class LoginEndpoint extends AbstractEndpoint {
         String fullUrl = OauthUtil.createAuthorizeUrl(redirectUri, param);
         return new IdsResponse<String, String>()
             .data(fullUrl);
+    }
+
+    private IdsPipeline<UserInfo> getUserInfoIdsPipeline(IdsPipeline<UserInfo> idsSigninPipeline) {
+        if (null == idsSigninPipeline) {
+            idsSigninPipeline = new IdsPipeline<UserInfo>() {
+                @Override
+                public boolean preHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+                    return IdsPipeline.super.preHandle(servletRequest, servletResponse);
+                }
+
+                @Override
+                public UserInfo postHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+                    return IdsPipeline.super.postHandle(servletRequest, servletResponse);
+                }
+            };
+        }
+        return idsSigninPipeline;
     }
 }

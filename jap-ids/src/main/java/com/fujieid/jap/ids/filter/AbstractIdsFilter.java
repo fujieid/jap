@@ -19,8 +19,11 @@ import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.config.IdsConfig;
+import com.fujieid.jap.ids.pipeline.IdsPipeline;
 import com.xkcoding.json.util.StringUtil;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,5 +105,17 @@ public class AbstractIdsFilter {
             }
         }
         this.ignoreUrls.add("/favicon.ico");
+    }
+
+    protected IdsPipeline<Object> getFilterErrorPipeline(IdsPipeline<Object> idsFilterErrorPipeline) {
+        if (null == idsFilterErrorPipeline) {
+            idsFilterErrorPipeline = new IdsPipeline<Object>() {
+                @Override
+                public void errorHandle(ServletRequest servletRequest, ServletResponse servletResponse, Throwable throwable) {
+                    IdsPipeline.super.errorHandle(servletRequest, servletResponse, throwable);
+                }
+            };
+        }
+        return idsFilterErrorPipeline;
     }
 }

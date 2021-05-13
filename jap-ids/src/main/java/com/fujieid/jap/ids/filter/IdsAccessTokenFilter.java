@@ -52,7 +52,7 @@ public class IdsAccessTokenFilter extends AbstractIdsFilter implements Filter {
             TokenUtil.validateAccessToken(accessToken);
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {
-            idsFilterErrorPipeline.errorHandle(servletRequest, servletResponse, e);
+            this.getFilterErrorPipeline(idsFilterErrorPipeline).errorHandle(servletRequest, servletResponse, e);
         }
     }
 
