@@ -8,7 +8,7 @@
 	<a target="_blank" href="https://search.maven.org/search?q=jap">
 	  <img src="https://img.shields.io/badge/nexus-v1.0.1-blue" ></img>
 	</a>
-	<a target="_blank" href="https://oss.sonatype.org/content/repositories/snapshots/com/fujieid">
+	<a target="_blank" href="https://oss.sonatype.org/content/repositories/snapshots/com/fujieid/">
 	  <img src="https://img.shields.io/nexus/s/https/oss.sonatype.org/com.fujieid/jap-bom.svg?style=flat-square" ></img>
 	</a>
 	<a target="_blank" href="https://gitee.com/yadong.zhang/JustAuth/blob/master/LICENSE">
