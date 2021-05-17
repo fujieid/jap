@@ -49,7 +49,7 @@ public class IdsConfig {
      */
     private String loginUrl;
     /**
-     * error url
+     * error url, the default is {@code /oauth/error}
      */
     private String errorUrl;
     /**
