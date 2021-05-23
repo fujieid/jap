@@ -6,7 +6,7 @@
 </p>
 <p align="center">
 	<a target="_blank" href="https://search.maven.org/search?q=jap">
-	  <img src="https://img.shields.io/badge/nexus-v1.0.1-blue" ></img>
+	  <img src="https://img.shields.io/github/v/release/fujieid/jap?style=flat-square" ></img>
 	</a>
 	<a target="_blank" href="https://oss.sonatype.org/content/repositories/snapshots/com/fujieid/">
 	  <img src="https://img.shields.io/nexus/s/https/oss.sonatype.org/com.fujieid/jap-bom.svg?style=flat-square" ></img>
