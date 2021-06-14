@@ -48,6 +48,7 @@ public class JwkUtil {
             jwk = RsaJwkGenerator.generateJwk(2048);
             jwk.setKeyId(keyId);
             jwk.setAlgorithm(signingAlg.getAlg());
+            jwk.setUse("sig");
         } catch (JoseException e) {
             e.printStackTrace();
             throw new InvalidJwksException("Unable to create RSA Json Web Key.");
@@ -96,6 +97,7 @@ public class JwkUtil {
             jwk.setUse(Use.SIGNATURE);
             jwk.setKeyId(keyId);
             jwk.setAlgorithm(signingAlg.getAlg());
+            jwk.setUse("sig");
         } catch (JoseException e) {
             e.printStackTrace();
             throw new InvalidJwksException("Unable to create ES Json Web Key.");
