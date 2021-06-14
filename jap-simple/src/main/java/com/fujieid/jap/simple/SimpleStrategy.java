@@ -101,7 +101,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
     }
 
     /**
-     * 登录成功
+     * login successful
      *
      * @param simpleConfig Authenticate Config
      * @param credential   Username password credential
