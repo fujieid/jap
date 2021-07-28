@@ -109,7 +109,7 @@ public class TokenUtil {
         String clientId = clientDetail.getClientId();
 
         long accessTokenExpiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
-        long refreshTokenExpiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getRefreshTokenExpiresIn());
+        long refreshTokenExpiresIn = OauthUtil.getRefreshTokenExpiresIn(clientDetail.getRefreshTokenExpiresIn());
 
         String accessTokenStr = JwtUtil.createJwtToken(clientId, user, accessTokenExpiresIn, nonce, issuer);
         String refreshTokenStr = SecureUtil.sha256(clientId.concat(scope).concat(System.currentTimeMillis() + ""));
@@ -140,14 +140,15 @@ public class TokenUtil {
 
     public static AccessToken refreshAccessToken(UserInfo user, ClientDetail clientDetail, AccessToken accessToken, String nonce, String issuer) {
         String rawToken = accessToken.getAccessToken();
-        String accessTokenStr = JwtUtil.createJwtToken(clientDetail.getClientId(), user, clientDetail.getAccessTokenExpiresIn(), nonce, issuer);
+        Long accessTokenExpiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
+        String accessTokenStr = JwtUtil.createJwtToken(clientDetail.getClientId(), user, accessTokenExpiresIn, nonce, issuer);
         accessToken.setAccessToken(accessTokenStr);
-        accessToken.setAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
+        accessToken.setAccessTokenExpiresIn(accessTokenExpiresIn);
 
-        accessToken.setAccessTokenExpiration(OauthUtil.getAccessTokenExpiresAt(clientDetail.getAccessTokenExpiresIn()));
+        accessToken.setAccessTokenExpiration(OauthUtil.getAccessTokenExpiresAt(accessTokenExpiresIn));
 
         String tokenCacheKey = IdsConsts.OAUTH_ACCESS_TOKEN_CACHE_KEY + accessTokenStr;
-        JapIds.getContext().getCache().set(tokenCacheKey, accessTokenStr, clientDetail.getAccessTokenExpiresIn() * 1000);
+        JapIds.getContext().getCache().set(tokenCacheKey, accessTokenStr, accessTokenExpiresIn * 1000);
 
         String rawTokenCacheKey = IdsConsts.OAUTH_ACCESS_TOKEN_CACHE_KEY + rawToken;
         JapIds.getContext().getCache().removeKey(rawTokenCacheKey);

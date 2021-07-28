@@ -193,7 +193,7 @@ public class IdsTokenProvider {
 
         UserInfo user = JapIds.getContext().getUserService().getById(token.getUserId());
 
-        long expiresIn = OauthUtil.getRefreshTokenExpiresIn(clientDetail.getRefreshTokenExpiresIn());
+        long expiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
 
         AccessToken accessToken = TokenUtil.refreshAccessToken(user, clientDetail, token, param.getNonce(), EndpointUtil.getIssuer(request));
         return new IdsResponse<String, Object>()
