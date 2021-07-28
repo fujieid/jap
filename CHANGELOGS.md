@@ -1,3 +1,11 @@
+## v1.0.3 (2021-07-28)
+
+- (**fix**): a bug of JwkUtil
+- (**fix**): cannot refresh token
+- (**pr**): Merge Gitee PR [#16](https://gitee.com/fujieid/jap/pulls/16) by [@lowis](https://gitee.com/lowis)
+- (**issue**): Fix Gitee [#I3YWTD](https://gitee.com/fujieid/jap/issues/I3YWTD)
+- Upgrade justauth to 1.16.2
+
 ## v1.0.2 (2021-05-24)
 
 ### New features
