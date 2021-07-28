@@ -98,7 +98,7 @@ JAP 基于 LGPL 3.0 协议。商用分为以下两种情况：
 
 ## 🚀 他们在用
 
-![](docs/media/jai345x99.png) ![](docs/media/liuniu345x99.png) ![](docs/media/mica345x99.png)
+![](docs/media/jai-h50.png) ![](docs/media/liuniu-h50.png) ![](docs/media/mica-h50.png)
 
 
 ## 🏘️ 加入社群
