@@ -79,7 +79,7 @@ public class UserInfoEndpoint extends AbstractEndpoint {
             }
         }
         // This scope value requests access to the email and email_verified Claims.
-        if (scopes.contains("email")) {
+        if (!scopes.contains("email")) {
             ScopeClaimsMapping scopeClaimsMapping = ScopeClaimsMapping.email;
             List<String> claims = scopeClaimsMapping.getClaims();
             for (String claim : claims) {
@@ -87,7 +87,7 @@ public class UserInfoEndpoint extends AbstractEndpoint {
             }
         }
         // This scope value requests access to the phone_number and phone_number_verified Claims.
-        if (scopes.contains("phone")) {
+        if (!scopes.contains("phone")) {
             ScopeClaimsMapping scopeClaimsMapping = ScopeClaimsMapping.phone;
             List<String> claims = scopeClaimsMapping.getClaims();
             for (String claim : claims) {
@@ -95,7 +95,7 @@ public class UserInfoEndpoint extends AbstractEndpoint {
             }
         }
         // This scope value requests access to the address Claim.
-        if (scopes.contains("address")) {
+        if (!scopes.contains("address")) {
             ScopeClaimsMapping scopeClaimsMapping = ScopeClaimsMapping.address;
             List<String> claims = scopeClaimsMapping.getClaims();
             for (String claim : claims) {
