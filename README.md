@@ -72,23 +72,6 @@ JAP 适用于所有需要登录功能的场景。比如：
 - **力求省事**：你们的项目太多（或者是开发语言较多，比如：Java、Python、Node 等），每个项目都需要登录认证模块，想解决这种重复劳动的问题，使研发人员有更多的时间和精力投入到业务开发中，提高研发产能和研发效率。
 - ...
 
-## ❓ JAP 常见问题有哪些？
-
-### JAP 不支持具体的业务操作吗？
-
-JAP 针对用户、应用等业务数据，只提供标准的业务接口，不提供数据库层面的支持。JAP 要做的是为广大开发者提供一套技术标准，既然是标准，那就不能依赖于任何和具体业务相关的逻辑。不管你们的系统是用的 MySQL、Oracle、SQLlite、Redis、MongoDB 还是其他的，JAP 通通不关心。JAP 对外提供标准接口，业务端只需要按需实现 JAP 的接口即可，这种设计能在最大程度上增加它的灵活性，使它不受限于某一具体的数据库实现方案。
-
-### JAP 可以用到企业级项目吗？
-
-当然，JAP 的价值就在于：**方便开发者无缝对接任何第三方应用或者自有系统，提高开发效率，减少代码维护成本**。所以对于企业来说，这是一个降本增效的功能。JAP 基于模块化开发，并且不侵入业务系统，可以十分方便的集成到企业内部各个系统或者统一的登录认证网关中。
-
-### JAP 可以商用吗？
-
-JAP 基于 LGPL 3.0 协议。商用分为以下两种情况：
-
-- LGPL **允许商业软件通过类库引用(link)方式使用**而不需要开源商业软件的代码。这使得**采用 LGPL 协议的开源代码可以被商业软件作为类库引用并发布和销售**。
-- 如果修改 LGPL 协议的代码或者衍生，则所有修改的代码，涉及修改部分的额外代码和衍生的代码都必须采用 LGPL 协议。因此 LGPL 协议的开源代码**不适合通过修改和衍生的方式做二次开发的商业软件采用**。
-
 ## 🚀 开源推荐
 - `JustAuth` 开箱即用的整合第三方登录的开源组件: [https://github.com/justauth/JustAuth](https://github.com/justauth/JustAuth)
 - `spring-boot-demo` 深度学习并实战 spring boot 的项目: [https://github.com/xkcoding/spring-boot-demo](https://github.com/xkcoding/spring-boot-demo)
@@ -100,20 +83,14 @@ JAP 基于 LGPL 3.0 协议。商用分为以下两种情况：
 
 ![](docs/media/jai-h50.png) ![](docs/media/liuniu-h50.png) ![](docs/media/mica-h50.png)
 
-
-## 🏘️ 加入社群
-
-![](docs/media/wechat.png)
-
-## 🏘️ 加入开发者组织
-
-[参考文章](https://justauth.plus/community/weneed.html)
-
 ## 👪 贡献者列表
 
 [![contributors](https://whnb.wang/contributors/fujieid/jap)](https://whnb.wang)
+## 🏘️ 加入社群
 
-## 💹 关注统计
+<img width="120" src="docs/media/wechat.png">
+
+## 💹 统计图
 
 ### Gitee
 
