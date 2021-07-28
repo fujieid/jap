@@ -74,15 +74,15 @@ JAP 适用于所有需要登录功能的场景。比如：
 
 ## ❓ JAP 常见问题有哪些？
 
-### ❔ JAP 不支持具体的业务操作吗？
+### JAP 不支持具体的业务操作吗？
 
 JAP 针对用户、应用等业务数据，只提供标准的业务接口，不提供数据库层面的支持。JAP 要做的是为广大开发者提供一套技术标准，既然是标准，那就不能依赖于任何和具体业务相关的逻辑。不管你们的系统是用的 MySQL、Oracle、SQLlite、Redis、MongoDB 还是其他的，JAP 通通不关心。JAP 对外提供标准接口，业务端只需要按需实现 JAP 的接口即可，这种设计能在最大程度上增加它的灵活性，使它不受限于某一具体的数据库实现方案。
 
-### ❔ JAP 可以用到企业级项目吗？
+### JAP 可以用到企业级项目吗？
 
 当然，JAP 的价值就在于：**方便开发者无缝对接任何第三方应用或者自有系统，提高开发效率，减少代码维护成本**。所以对于企业来说，这是一个降本增效的功能。JAP 基于模块化开发，并且不侵入业务系统，可以十分方便的集成到企业内部各个系统或者统一的登录认证网关中。
 
-### ❔ JAP 可以商用吗？
+### JAP 可以商用吗？
 
 JAP 基于 LGPL 3.0 协议。商用分为以下两种情况：
 
@@ -95,6 +95,11 @@ JAP 基于 LGPL 3.0 协议。商用分为以下两种情况：
 - `mica` SpringBoot 微服务高效开发工具集: [https://github.com/lets-mica/mica](https://github.com/lets-mica/mica)
 - `pig` 宇宙最强微服务认证授权脚手架(架构师必备): [https://gitee.com/log4j/pig](https://gitee.com/log4j/pig)
 - `SpringBlade` 完整的线上解决方案（企业开发必备）: https://gitee.com/smallc/SpringBlade
+
+## 🚀 他们在用
+
+![](docs/media/jai345x99.png) ![](docs/media/liuniu345x99.png) ![](docs/media/mica345x99.png)
+
 
 ## 🏘️ 加入社群
 
