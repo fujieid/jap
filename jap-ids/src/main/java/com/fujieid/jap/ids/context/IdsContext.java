@@ -41,7 +41,9 @@ public class IdsContext implements Serializable {
 
     private IdsIdentityService identityService;
 
-    private IdsUserStoreService userStoreService = new IdsUserStoreServiceImpl();
+    private IdsUserStoreService userStoreService;
+
+    private IdsTokenService tokenService;
 
     private IdsConfig idsConfig;
 
@@ -102,6 +104,15 @@ public class IdsContext implements Serializable {
 
     public IdsContext setUserStoreService(IdsUserStoreService userStoreService) {
         this.userStoreService = userStoreService;
+        return this;
+    }
+
+    public IdsTokenService getTokenService() {
+        return tokenService;
+    }
+
+    public IdsContext setTokenService(IdsTokenService tokenService) {
+        this.tokenService = tokenService;
         return this;
     }
 
