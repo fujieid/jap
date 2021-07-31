@@ -15,6 +15,7 @@
  */
 package com.fujieid.jap.ids.service;
 
+import com.fujieid.jap.ids.model.IdsConsts;
 import com.fujieid.jap.ids.model.UserInfo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +37,9 @@ public interface IdsUserStoreService {
      * @param userInfo User information after login
      * @param request  current HTTP request
      */
-    void save(UserInfo userInfo, HttpServletRequest request);
+    default void save(UserInfo userInfo, HttpServletRequest request) {
+        request.getSession().setAttribute(IdsConsts.OAUTH_USERINFO_CACHE_KEY, userInfo);
+    }
 
     /**
      * Get logged-in user information
@@ -44,12 +47,16 @@ public interface IdsUserStoreService {
      * @param request current HTTP request
      * @return UserInfo
      */
-    UserInfo get(HttpServletRequest request);
+    default UserInfo get(HttpServletRequest request) {
+        return (UserInfo) request.getSession().getAttribute(IdsConsts.OAUTH_USERINFO_CACHE_KEY);
+    }
 
     /**
      * Delete logged-in user information
      *
      * @param request current HTTP request
      */
-    void remove(HttpServletRequest request);
+    default void remove(HttpServletRequest request) {
+        request.getSession().removeAttribute(IdsConsts.OAUTH_USERINFO_CACHE_KEY);
+    }
 }
