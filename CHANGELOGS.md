@@ -1,3 +1,8 @@
+## v1.0.4 (2021-08-**)
+
+- feat: Support to generate custom token
+
+
 ## v1.0.3 (2021-07-28)
 
 - (**fix**): a bug of JwkUtil
