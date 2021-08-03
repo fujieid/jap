@@ -36,11 +36,11 @@ public interface IdsTokenService {
      * <p>
      * Developers can reimplement this method to generate access token in any format.
      *
-     * @param clientId Client Identifier
-     * @param userinfo User Profile
-     *                 0-     * @param tokenExpireIn Id Token validity (seconds)
-     * @param nonce    Random string
-     * @param issuer   The issuer name. This parameter cannot contain the colon (:) character.
+     * @param clientId      Client Identifier
+     * @param userinfo      User Profile
+     * @param tokenExpireIn Id Token validity (seconds)
+     * @param nonce         Random string
+     * @param issuer        The issuer name. This parameter cannot contain the colon (:) character.
      * @return String
      */
     default String createAccessToken(String clientId, UserInfo userinfo, Long tokenExpireIn, String nonce, String issuer) {
@@ -52,12 +52,12 @@ public interface IdsTokenService {
      * <p>
      * Developers can reimplement this method to generate access token in any format.
      *
-     * @param clientId Client Identifier
-     * @param userinfo User Profile
-     *                 0-     * @param tokenExpireIn Id Token validity (seconds)
-     * @param nonce    Random string
-     * @param issuer   The issuer name. This parameter cannot contain the colon (:) character.
-     * @param scopes   The scope granted by the current access token
+     * @param clientId      Client Identifier
+     * @param userinfo      User Profile
+     * @param tokenExpireIn Id Token validity (seconds)
+     * @param nonce         Random string
+     * @param issuer        The issuer name. This parameter cannot contain the colon (:) character.
+     * @param scopes        The scope granted by the current access token
      * @return String
      */
     default String createAccessToken(String clientId, UserInfo userinfo, Long tokenExpireIn, String nonce, String issuer, Set<String> scopes) {

@@ -2,7 +2,10 @@ package com.fujieid.jap.ids.provider;
 
 import com.fujieid.jap.ids.BaseIdsTest;
 import com.fujieid.jap.ids.JapIds;
-import com.fujieid.jap.ids.exception.*;
+import com.fujieid.jap.ids.exception.InvalidClientException;
+import com.fujieid.jap.ids.exception.InvalidCodeException;
+import com.fujieid.jap.ids.exception.InvalidRedirectUriException;
+import com.fujieid.jap.ids.exception.UnsupportedGrantTypeException;
 import com.fujieid.jap.ids.model.ClientDetail;
 import com.fujieid.jap.ids.model.IdsRequestParam;
 import com.fujieid.jap.ids.model.IdsResponse;

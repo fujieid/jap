@@ -41,9 +41,9 @@ public class IdsContext implements Serializable {
 
     private IdsIdentityService identityService;
 
-    private IdsUserStoreService userStoreService;
+    private IdsUserStoreService userStoreService = new IdsUserStoreServiceImpl();
 
-    private IdsTokenService tokenService;
+    private IdsTokenService tokenService = new IdsTokenServiceImpl();
 
     private IdsConfig idsConfig;
 
