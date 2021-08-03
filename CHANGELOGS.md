@@ -1,6 +1,11 @@
 ## v1.0.4 (2021-08-**)
 
-- feat: Support to generate custom token
+- feat: [jap-ids] Support to generate custom token
+- feat: [jap-ids] When `IdsConfig#enableDynamicIssuer` is `true`, custom `context-path` is supported.
+
+----
+- feat: [jap-ids] 支持生成自定义 token（包含 access_token 和 refresh_token）
+- feat: [jap-ids] 当启用 `IdsConfig#enableDynamicIssuer` 时，支持自定义 `context-path`
 
 
 ## v1.0.3 (2021-07-28)
