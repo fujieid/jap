@@ -12,8 +12,8 @@
   <artifactId>jap-mfa</artifactId>
   <name>jap-mfa</name>
   <description>
-    Time based one-time password (TOTP), which is suitable for Google authenticator and TOTP authenticator of binary
-    boot
+    Time based one-time password (TOTP),
+    which is suitable for Google authenticator and TOTP authenticator of binary boot
   </description>
 
   <dependencies>
