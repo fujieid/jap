@@ -10,13 +10,13 @@ assignees: ''
 
 - [ ] I have searched the relevant information in the existing list of Issues.
 - [ ] I have searched the developer documentation for that information: https://justauth.plus
-- [ ] I have read the relevant Q&A: https://justauth.plus/qa
 
 ## Issue description
 
 ## Environment
 
 - JustAuthPlus(JAP) version(e.g. `1.0.1`): 
+- JustAuthPlus(JAP) Module(e.g. `jap-ids`): 
 
 ### Minimal test code / Steps to reproduce the issue
 1.

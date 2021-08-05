@@ -12,4 +12,5 @@ assignees: ''
 
 ## Environment
 
-- JustAuthPlus(JAP) version(e.g. `1.0.1`): 
+- JustAuthPlus(JAP) version(e.g. `1.0.1`):
+- JustAuthPlus(JAP) Module(e.g. `jap-ids`): 
