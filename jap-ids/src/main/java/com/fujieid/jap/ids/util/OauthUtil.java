@@ -20,12 +20,14 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.*;
 import com.fujieid.jap.ids.model.ClientDetail;
 import com.fujieid.jap.ids.model.IdsConsts;
 import com.fujieid.jap.ids.model.IdsRequestParam;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.model.enums.GrantType;
+import com.fujieid.jap.ids.service.IdsSecretService;
 import com.fujieid.jap.ids.service.Oauth2Service;
 import com.xkcoding.json.util.StringUtil;
 import org.jose4j.base64url.Base64Url;
@@ -146,14 +148,21 @@ public class OauthUtil {
             if (param.isEnablePkce()) {
                 oauth2Service.validateAuthrizationCodeChallenge(param.getCodeVerifier(), param.getCode());
             } else {
-                if (StringUtil.isEmpty(param.getClientSecret()) || !clientDetail.getClientSecret().equals(param.getClientSecret())) {
-                    throw new InvalidClientException(ErrorResponse.INVALID_CLIENT);
-                }
+                matchesSecret(param, clientDetail);
             }
         } else {
-            if (StringUtil.isEmpty(param.getClientSecret()) || !clientDetail.getClientSecret().equals(param.getClientSecret())) {
-                throw new InvalidClientException(ErrorResponse.INVALID_CLIENT);
-            }
+            matchesSecret(param, clientDetail);
+        }
+    }
+
+    private static void matchesSecret(IdsRequestParam param, ClientDetail clientDetail) {
+        IdsSecretService secretService = JapIds.getContext().getSecretService();
+        if (null == secretService) {
+            throw new IdsTokenException("com.fujieid.jap.ids.service.IdsSecretService has not been injected");
+        }
+
+        if (!secretService.matches(clientDetail.getClientSecret(), param.getClientSecret())) {
+            throw new InvalidClientException(ErrorResponse.INVALID_CLIENT);
         }
     }
 

@@ -45,6 +45,8 @@ public class IdsContext implements Serializable {
 
     private IdsTokenService tokenService = new IdsTokenServiceImpl();
 
+    private IdsSecretService secretService = new IdsSimpleSecretServiceImpl();
+
     private IdsConfig idsConfig;
 
     private IdsPipeline<Object> filterPipeline;
@@ -113,6 +115,15 @@ public class IdsContext implements Serializable {
 
     public IdsContext setTokenService(IdsTokenService tokenService) {
         this.tokenService = tokenService;
+        return this;
+    }
+
+    public IdsSecretService getSecretService() {
+        return secretService;
+    }
+
+    public IdsContext setSecretService(IdsSecretService secretService) {
+        this.secretService = secretService;
         return this;
     }
 
