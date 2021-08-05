@@ -17,7 +17,6 @@ package com.fujieid.jap.simple;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.fujieid.jap.core.util.RequestUtil;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.cache.JapCache;
@@ -27,6 +26,7 @@ import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
+import com.fujieid.jap.core.util.RequestUtil;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
