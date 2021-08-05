@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Access token helper. Provides a unified access token method {@link AccessTokenHelper#getToken(HttpServletRequest, OAuthConfig)}
+ * Access token helper. Provides a unified access token method {@link AccessTokenHelper#getToken(HttpServletRequest, OAuthConfig, Object[])}
  * for different authorization methods
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -46,6 +46,7 @@ public class AccessTokenHelper {
      *
      * @param request     Current callback request
      * @param oAuthConfig oauth config
+     * @param obj         Optional parameters
      * @return AccessToken
      */
     public static AccessToken getToken(HttpServletRequest request, OAuthConfig oAuthConfig, Object... obj) throws JapOauth2Exception {
