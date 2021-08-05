@@ -136,10 +136,10 @@ public class TokenUtil {
         accessToken.setAccessTokenExpiration(OauthUtil.getAccessTokenExpiresAt(accessTokenExpiresIn));
         accessToken.setRefreshTokenExpiration(OauthUtil.getRefreshTokenExpiresAt(refreshTokenExpiresIn));
 
-        String token = IdsConsts.OAUTH_ACCESS_TOKEN_CACHE_KEY + accessTokenStr;
-        String rtoken = IdsConsts.OAUTH_REFRESH_TOKEN_CACHE_KEY + refreshTokenStr;
-        JapIds.getContext().getCache().set(token, accessToken, accessTokenExpiresIn * 1000);
-        JapIds.getContext().getCache().set(rtoken, accessToken, refreshTokenExpiresIn * 1000);
+        String tokenCacheKey = IdsConsts.OAUTH_ACCESS_TOKEN_CACHE_KEY + accessTokenStr;
+        String rtokenCacheKey = IdsConsts.OAUTH_REFRESH_TOKEN_CACHE_KEY + refreshTokenStr;
+        JapIds.getContext().getCache().set(tokenCacheKey, accessToken, accessTokenExpiresIn * 1000);
+        JapIds.getContext().getCache().set(rtokenCacheKey, accessToken, refreshTokenExpiresIn * 1000);
         return accessToken;
     }
 
@@ -158,7 +158,7 @@ public class TokenUtil {
         accessToken.setAccessTokenExpiration(OauthUtil.getAccessTokenExpiresAt(accessTokenExpiresIn));
 
         String tokenCacheKey = IdsConsts.OAUTH_ACCESS_TOKEN_CACHE_KEY + accessTokenStr;
-        JapIds.getContext().getCache().set(tokenCacheKey, accessTokenStr, accessTokenExpiresIn * 1000);
+        JapIds.getContext().getCache().set(tokenCacheKey, accessToken, accessTokenExpiresIn * 1000);
 
         String rawTokenCacheKey = IdsConsts.OAUTH_ACCESS_TOKEN_CACHE_KEY + rawToken;
         JapIds.getContext().getCache().removeKey(rawTokenCacheKey);
