@@ -1,12 +1,19 @@
 ## v1.0.4 (2021-08-**)
 
 - feat: [jap-ids] Support to generate custom token
+- feat: [jap-ids] Support custom verification of client_secret, such as: BCrypt, etc.
 - feat: [jap-ids] When `IdsConfig#enableDynamicIssuer` is `true`, custom `context-path` is supported.
+- fix: [jap-ids] Solve the problem of "After refreshing the token, the user information cannot be obtained with the new access token" ([#I3XHTK](https://gitee.com/fujieid/jap/issues/I3XHTK))
+- feat: [jap-oauth2] `Oauth2Strategy` supports the following methods: `refreshToken`, `revokeToken`, `getUserInfo`
+- doc: change the template of issue and PR
 
 ----
 - feat: [jap-ids] 支持生成自定义 token（包含 access_token 和 refresh_token）
+- feat: [jap-ids] 支持自定义验证 `client_secret`，适配多种场景，如：BCrypt 等
 - feat: [jap-ids] 当启用 `IdsConfig#enableDynamicIssuer` 时，支持自定义 `context-path`
-
+- fix: [jap-ids] 解决“刷新token后，用新的access_token无法获取用户信息”问题 ([#I3XHTK](https://gitee.com/fujieid/jap/issues/I3XHTK))
+- feat: [jap-oauth2] `Oauth2Strategy` 支持使用以下方法： `refreshToken`、`revokeToken`、`getUserInfo`
+- doc: 更改 issue 和 pr 的模板
 
 ## v1.0.3 (2021-07-28)
 
