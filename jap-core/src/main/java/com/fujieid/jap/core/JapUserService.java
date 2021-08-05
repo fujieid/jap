@@ -94,7 +94,7 @@ public interface JapUserService {
      * @param platform  oauth2 platform name
      * @param userInfo  The basic user information returned by the OAuth platform
      * @param tokenInfo The token information returned by the OAuth platform, developers can store tokens
-     *                  , type {@code com.fujieid.jap.oauth2.helper.AccessToken}
+     *                  , type {@code com.fujieid.jap.oauth2.token.AccessToken}
      * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
      */
     default JapUser createAndGetOauth2User(String platform, Map<String, Object> userInfo, Object tokenInfo) {
