@@ -33,5 +33,9 @@ public enum Oauth2GrantType {
     /**
      * Client Credentials Grant
      */
-    client_credentials
+    client_credentials,
+    /**
+     * Refreshing an Access Token
+     */
+    refresh_token
 }

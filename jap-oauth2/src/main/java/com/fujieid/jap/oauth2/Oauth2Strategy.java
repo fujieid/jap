@@ -31,6 +31,7 @@ import com.fujieid.jap.oauth2.pkce.PkceHelper;
 import com.fujieid.jap.oauth2.token.AccessToken;
 import com.fujieid.jap.oauth2.token.AccessTokenHelper;
 import com.xkcoding.json.util.Kv;
+import com.xkcoding.json.util.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -100,32 +101,32 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         } catch (JapException e) {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
         }
-        OAuthConfig oAuthConfig = (OAuthConfig) config;
+        OAuthConfig authConfig = (OAuthConfig) config;
 
         try {
-            Oauth2Util.checkOauthConfig(oAuthConfig);
+            Oauth2Util.checkOauthConfig(authConfig);
         } catch (JapOauth2Exception e) {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
         }
 
-        boolean isPasswordOrClientMode = oAuthConfig.getGrantType() == Oauth2GrantType.password
-            || oAuthConfig.getGrantType() == Oauth2GrantType.client_credentials;
+        boolean isPasswordOrClientMode = authConfig.getGrantType() == Oauth2GrantType.password
+            || authConfig.getGrantType() == Oauth2GrantType.client_credentials;
 
         // If it is not a callback request, it must be a request to jump to the authorization link
         // If it is a password authorization request or a client authorization request, the token will be obtained directly
-        if (!Oauth2Util.isCallback(request, oAuthConfig) && !isPasswordOrClientMode) {
-            String authorizationUrl = getAuthorizationUrl(oAuthConfig);
+        if (!Oauth2Util.isCallback(request, authConfig) && !isPasswordOrClientMode) {
+            String authorizationUrl = getAuthorizationUrl(authConfig);
             return JapResponse.success(authorizationUrl);
         } else {
             AccessToken accessToken = null;
             try {
-                accessToken = AccessTokenHelper.getToken(request, oAuthConfig);
+                accessToken = AccessTokenHelper.getToken(request, authConfig);
             } catch (JapOauth2Exception e) {
                 return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
             }
             JapUser japUser = null;
             try {
-                japUser = getUserInfo(oAuthConfig, accessToken);
+                japUser = getUserInfo(authConfig, accessToken);
             } catch (JapOauth2Exception e) {
                 return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
             }
@@ -137,28 +138,104 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         }
     }
 
-    private JapUser getUserInfo(OAuthConfig oAuthConfig, AccessToken accessToken) throws JapOauth2Exception {
+    /**
+     * Refresh the authorized token from the OAuth service provider
+     *
+     * @param config       AuthenticateConfig
+     * @param refreshToken The refresh_token returned with the access_token when requesting the token endpoint
+     * @return JapResponse
+     */
+    public JapResponse refreshToken(AuthenticateConfig config, String refreshToken) {
+        try {
+            this.checkAuthenticateConfig(config, OAuthConfig.class);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
+        OAuthConfig authConfig = (OAuthConfig) config;
+        if (authConfig.getGrantType() != Oauth2GrantType.refresh_token) {
+            return JapResponse.error(JapErrorCode.INVALID_GRANT_TYPE);
+        }
+        AccessToken accessToken = null;
+        try {
+            accessToken = AccessTokenHelper.getToken(null, authConfig, refreshToken);
+        } catch (JapOauth2Exception e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
+
+        return JapResponse.success(accessToken);
+    }
+
+    /**
+     * Revoke the authorized token from the OAuth service provider
+     *
+     * @param config      AuthenticateConfig
+     * @param accessToken Authorized access_token
+     * @return JapResponse
+     */
+    public JapResponse revokeToken(AuthenticateConfig config, String accessToken) {
+        try {
+            this.checkAuthenticateConfig(config, OAuthConfig.class);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
+        OAuthConfig authConfig = (OAuthConfig) config;
+
         Map<String, String> params = new HashMap<>(6);
+        params.put("access_token", accessToken);
+
+        Kv tokenInfo = Oauth2Util.request(authConfig.getRevokeTokenEndpointMethodType(), authConfig.getRevokeTokenUrl(), params);
+
+        Oauth2Util.checkOauthResponse(tokenInfo, "Oauth2Strategy failed to revoke access_token. " + accessToken);
+
+        return JapResponse.success();
+    }
+
+    /**
+     * Get the userinfo from the OAuth service provider
+     *
+     * @param config      AuthenticateConfig
+     * @param accessToken {@link com.fujieid.jap.oauth2.token.AccessToken}
+     * @return JapResponse
+     */
+    public JapResponse getUserInfo(AuthenticateConfig config, AccessToken accessToken) {
+        try {
+            this.checkAuthenticateConfig(config, OAuthConfig.class);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
+        OAuthConfig authConfig = (OAuthConfig) config;
+        try {
+            return JapResponse.success(this.getUserInfo(authConfig, accessToken));
+        } catch (JapOauth2Exception e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
+    }
+
+    private JapUser getUserInfo(OAuthConfig authConfig, AccessToken accessToken) throws JapOauth2Exception {
+        if (null == accessToken || StringUtil.isEmpty(accessToken.getAccessToken())) {
+            throw new JapOauth2Exception("Oauth2Strategy failed to get userInfo with accessToken. AccessToken is empty.");
+        }
+        Map<String, String> params = new HashMap<>(3);
         params.put("access_token", accessToken.getAccessToken());
 
-        Kv userInfo = Oauth2Util.request(oAuthConfig.getUserInfoEndpointMethodType(), oAuthConfig.getUserinfoUrl(), params);
+        Kv userInfo = Oauth2Util.request(authConfig.getUserInfoEndpointMethodType(), authConfig.getUserinfoUrl(), params);
 
         Oauth2Util.checkOauthResponse(userInfo, "Oauth2Strategy failed to get userInfo with accessToken.");
 
-        JapUser japUser = this.japUserService.createAndGetOauth2User(oAuthConfig.getPlatform(), userInfo, accessToken);
+        JapUser japUser = this.japUserService.createAndGetOauth2User(authConfig.getPlatform(), userInfo, accessToken);
         if (ObjectUtil.isNull(japUser)) {
             return null;
         }
         return japUser;
     }
 
-    private String getAuthorizationUrl(OAuthConfig oAuthConfig) {
+    private String getAuthorizationUrl(OAuthConfig authConfig) {
         String url = null;
         // 4.1.  Authorization Code Grant https://tools.ietf.org/html/rfc6749#section-4.1
         // 4.2.  Implicit Grant https://tools.ietf.org/html/rfc6749#section-4.2
-        if (oAuthConfig.getResponseType() == Oauth2ResponseType.code ||
-            oAuthConfig.getResponseType() == Oauth2ResponseType.token) {
-            url = generateAuthorizationCodeGrantUrl(oAuthConfig);
+        if (authConfig.getResponseType() == Oauth2ResponseType.code ||
+            authConfig.getResponseType() == Oauth2ResponseType.token) {
+            url = generateAuthorizationCodeGrantUrl(authConfig);
         }
         return url;
     }
@@ -168,32 +245,32 @@ public class Oauth2Strategy extends AbstractJapStrategy {
      * When it is in authorization code mode, the callback requests return code and state;
      * when it is in implicit authorization mode, the callback requests return token related data
      *
-     * @param oAuthConfig oauth config
+     * @param authConfig oauth config
      * @return authorize request url
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.1" target="_blank">4.1.  Authorization Code Grant</a>
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.2" target="_blank">4.2.  Implicit Grant</a>
      */
-    private String generateAuthorizationCodeGrantUrl(OAuthConfig oAuthConfig) {
+    private String generateAuthorizationCodeGrantUrl(OAuthConfig authConfig) {
         Map<String, Object> params = new HashMap<>(6);
-        params.put("response_type", oAuthConfig.getResponseType());
-        params.put("client_id", oAuthConfig.getClientId());
-        if (StrUtil.isNotBlank(oAuthConfig.getCallbackUrl())) {
-            params.put("redirect_uri", oAuthConfig.getCallbackUrl());
+        params.put("response_type", authConfig.getResponseType());
+        params.put("client_id", authConfig.getClientId());
+        if (StrUtil.isNotBlank(authConfig.getCallbackUrl())) {
+            params.put("redirect_uri", authConfig.getCallbackUrl());
         }
-        if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
-            params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
+        if (ArrayUtil.isNotEmpty(authConfig.getScopes())) {
+            params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, authConfig.getScopes()));
         }
-        String state = oAuthConfig.getState();
+        String state = authConfig.getState();
         if (StrUtil.isBlank(state)) {
             state = RandomUtil.randomString(6);
         }
-        params.put("state", oAuthConfig.getState());
-        JapAuthentication.getContext().getCache().set(Oauth2Const.STATE_CACHE_KEY.concat(oAuthConfig.getClientId()), state);
+        params.put("state", authConfig.getState());
+        JapAuthentication.getContext().getCache().set(Oauth2Const.STATE_CACHE_KEY.concat(authConfig.getClientId()), state);
         // Pkce is only applicable to authorization code mode
-        if (Oauth2ResponseType.code == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
-            params.putAll(PkceHelper.generatePkceParameters(oAuthConfig));
+        if (Oauth2ResponseType.code == authConfig.getResponseType() && authConfig.isEnablePkce()) {
+            params.putAll(PkceHelper.generatePkceParameters(authConfig));
         }
         String query = URLUtil.buildQuery(params, StandardCharsets.UTF_8);
-        return oAuthConfig.getAuthorizationUrl().concat("?").concat(query);
+        return authConfig.getAuthorizationUrl().concat("?").concat(query);
     }
 }
