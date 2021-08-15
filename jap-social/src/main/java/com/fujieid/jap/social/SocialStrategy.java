@@ -85,6 +85,7 @@ public class SocialStrategy extends AbstractJapStrategy {
 
     /**
      * Use this function to instantiate a policy when using a custom cache.
+     * <p>
      * For more information on how to implement custom caching,
      * please refer to: https://justauth.wiki/features/customize-the-state-cache.html
      *
@@ -94,6 +95,24 @@ public class SocialStrategy extends AbstractJapStrategy {
      */
     public SocialStrategy(JapUserService japUserService, JapConfig japConfig, AuthStateCache authStateCache) {
         this(japUserService, japConfig);
+        this.authStateCache = authStateCache;
+    }
+
+    /**
+     * Use this function to instantiate a policy when using a custom cache.
+     * <p>
+     * This constructor supports passing in custom {@link JapCache} and {@link AuthStateCache}
+     * <p>
+     * For more information on how to implement custom state caching,
+     * please refer to: https://justauth.wiki/features/customize-the-state-cache.html
+     *
+     * @param japUserService Required, implement user operations
+     * @param japConfig      Required, jap config
+     * @param japCache       japCache
+     * @param authStateCache Optional, custom cache implementation class
+     */
+    public SocialStrategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache, AuthStateCache authStateCache) {
+        this(japUserService, japConfig, japCache);
         this.authStateCache = authStateCache;
     }
 
