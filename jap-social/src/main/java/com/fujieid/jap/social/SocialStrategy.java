@@ -153,7 +153,13 @@ public class SocialStrategy extends AbstractJapStrategy {
     @Override
     public JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
 
-        SocialConfig socialConfig = (SocialConfig) config;
+        SocialConfig socialConfig = null;
+        try {
+            this.checkAuthenticateConfig(config, SocialConfig.class);
+            socialConfig = (SocialConfig) config;
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
 
         if (socialConfig.isBindUser()) {
             return this.bind(config, request, response);
@@ -225,7 +231,13 @@ public class SocialStrategy extends AbstractJapStrategy {
      * @return JapResponse
      */
     public JapResponse bind(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
-        SocialConfig socialConfig = (SocialConfig) config;
+        SocialConfig socialConfig = null;
+        try {
+            this.checkAuthenticateConfig(config, SocialConfig.class);
+            socialConfig = (SocialConfig) config;
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
 
         if (StrUtil.isEmpty(socialConfig.getBindUserId())) {
             return JapResponse.error(JapErrorCode.ERROR.getErrroCode(), "Unable to bind the account of the third-party platform, the user id is empty.");
@@ -279,6 +291,7 @@ public class SocialStrategy extends AbstractJapStrategy {
     public JapResponse refreshToken(AuthenticateConfig config, AuthToken authToken) {
         AuthRequest authRequest = null;
         try {
+            this.checkAuthenticateConfig(config, SocialConfig.class);
             authRequest = this.getAuthRequest(config);
         } catch (JapException e) {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
@@ -303,6 +316,7 @@ public class SocialStrategy extends AbstractJapStrategy {
     public JapResponse revokeToken(AuthenticateConfig config, AuthToken authToken) {
         AuthRequest authRequest = null;
         try {
+            this.checkAuthenticateConfig(config, SocialConfig.class);
             authRequest = this.getAuthRequest(config);
         } catch (JapException e) {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
@@ -326,6 +340,7 @@ public class SocialStrategy extends AbstractJapStrategy {
     public JapResponse getUserInfo(AuthenticateConfig config, AuthToken authToken) {
         AuthRequest authRequest = null;
         try {
+            this.checkAuthenticateConfig(config, SocialConfig.class);
             authRequest = this.getAuthRequest(config);
         } catch (JapException e) {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
@@ -353,8 +368,6 @@ public class SocialStrategy extends AbstractJapStrategy {
     }
 
     private AuthRequest getAuthRequest(AuthenticateConfig config) {
-        // Convert AuthenticateConfig to SocialConfig
-        this.checkAuthenticateConfig(config, SocialConfig.class);
         SocialConfig socialConfig = (SocialConfig) config;
         String source = socialConfig.getPlatform();
 
