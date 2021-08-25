@@ -31,6 +31,8 @@ import com.fujieid.jap.core.exception.JapUserException;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
+import com.fujieid.jap.core.util.RequestUtil;
+import com.xkcoding.json.JsonUtil;
 import me.zhyd.oauth.cache.AuthStateCache;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.config.AuthDefaultSource;
@@ -43,6 +45,7 @@ import me.zhyd.oauth.request.AuthRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -60,6 +63,8 @@ import java.util.Map;
  */
 public class SocialStrategy extends AbstractJapStrategy {
 
+    private static final String BIND_USERID_PREFIX_CACHE_KEY = "jap:social:bind:userid:";
+    private static final String BIND_REFERER_PREFIX_CACHE_KEY = "jap:social:bind:referer:";
     private AuthStateCache authStateCache;
 
     /**
@@ -116,9 +121,43 @@ public class SocialStrategy extends AbstractJapStrategy {
         this.authStateCache = authStateCache;
     }
 
+    /**
+     * Log in through a third-party platform.
+     * <p>
+     * 1. The user initiates a login request.
+     * <p>
+     * 2. Judge whether the user is logged in, if it is logged in, go directly to step [9], otherwise go to step [3].
+     * <p>
+     * 3. Obtain {@link AuthRequest} according to {@link AuthenticateConfig}.
+     * <p>
+     * 4. Determine whether the current request is a third-party callback request.
+     * If it is a third-party callback request, parse the callback parameters and skip to step [6] to log in.
+     * If it is not a third-party callback request, go to step [5].
+     * <p>
+     * 5. Create an authorization link and return to the front end to jump.
+     * <p>
+     * 6. Use the third-party callback parameter code to exchange token, token to exchange user info.
+     * <p>
+     * 7. Determine whether the current third-party user exists in the database,
+     * if it exists, go directly to step [9], otherwise go to step [8].
+     * <p>
+     * 8. Save third-party user information in the database.
+     * <p>
+     * 9. Log in successfully.
+     *
+     * @param config   {@link AuthenticateConfig}, the actual type is {@link SocialConfig}
+     * @param request  The request to authenticate
+     * @param response The response to authenticate
+     * @return JapResponse
+     */
     @Override
     public JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
 
+        SocialConfig socialConfig = (SocialConfig) config;
+
+        if (socialConfig.isBindUser()) {
+            return this.bind(config, request, response);
+        }
         JapUser sessionUser = this.checkSession(request, response);
         if (null != sessionUser) {
             return JapResponse.success(sessionUser);
@@ -130,22 +169,111 @@ public class SocialStrategy extends AbstractJapStrategy {
         } catch (JapException e) {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
         }
-        SocialConfig socialConfig = (SocialConfig) config;
+
         String source = socialConfig.getPlatform();
 
         AuthCallback authCallback = this.parseRequest(request);
 
-        // If it is not a callback request, it must be a request to jump to the authorization link
-        if (!this.isCallback(source, authCallback)) {
-            String url = authRequest.authorize(socialConfig.getState());
-            return JapResponse.success(url);
+        if (this.isCallback(source, authCallback)) {
+            try {
+                return this.login(request, response, source, authRequest, authCallback, this::loginSuccess);
+            } catch (JapUserException e) {
+                return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+            }
         }
 
+        // If it is not a callback request, it must be a request to jump to the authorization link
+        String url = authRequest.authorize(socialConfig.getState());
+        return JapResponse.success(url);
+    }
+
+    /**
+     * Bind the account of the third-party platform.
+     * <p>
+     * 1. The user initiates a request to bind an account and caches the current referer address (optional, that is,
+     * the address when the binding is initiated, and can jump back to the address after the binding is successful).
+     * <p>
+     * 2. Obtain {@link AuthRequest} according to {@link AuthenticateConfig}.
+     * <p>
+     * 3. Determine whether the current request is a third-party callback request.
+     * If it is a third-party callback request, parse the callback parameters and skip to step [5] for binding.
+     * If it is not a third-party callback request, go to step [4].
+     * <p>
+     * 4. Create an authorized connection (need to mark the unique identifier of the currently logged in user),
+     * and return to the front end to jump.
+     * <p>
+     * 4.1 You can put the user id in the state.
+     * <p>
+     * 4.2 The user id and state can be cached correspondingly, the key value is state.
+     * <p>
+     * 5. Use the third-party callback parameter code to exchange token, token to exchange user info,
+     * and parse state to obtain the system user ID to be bound.
+     * <p>
+     * 6. Determine whether the current third-party user exists in the database,
+     * if it exists, go directly to step [8], otherwise go to step [7]
+     * <p>
+     * 7. Save third-party user information in the database
+     * <p>
+     * 8. The social userinfo exists in the database, and the binding relationship is established directly
+     * with the user id corresponding to the state
+     * <p>
+     * 9.Bind successfully,
+     *
+     * @param config   {@link AuthenticateConfig}, the actual type is {@link SocialConfig}
+     * @param request  The request to bind
+     * @param response The response to bind
+     * @return JapResponse
+     */
+    public JapResponse bind(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+        SocialConfig socialConfig = (SocialConfig) config;
+
+        if (StrUtil.isEmpty(socialConfig.getBindUserId())) {
+            return JapResponse.error(JapErrorCode.ERROR.getErrroCode(), "Unable to bind the account of the third-party platform, the user id is empty.");
+        }
+
+        AuthRequest authRequest = null;
         try {
-            return this.login(request, response, source, authRequest, authCallback);
-        } catch (JapUserException e) {
+            authRequest = this.getAuthRequest(config);
+        } catch (JapException e) {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
         }
+
+        String source = socialConfig.getPlatform();
+
+        AuthCallback authCallback = this.parseRequest(request);
+
+        if (this.isCallback(source, authCallback)) {
+            try {
+                return this.login(request, response, source, authRequest, authCallback, (japUser, currentRequest, currentResponse) -> {
+                    String bindUserId = authStateCache.get(BIND_USERID_PREFIX_CACHE_KEY.concat(authCallback.getState()));
+                    if (StrUtil.isEmpty(bindUserId)) {
+                        throw new JapUserException("Unable to bind user information of " + source +
+                            ". The operation has expired, please try again");
+                    }
+
+                    boolean bindResult = japUserService.bindSocialUser(japUser, bindUserId);
+                    if (!bindResult) {
+                        throw new JapUserException("Unable to bind user information of " + source +
+                            ". bind user id: " + bindUserId +
+                            ", social userinfo: " + JsonUtil.toJsonString(japUser));
+                    }
+                    String referer = authStateCache.get(BIND_REFERER_PREFIX_CACHE_KEY.concat(authCallback.getState()));
+
+                    Map<String, String> res = new HashMap<>(5);
+                    res.put("bingUserId", bindUserId);
+                    res.put("referer", referer);
+                    return JapResponse.success(res);
+                });
+            } catch (JapUserException e) {
+                return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+            }
+        }
+
+        // If it is not a callback request, it must be a request to jump to the authorization link
+        authStateCache.cache(BIND_USERID_PREFIX_CACHE_KEY.concat(socialConfig.getState()), socialConfig.getBindUserId());
+        authStateCache.cache(BIND_REFERER_PREFIX_CACHE_KEY.concat(socialConfig.getState()), RequestUtil.getReferer(request));
+        String url = authRequest.authorize(socialConfig.getState());
+        return JapResponse.success(url);
     }
 
     public JapResponse refreshToken(AuthenticateConfig config, AuthToken authToken) {
@@ -248,8 +376,10 @@ public class SocialStrategy extends AbstractJapStrategy {
      * @param source       Third party platform name
      * @param authRequest  AuthRequest of justauth
      * @param authCallback Parse the parameters obtained by the third party callback request
+     * @param callback     callback function
      */
-    private JapResponse login(HttpServletRequest request, HttpServletResponse response, String source, AuthRequest authRequest, AuthCallback authCallback) throws JapUserException {
+    private JapResponse login(HttpServletRequest request, HttpServletResponse response, String source,
+                              AuthRequest authRequest, AuthCallback authCallback, SocialFunc callback) throws JapUserException {
         AuthResponse<?> authUserAuthResponse = null;
         try {
             authUserAuthResponse = authRequest.login(authCallback);
@@ -270,7 +400,7 @@ public class SocialStrategy extends AbstractJapStrategy {
             }
         }
 
-        return this.loginSuccess(japUser, request, response);
+        return callback.exec(japUser, request, response);
     }
 
     /**
