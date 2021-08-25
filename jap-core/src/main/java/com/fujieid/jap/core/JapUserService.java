@@ -86,6 +86,18 @@ public interface JapUserService {
         return null;
     }
 
+
+    /**
+     * After logging in, bind the account of the third-party platform
+     *
+     * @param japUser    User information of the third-party platform after successful login
+     * @param bindUserId The user id that needs to be bound, this is a user of the business system, not a user of the third-party platform.
+     * @return When binding successfully, return {@code true}, otherwise return {@code false}
+     */
+    default boolean bindSocialUser(JapUser japUser, String bindUserId) {
+        return false;
+    }
+
     /**
      * Save the oauth login user information to the database and return JapUser
      * <p>
