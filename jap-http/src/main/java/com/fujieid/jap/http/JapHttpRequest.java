@@ -15,6 +15,8 @@
  */
 package com.fujieid.jap.http;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -134,4 +136,13 @@ public interface JapHttpRequest {
      * @return the <code>HttpSession</code> associated with this request
      */
     JapHttpSession getSession();
+
+    /**
+     * Retrieves the body of the request as character data using a <code>BufferedReader</code>. The reader translates
+     * the character data according to the character encoding used on the body.
+     *
+     * @return a <code>BufferedReader</code> containing the body of the request
+     * @throws IOException if an input or output exception occurred
+     */
+    BufferedReader getReader() throws IOException;
 }
