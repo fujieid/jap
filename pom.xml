@@ -48,6 +48,7 @@
     <module>jap-mfa</module>
     <module>jap-ids</module>
     <module>jap-bom</module>
+    <module>jap-http-api</module>
   </modules>
 
   <properties>
@@ -78,7 +79,7 @@
     <jedis.version>3.2.0</jedis.version>
     <kisso.version>3.7.6</kisso.version>
     <simple-json.version>0.0.2</simple-json.version>
-    <simple-http.version>1.0.3</simple-http.version>
+    <simple-http.version>1.0.4</simple-http.version>
     <zxing.version>3.3.3</zxing.version>
     <googleauth.version>1.4.0</googleauth.version>
     <commons-cli.version>1.4</commons-cli.version>

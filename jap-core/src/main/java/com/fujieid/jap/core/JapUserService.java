@@ -101,4 +101,15 @@ public interface JapUserService {
         return null;
     }
 
+    /**
+     * Save the http authed user information to the database and return JapUser
+     * <p>
+     * It is suitable for the {@code jap-http-api} module
+     * @param userinfo user information
+     * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
+     */
+    default JapUser createAndGetHttpApiUser(Object userinfo){
+        return null;
+    }
+
 }

@@ -37,6 +37,7 @@ public enum JapErrorCode {
     MISS_AUTHENTICATE_CONFIG(1005, "AuthenticateConfig is required."),
     MISS_ISSUER(1006, "OidcStrategy requires a issuer option."),
     MISS_CREDENTIALS(1007, "Missing credentials"),
+    ERROR_HTTP_API_CONFIG(1008,"http api config error,please check")
     ;
 
     private final int errroCode;
