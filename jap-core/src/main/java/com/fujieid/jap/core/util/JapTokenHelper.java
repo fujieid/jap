@@ -19,9 +19,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.kisso.security.token.SSOToken;
 import com.fujieid.jap.core.JapConst;
 import com.fujieid.jap.core.context.JapAuthentication;
-import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.sso.JapSsoUtil;
-import com.xkcoding.json.util.StringUtil;
 
 import java.util.Map;
 
@@ -36,26 +34,14 @@ public class JapTokenHelper {
 
 
     public static void saveUserToken(String userId, String token) {
-        if (StringUtil.isEmpty(userId)) {
-            throw new JapException("Failed to save user token, userid cannot be empty.");
-        }
-        if (StringUtil.isEmpty(token)) {
-            throw new JapException("Failed to save user token, user token cannot be empty.");
-        }
         JapAuthentication.getContext().getCache().set(JapConst.USER_TOKEN_KEY.concat(userId), token);
     }
 
     public static String getUserToken(String userId) {
-        if (StringUtil.isEmpty(userId)) {
-            throw new JapException("Failed to get user token, userid cannot be empty.");
-        }
         return (String) JapAuthentication.getContext().getCache().get(JapConst.USER_TOKEN_KEY.concat(userId));
     }
 
     public static void removeUserToken(String userId) {
-        if (StringUtil.isEmpty(userId)) {
-            throw new JapException("Failed to remove user token, userid cannot be empty.");
-        }
         JapAuthentication.getContext().getCache().removeKey(JapConst.USER_TOKEN_KEY.concat(userId));
     }
 
