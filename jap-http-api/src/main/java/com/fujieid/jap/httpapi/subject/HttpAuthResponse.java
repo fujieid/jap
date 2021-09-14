@@ -3,6 +3,12 @@ package com.fujieid.jap.httpapi.subject;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * packaging auth result
+ * @author zhihai.yu (mvbbb(a)foxmail.com)
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class HttpAuthResponse {
     private boolean success;
     private String body;

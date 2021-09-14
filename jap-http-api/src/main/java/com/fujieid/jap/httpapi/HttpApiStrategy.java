@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * The strategy for jap-http-api module to request third party system.
  * @author zhihai.yu (mvbbb(a)foxmail.com)
  * @version 1.0.0
  * @since 1.0.0
@@ -97,7 +98,8 @@ public class HttpApiStrategy extends AbstractJapStrategy {
                                                                         config.getCustomHeaders(),
                                                                         config.getCustomParams(),
                                                                         SimpleAuthJsonUtil.getJsonStrByParams(config.getCustomBody()));
-        if(responseForWWWAuth.getHeaders()==null){
+
+        if(responseForWWWAuth==null||responseForWWWAuth.getHeaders()==null){
             return null;
         }
         HttpAuthResponse result = null;
