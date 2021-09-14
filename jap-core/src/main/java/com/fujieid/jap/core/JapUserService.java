@@ -86,6 +86,18 @@ public interface JapUserService {
         return null;
     }
 
+
+    /**
+     * After logging in, bind the account of the third-party platform
+     *
+     * @param japUser    User information of the third-party platform after successful login
+     * @param bindUserId The user id that needs to be bound, this is a user of the business system, not a user of the third-party platform.
+     * @return When binding successfully, return {@code true}, otherwise return {@code false}
+     */
+    default boolean bindSocialUser(JapUser japUser, String bindUserId) {
+        return false;
+    }
+
     /**
      * Save the oauth login user information to the database and return JapUser
      * <p>
@@ -94,7 +106,7 @@ public interface JapUserService {
      * @param platform  oauth2 platform name
      * @param userInfo  The basic user information returned by the OAuth platform
      * @param tokenInfo The token information returned by the OAuth platform, developers can store tokens
-     *                  , type {@code com.fujieid.jap.oauth2.helper.AccessToken}
+     *                  , type {@code com.fujieid.jap.oauth2.token.AccessToken}
      * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
      */
     default JapUser createAndGetOauth2User(String platform, Map<String, Object> userInfo, Object tokenInfo) {
