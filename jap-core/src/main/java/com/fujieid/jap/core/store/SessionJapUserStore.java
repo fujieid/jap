@@ -22,10 +22,9 @@ import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.util.JapTokenHelper;
 import com.fujieid.jap.core.util.JapUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
+import com.fujieid.jap.http.JapHttpSession;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -46,8 +45,8 @@ public class SessionJapUserStore implements JapUserStore {
      * @return JapUser
      */
     @Override
-    public JapUser save(HttpServletRequest request, HttpServletResponse response, JapUser japUser) {
-        HttpSession session = request.getSession();
+    public JapUser save(JapHttpRequest request, JapHttpResponse response, JapUser japUser) {
+        JapHttpSession session = request.getSession();
         JapUser newUser = BeanUtil.copyProperties(japUser, JapUser.class);
         newUser.setPassword(null);
         session.setAttribute(JapConst.SESSION_USER_KEY, newUser);
@@ -68,7 +67,7 @@ public class SessionJapUserStore implements JapUserStore {
      * @param response current HTTP response
      */
     @Override
-    public void remove(HttpServletRequest request, HttpServletResponse response) {
+    public void remove(JapHttpRequest request, JapHttpResponse response) {
 
         JapConfig japConfig = JapAuthentication.getContext().getConfig();
         if (!japConfig.isSso()) {
@@ -78,7 +77,7 @@ public class SessionJapUserStore implements JapUserStore {
             }
         }
 
-        HttpSession session = request.getSession();
+        JapHttpSession session = request.getSession();
         session.removeAttribute(JapConst.SESSION_USER_KEY);
         session.invalidate();
     }
@@ -92,8 +91,8 @@ public class SessionJapUserStore implements JapUserStore {
      * @return JapUser
      */
     @Override
-    public JapUser get(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
+    public JapUser get(JapHttpRequest request, JapHttpResponse response) {
+        JapHttpSession session = request.getSession();
         return (JapUser) session.getAttribute(JapConst.SESSION_USER_KEY);
     }
 }

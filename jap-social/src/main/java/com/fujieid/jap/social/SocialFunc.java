@@ -17,9 +17,8 @@ package com.fujieid.jap.social;
 
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.result.JapResponse;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -29,5 +28,5 @@ import javax.servlet.http.HttpServletResponse;
 @FunctionalInterface
 public interface SocialFunc {
 
-    JapResponse exec(JapUser japUser, HttpServletRequest request, HttpServletResponse response);
+    JapResponse exec(JapUser japUser, JapHttpRequest request, JapHttpResponse response);
 }

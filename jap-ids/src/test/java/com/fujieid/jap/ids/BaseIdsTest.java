@@ -1,15 +1,15 @@
 package com.fujieid.jap.ids;
 
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.config.JwtConfig;
 import com.fujieid.jap.ids.context.IdsContext;
-import com.xkcoding.json.JsonUtil;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import static org.mockito.Mockito.when;
@@ -23,10 +23,9 @@ import static org.mockito.Mockito.when;
 public class BaseIdsTest {
 
 
+    public JapHttpRequest request;
     @Mock
     protected HttpServletRequest httpServletRequestMock;
-    @Mock
-    protected HttpServletResponse httpServletResponseMock;
     @Mock
     protected HttpSession httpsSessionMock;
     protected String issuer = "http://www.baidu.com";
@@ -36,6 +35,7 @@ public class BaseIdsTest {
         MockitoAnnotations.initMocks(this);
         // Arrange
         when(httpServletRequestMock.getSession()).thenReturn(httpsSessionMock);
+        this.request = new JakartaRequestAdapter(httpServletRequestMock);
 
         // 注册 JAP IDS 上下文
         JapIds.registerContext(new IdsContext()

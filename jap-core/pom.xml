@@ -28,5 +28,15 @@
       <groupId>com.xkcoding.json</groupId>
       <artifactId>simple-json</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>com.fujieid</groupId>
+      <artifactId>jap-http</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fujieid</groupId>
+      <artifactId>jap-http-adapter</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

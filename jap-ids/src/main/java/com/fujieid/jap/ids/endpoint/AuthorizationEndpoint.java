@@ -16,6 +16,7 @@
 package com.fujieid.jap.ids.endpoint;
 
 import cn.hutool.core.util.ArrayUtil;
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.InvalidScopeException;
 import com.fujieid.jap.ids.model.ClientDetail;
@@ -30,7 +31,6 @@ import com.fujieid.jap.ids.util.EndpointUtil;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.xkcoding.json.util.StringUtil;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
@@ -59,7 +59,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
      * @return Callback url or authorization url
      * @throws IOException IOException
      */
-    public IdsResponse<String, String> authorize(HttpServletRequest request) throws IOException {
+    public IdsResponse<String, String> authorize(JapHttpRequest request) throws IOException {
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
 
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(param.getClientId());
@@ -85,7 +85,7 @@ public class AuthorizationEndpoint extends AbstractEndpoint {
      * @param request current HTTP request
      * @return Return the callback url (with parameters such as code)
      */
-    public IdsResponse<String, String> agree(HttpServletRequest request) {
+    public IdsResponse<String, String> agree(JapHttpRequest request) {
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
 
         // The scope checked by the user may be inconsistent with the scope passed in the current HTTP request

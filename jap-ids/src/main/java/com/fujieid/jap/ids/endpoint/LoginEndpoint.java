@@ -17,6 +17,8 @@ package com.fujieid.jap.ids.endpoint;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.ClientDetail;
@@ -30,10 +32,6 @@ import com.fujieid.jap.ids.util.EndpointUtil;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.ObjectUtils;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -53,14 +51,14 @@ public class LoginEndpoint extends AbstractEndpoint {
      * @param response current HTTP response
      * @throws IOException IOException
      */
-    public void showLoginPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void showLoginPage(JapHttpRequest request, JapHttpResponse response) throws IOException {
         String loginPageHtml = generateLoginPageHtml(request);
         response.setContentType("text/html;charset=UTF-8");
         response.setContentLength(loginPageHtml.getBytes(StandardCharsets.UTF_8).length);
         response.getWriter().write(loginPageHtml);
     }
 
-    private String generateLoginPageHtml(HttpServletRequest request) {
+    private String generateLoginPageHtml(JapHttpRequest request) {
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html>\n"
             + "<html lang=\"en\">\n"
@@ -98,19 +96,18 @@ public class LoginEndpoint extends AbstractEndpoint {
     /**
      * Login with account password
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @return Confirm authorization page
      */
-    public IdsResponse<String, String> signin(ServletRequest servletRequest, ServletResponse servletResponse) {
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
+    public IdsResponse<String, String> signin(JapHttpRequest request, JapHttpResponse response) {
         IdsPipeline<UserInfo> idsSigninPipeline = JapIds.getContext().getSigninPipeline();
         idsSigninPipeline = this.getUserInfoIdsPipeline(idsSigninPipeline);
-        if (!idsSigninPipeline.preHandle(request, servletResponse)) {
+        if (!idsSigninPipeline.preHandle(request, response)) {
             throw new IdsException("IdsSigninPipeline<UserInfo>.preHandle returns false, the process is blocked.");
         }
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
-        UserInfo userInfo = idsSigninPipeline.postHandle(request, servletResponse);
+        UserInfo userInfo = idsSigninPipeline.postHandle(request, response);
         if (null == userInfo) {
             String username = param.getUsername();
             String password = param.getPassword();

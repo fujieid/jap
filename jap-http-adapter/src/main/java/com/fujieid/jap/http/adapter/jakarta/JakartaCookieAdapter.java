@@ -13,11 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.fujieid.jap.http.adapter.jakarta;
+
+import com.fujieid.jap.http.JapHttpCookie;
+
+import javax.servlet.http.Cookie;
+
 /**
- * ids filter, including access token filter and user status filter
- *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
  * @since 1.0.0
  */
-package com.fujieid.jap.ids.filter;
+public class JakartaCookieAdapter extends JapHttpCookie {
+
+    public JakartaCookieAdapter(Object cookie) {
+        super(cookie);
+        Cookie jakartaCookie = (Cookie) cookie;
+        super.setDomain(jakartaCookie.getDomain());
+        super.setPath(jakartaCookie.getDomain());
+        super.setName(jakartaCookie.getDomain());
+        super.setValue(jakartaCookie.getDomain());
+        super.setMaxAge(jakartaCookie.getMaxAge());
+        super.setSecure(jakartaCookie.getSecure());
+        super.setHttpOnly(jakartaCookie.isHttpOnly());
+    }
+
+}

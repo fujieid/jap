@@ -15,11 +15,9 @@
  */
 package com.fujieid.jap.ids.service;
 
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.ids.model.IdsConsts;
 import com.fujieid.jap.ids.model.UserInfo;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -29,7 +27,7 @@ import javax.servlet.http.HttpSession;
 public class IdsUserStoreServiceImpl implements IdsUserStoreService {
 
     /**
-     * Save user data, and store user information in {@link HttpSession} by default.
+     * Save user data, and store user information in {@link com.fujieid.jap.http.JapHttpSession} by default.
      * <p>
      * Developers can implement this method to save user information in other media, such as cache, database, etc.
      *
@@ -37,7 +35,7 @@ public class IdsUserStoreServiceImpl implements IdsUserStoreService {
      * @param request  current HTTP request
      */
     @Override
-    public void save(UserInfo userInfo, HttpServletRequest request) {
+    public void save(UserInfo userInfo, JapHttpRequest request) {
         request.getSession().setAttribute(IdsConsts.OAUTH_USERINFO_CACHE_KEY, userInfo);
     }
 
@@ -48,7 +46,7 @@ public class IdsUserStoreServiceImpl implements IdsUserStoreService {
      * @return UserInfo
      */
     @Override
-    public UserInfo get(HttpServletRequest request) {
+    public UserInfo get(JapHttpRequest request) {
         return (UserInfo) request.getSession().getAttribute(IdsConsts.OAUTH_USERINFO_CACHE_KEY);
     }
 
@@ -58,7 +56,7 @@ public class IdsUserStoreServiceImpl implements IdsUserStoreService {
      * @param request current HTTP request
      */
     @Override
-    public void remove(HttpServletRequest request) {
+    public void remove(JapHttpRequest request) {
         request.getSession().removeAttribute(IdsConsts.OAUTH_USERINFO_CACHE_KEY);
     }
 }

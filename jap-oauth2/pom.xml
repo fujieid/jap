@@ -21,6 +21,15 @@
       <groupId>com.fujieid</groupId>
       <artifactId>jap-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.fujieid</groupId>
+      <artifactId>jap-http</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fujieid</groupId>
+      <artifactId>jap-http-adapter</artifactId>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>cn.hutool</groupId>

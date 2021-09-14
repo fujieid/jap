@@ -15,12 +15,12 @@
  */
 package com.fujieid.jap.ids.endpoint;
 
-import com.fujieid.jap.core.util.RequestUtil;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
+import com.fujieid.jap.http.RequestUtil;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.xkcoding.json.util.StringUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -51,7 +51,7 @@ public class ErrorEndpoint extends AbstractEndpoint {
      * @param response current HTTP response
      * @throws IOException IOException
      */
-    public void showErrorPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void showErrorPage(JapHttpRequest request, JapHttpResponse response) throws IOException {
         ErrorResponse errorResponse = ErrorResponse.getByError(RequestUtil.getParam("error", request));
         String errorPageHtml = createErrorPageHtml(errorResponse.getError(), errorResponse.getErrorDescription());
         response.setContentType("text/html;charset=UTF-8");
@@ -67,7 +67,7 @@ public class ErrorEndpoint extends AbstractEndpoint {
      * @param response         current HTTP response
      * @throws IOException IOException
      */
-    public void showErrorPage(String error, String errorDescription, HttpServletResponse response) throws IOException {
+    public void showErrorPage(String error, String errorDescription, JapHttpResponse response) throws IOException {
         String errorPageHtml = createErrorPageHtml(error, errorDescription);
         response.setContentType("text/html;charset=UTF-8");
         response.setContentLength(errorPageHtml.getBytes(StandardCharsets.UTF_8).length);

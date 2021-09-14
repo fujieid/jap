@@ -15,10 +15,9 @@
  */
 package com.fujieid.jap.ids.pipeline;
 
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.ids.model.UserInfo;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -29,24 +28,24 @@ public class CustomizeSignInPipeline implements IdsSignInPipeline {
     /**
      * Callback when the program is abnormal
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
-     * @param throwable       any exception thrown on handler execution, if any.
+     * @param request   current HTTP request
+     * @param response  current HTTP response
+     * @param throwable any exception thrown on handler execution, if any.
      */
     @Override
-    public void errorHandle(ServletRequest servletRequest, ServletResponse servletResponse, Throwable throwable) {
+    public void errorHandle(JapHttpRequest request, JapHttpResponse response, Throwable throwable) {
         System.out.println("CustomizeSignInPipeline >> errorHandle");
     }
 
     /**
      * Operations before business process processing, such as initializing resources, etc.
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @return boolean
      */
     @Override
-    public boolean preHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+    public boolean preHandle(JapHttpRequest request, JapHttpResponse response) {
         System.out.println("CustomizeSignInPipeline >> preHandle");
         return true;
     }
@@ -54,12 +53,12 @@ public class CustomizeSignInPipeline implements IdsSignInPipeline {
     /**
      * Intercept the execution of a handler
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @return UserInfo
      */
     @Override
-    public UserInfo postHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+    public UserInfo postHandle(JapHttpRequest request, JapHttpResponse response) {
         System.out.println("CustomizeSignInPipeline >> postHandle");
         return null;
     }
@@ -67,11 +66,11 @@ public class CustomizeSignInPipeline implements IdsSignInPipeline {
     /**
      * Callback after business process processing is completed, such as recycling resources, recording status, etc.
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      */
     @Override
-    public void afterHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+    public void afterHandle(JapHttpRequest request, JapHttpResponse response) {
         System.out.println("CustomizeSignInPipeline >> afterHandle");
     }
 }

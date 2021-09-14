@@ -15,12 +15,12 @@
  */
 package com.fujieid.jap.ids.pipeline;
 
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.IdsResponse;
 import com.xkcoding.json.JsonUtil;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -41,24 +41,24 @@ public interface IdsPipeline<T> {
     /**
      * Callback when the program is abnormal
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
-     * @param throwable       any exception thrown on handler execution, if any.
+     * @param request   current HTTP request
+     * @param response  current HTTP response
+     * @param throwable any exception thrown on handler execution, if any.
      */
-    default void errorHandle(ServletRequest servletRequest, ServletResponse servletResponse, Throwable throwable) {
-        IdsResponse<String, Object> response = new IdsResponse<>();
+    default void errorHandle(JapHttpRequest request, JapHttpResponse response, Throwable throwable) {
+        IdsResponse<String, Object> idsResponse = new IdsResponse<>();
         if (throwable instanceof IdsException) {
             IdsException idsException = (IdsException) throwable;
-            response.error(idsException.getError())
+            idsResponse.error(idsException.getError())
                 .errorDescription(idsException.getErrorDescription());
         } else {
-            response.errorDescription(throwable.getMessage());
+            idsResponse.errorDescription(throwable.getMessage());
         }
-        String errorResponseStr = JsonUtil.toJsonString(response);
-        servletResponse.setContentType("text/html;charset=UTF-8");
-        servletResponse.setContentLength(errorResponseStr.getBytes(StandardCharsets.UTF_8).length);
+        String errorResponseStr = JsonUtil.toJsonString(idsResponse);
+        response.setContentType("text/html;charset=UTF-8");
+        response.setContentLength(errorResponseStr.getBytes(StandardCharsets.UTF_8).length);
         try {
-            servletResponse.getWriter().write(errorResponseStr);
+            response.getWriter().write(errorResponseStr);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,31 +67,31 @@ public interface IdsPipeline<T> {
     /**
      * Operations before business process processing, such as initializing resources, etc.
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @return boolean
      */
-    default boolean preHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+    default boolean preHandle(JapHttpRequest request, JapHttpResponse response) {
         return true;
     }
 
     /**
      * Intercept the execution of a handler
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @return Object
      */
-    default T postHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+    default T postHandle(JapHttpRequest request, JapHttpResponse response) {
         return null;
     }
 
     /**
      * Callback after business process processing is completed, such as recycling resources, recording status, etc.
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      */
-    default void afterHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
+    default void afterHandle(JapHttpRequest request, JapHttpResponse response) {
     }
 }

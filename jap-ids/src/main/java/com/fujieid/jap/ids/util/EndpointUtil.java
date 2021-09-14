@@ -15,12 +15,12 @@
  */
 package com.fujieid.jap.ids.util;
 
-import com.fujieid.jap.core.util.RequestUtil;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.RequestUtil;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.exception.IdsException;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 /**
@@ -32,7 +32,7 @@ import java.util.Optional;
  */
 public class EndpointUtil {
 
-    public static String getIssuer(HttpServletRequest request) {
+    public static String getIssuer(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         if (config.isEnableDynamicIssuer() && null == request) {
             throw new IdsException("The second-level domain name verification has been enabled, the HTTP request cannot be empty");
@@ -46,67 +46,67 @@ public class EndpointUtil {
     }
 
 
-    public static String getLoginUrl(HttpServletRequest request) {
+    public static String getLoginUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getLoginUrl();
     }
 
-    public static String getErrorUrl(HttpServletRequest request) {
+    public static String getErrorUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getErrorUrl();
     }
 
-    public static String getAuthorizeUrl(HttpServletRequest request) {
+    public static String getAuthorizeUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getAuthorizeUrl();
     }
 
-    public static String getAuthorizeAutoApproveUrl(HttpServletRequest request) {
+    public static String getAuthorizeAutoApproveUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getAuthorizeAutoApproveUrl();
     }
 
-    public static String getTokenUrl(HttpServletRequest request) {
+    public static String getTokenUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getTokenUrl();
     }
 
-    public static String getUserinfoUrl(HttpServletRequest request) {
+    public static String getUserinfoUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getUserinfoUrl();
     }
 
-    public static String getRegistrationUrl(HttpServletRequest request) {
+    public static String getRegistrationUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getRegistrationUrl();
     }
 
-    public static String getEndSessionUrl(HttpServletRequest request) {
+    public static String getEndSessionUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getEndSessionUrl();
     }
 
-    public static String getCheckSessionUrl(HttpServletRequest request) {
+    public static String getCheckSessionUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getCheckSessionUrl();
     }
 
-    public static String getLogoutRedirectUrl(HttpServletRequest request) {
+    public static String getLogoutRedirectUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getLogoutRedirectUrl();
     }
 
-    public static String getJwksUrl(HttpServletRequest request) {
+    public static String getJwksUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getJwksUrl();
     }
 
-    public static String getDiscoveryUrl(HttpServletRequest request) {
+    public static String getDiscoveryUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         return getIssuer(request) + config.getDiscoveryUrl();
     }
 
-    public static String getLoginPageUrl(HttpServletRequest request) {
+    public static String getLoginPageUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         if (config.isExternalLoginPageUrl()) {
             return config.getLoginPageUrl();
@@ -114,7 +114,7 @@ public class EndpointUtil {
         return getIssuer(request) + config.getLoginPageUrl();
     }
 
-    public static String getConfirmPageUrl(HttpServletRequest request) {
+    public static String getConfirmPageUrl(JapHttpRequest request) {
         IdsConfig config = JapIds.getIdsConfig();
         if (config.isExternalConfirmPageUrl()) {
             return config.getConfirmPageUrl();

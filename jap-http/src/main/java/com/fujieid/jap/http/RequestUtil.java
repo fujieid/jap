@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fujieid.jap.core.util;
+package com.fujieid.jap.http;
 
-import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.ArrayUtil;
-import com.xkcoding.json.util.StringUtil;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -44,7 +38,7 @@ public class RequestUtil {
      * @param request   current HTTP request
      * @return string
      */
-    public static String getParam(String paramName, HttpServletRequest request) {
+    public static String getParam(String paramName, JapHttpRequest request) {
         if (null == request) {
             return null;
         }
@@ -58,7 +52,7 @@ public class RequestUtil {
      * @param request    current HTTP request
      * @return string
      */
-    public static String getHeader(String headerName, HttpServletRequest request) {
+    public static String getHeader(String headerName, JapHttpRequest request) {
         if (null == request) {
             return "";
         }
@@ -71,7 +65,7 @@ public class RequestUtil {
      * @param request current HTTP request
      * @return string
      */
-    public static String getReferer(HttpServletRequest request) {
+    public static String getReferer(JapHttpRequest request) {
         return getHeader("Referer", request);
     }
 
@@ -81,9 +75,9 @@ public class RequestUtil {
      * @param request current HTTP request
      * @return string
      */
-    public static String getFullDomainName(HttpServletRequest request) {
-        StringBuffer url = request.getRequestURL();
-        return url.delete(url.length() - request.getRequestURI().length(), url.length()).toString();
+    public static String getFullDomainName(JapHttpRequest request) {
+        StringBuffer url = request.getRequestUrl();
+        return url.delete(url.length() - request.getRequestUri().length(), url.length()).toString();
     }
 
     /**
@@ -92,7 +86,7 @@ public class RequestUtil {
      * @param request current HTTP request
      * @return string
      */
-    public static String getUa(HttpServletRequest request) {
+    public static String getUa(JapHttpRequest request) {
         return getHeader("User-Agent", request);
     }
 
@@ -102,7 +96,7 @@ public class RequestUtil {
      * @param request current HTTP request
      * @return string
      */
-    public static String getIp(HttpServletRequest request) {
+    public static String getIp(JapHttpRequest request) {
         if (null == request) {
             return "";
         }
@@ -144,7 +138,23 @@ public class RequestUtil {
      * @return boolean
      */
     private static boolean isValidIp(String ip) {
-        return !StringUtil.isEmpty(ip) && !"unknown".equalsIgnoreCase(ip);
+        return isNotEmpty(ip) && !"unknown".equalsIgnoreCase(ip);
+    }
+
+    /**
+     * Get the value of the cookie
+     *
+     * @param request current HTTP request
+     * @param name    cookie name
+     * @return String
+     */
+    public static String getCookieVal(JapHttpRequest request, String name) {
+        JapHttpCookie cookie = getCookie(request, name);
+        return cookie != null ? cookie.getValue() : null;
+    }
+
+    private static boolean isNotEmpty(String s) {
+        return s != null && s.trim().length() != 0;
     }
 
     /**
@@ -154,13 +164,13 @@ public class RequestUtil {
      * @param request current HTTP request
      * @return string
      */
-    public static String getRequestUrl(boolean encode, HttpServletRequest request) {
+    public static String getRequestUrl(boolean encode, JapHttpRequest request) {
         if (null == request) {
             return "";
         }
-        String currentUrl = request.getRequestURL().toString();
+        String currentUrl = request.getRequestUrl().toString();
         String queryString = request.getQueryString();
-        if (!StringUtil.isEmpty(queryString)) {
+        if (isNotEmpty(queryString)) {
             currentUrl = currentUrl + "?" + queryString;
         }
 
@@ -178,28 +188,16 @@ public class RequestUtil {
     }
 
     /**
-     * Get the value of the cookie
-     *
-     * @param request current HTTP request
-     * @param name    cookie name
-     * @return String
-     */
-    public static String getCookieVal(HttpServletRequest request, String name) {
-        Cookie cookie = getCookie(request, name);
-        return cookie != null ? cookie.getValue() : null;
-    }
-
-    /**
      * Get cookie
      *
      * @param request current HTTP request
      * @param name    cookie name
      * @return Cookie
      */
-    public static Cookie getCookie(HttpServletRequest request, String name) {
-        Cookie[] cookies = request.getCookies();
+    public static JapHttpCookie getCookie(JapHttpRequest request, String name) {
+        JapHttpCookie[] cookies = request.getCookies();
         if (cookies != null) {
-            for (Cookie cookie : cookies) {
+            for (JapHttpCookie cookie : cookies) {
                 if (name.equals(cookie.getName())) {
                     return cookie;
                 }
@@ -214,13 +212,13 @@ public class RequestUtil {
      * @param request current HTTP request
      * @return Map
      */
-    public static Map<String, Cookie> getCookieMap(HttpServletRequest request) {
-        final Cookie[] cookies = request.getCookies();
-        if (ArrayUtil.isEmpty(cookies)) {
-            return MapUtil.empty();
+    public static Map<String, JapHttpCookie> getCookieMap(JapHttpRequest request) {
+        final JapHttpCookie[] cookies = request.getCookies();
+        if (null == cookies || cookies.length == 0) {
+            return new HashMap<>();
         }
 
-        return Arrays.stream(cookies).collect(Collectors.toMap(Cookie::getName, v -> v, (k1, k2) -> k1));
+        return Arrays.stream(cookies).collect(Collectors.toMap(JapHttpCookie::getName, v -> v, (k1, k2) -> k1));
     }
 
     /**
@@ -233,8 +231,8 @@ public class RequestUtil {
      * @param path     path
      * @param domain   domain
      */
-    public static void setCookie(HttpServletResponse response, String name, String value, int maxAge, String path, String domain) {
-        Cookie cookie = new Cookie(name, value);
+    public static void setCookie(JapHttpResponse response, String name, String value, int maxAge, String path, String domain) {
+        JapHttpCookie cookie = new JapHttpCookie(name, value);
         cookie.setPath(path);
         if (null != domain) {
             cookie.setDomain(domain);

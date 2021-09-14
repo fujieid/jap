@@ -47,6 +47,9 @@
     <module>jap-oidc</module>
     <module>jap-mfa</module>
     <module>jap-ids</module>
+    <module>jap-ids-web</module>
+    <module>jap-http</module>
+    <module>jap-http-adapter</module>
     <module>jap-bom</module>
   </modules>
 
@@ -106,11 +109,10 @@
       <artifactId>slf4j-api</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- servlet -->
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
-      <scope>provided</scope>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -153,7 +155,22 @@
       </dependency>
       <dependency>
         <groupId>com.fujieid</groupId>
+        <artifactId>jap-http</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fujieid</groupId>
+        <artifactId>jap-http-adapter</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fujieid</groupId>
         <artifactId>jap-ids</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fujieid</groupId>
+        <artifactId>jap-ids-web</artifactId>
         <version>${revision}</version>
       </dependency>
       <!-- junit start -->

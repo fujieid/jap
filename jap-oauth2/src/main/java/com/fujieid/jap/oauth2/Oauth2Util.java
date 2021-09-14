@@ -22,12 +22,12 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import com.xkcoding.http.HttpUtil;
 import com.xkcoding.json.JsonUtil;
 import com.xkcoding.json.util.Kv;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
@@ -82,7 +82,7 @@ public class Oauth2Util {
         }
         if (responseKv.containsKey("error") && ObjectUtil.isNotEmpty(responseKv.get("error"))) {
             throw new JapOauth2Exception(Optional.ofNullable(errorMsg).orElse("") +
-                responseKv.get("error_description") + " " + responseKv.toString());
+                responseKv.get("error_description") + " " + responseKv);
         }
     }
 
@@ -186,7 +186,7 @@ public class Oauth2Util {
      * @param oAuthConfig OAuthConfig
      * @return When true is returned, the current HTTP request is a callback request
      */
-    public static boolean isCallback(HttpServletRequest request, OAuthConfig oAuthConfig) {
+    public static boolean isCallback(JapHttpRequest request, OAuthConfig oAuthConfig) {
         if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {
             String code = request.getParameter("code");
             return !StrUtil.isEmpty(code);

@@ -16,7 +16,8 @@
 package com.fujieid.jap.ids.util;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.fujieid.jap.core.util.RequestUtil;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.RequestUtil;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.IdsTokenException;
 import com.fujieid.jap.ids.exception.InvalidTokenException;
@@ -26,7 +27,6 @@ import com.fujieid.jap.ids.model.enums.TokenAuthMethod;
 import com.fujieid.jap.ids.service.IdsTokenService;
 import com.xkcoding.json.util.StringUtil;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +44,7 @@ public class TokenUtil {
      * @param request request
      * @return String
      */
-    public static String getAccessToken(HttpServletRequest request) {
+    public static String getAccessToken(JapHttpRequest request) {
         List<TokenAuthMethod> tokenAuthMethods = JapIds.getIdsConfig().getTokenAuthMethods();
         if (ObjectUtil.isEmpty(tokenAuthMethods)) {
             tokenAuthMethods = Collections.singletonList(TokenAuthMethod.ALL);
@@ -79,7 +79,7 @@ public class TokenUtil {
         return null;
     }
 
-    private static String getAccessTokenFromUrl(HttpServletRequest request) {
+    private static String getAccessTokenFromUrl(JapHttpRequest request) {
         String accessToken = RequestUtil.getParam(IdsConsts.ACCESS_TOKEN, request);
         if (StringUtil.isNotEmpty(accessToken)) {
             return accessToken;
@@ -87,12 +87,12 @@ public class TokenUtil {
         return null;
     }
 
-    private static String getAccessTokenFromHeader(HttpServletRequest request) {
+    private static String getAccessTokenFromHeader(JapHttpRequest request) {
         String accessToken = RequestUtil.getHeader(IdsConsts.AUTHORIZATION_HEADER_NAME, request);
         return BearerToken.parse(accessToken);
     }
 
-    private static String getAccessTokenFromCookie(HttpServletRequest request) {
+    private static String getAccessTokenFromCookie(JapHttpRequest request) {
         return RequestUtil.getCookieVal(request, IdsConsts.ACCESS_TOKEN);
     }
 
@@ -170,7 +170,7 @@ public class TokenUtil {
     }
 
 
-    public static void invalidateToken(HttpServletRequest request) {
+    public static void invalidateToken(JapHttpRequest request) {
         String accessTokenStr = TokenUtil.getAccessToken(request);
         AccessToken accessToken = TokenUtil.getByAccessToken(accessTokenStr);
         if (null != accessToken) {

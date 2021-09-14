@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fujieid.jap.ids.filter;
+package com.fujieid.jap.web.filter;
 
+import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.adapter.jakarta.JakartaResponseAdapter;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
@@ -22,6 +24,7 @@ import com.fujieid.jap.ids.pipeline.IdsPipeline;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -36,17 +39,17 @@ public class IdsUserStatusFilter extends AbstractIdsFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         IdsPipeline<Object> idsFilterErrorPipeline = JapIds.getContext().getFilterPipeline();
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-
         boolean ignored = this.isIgnoredServletPath(request);
         if (ignored) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        if (JapIds.isAuthenticated(request)) {
+        if (JapIds.isAuthenticated(new JakartaRequestAdapter(request))) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        this.getFilterErrorPipeline(idsFilterErrorPipeline).errorHandle(servletRequest, servletResponse,
+        this.getFilterErrorPipeline(idsFilterErrorPipeline).errorHandle(new JakartaRequestAdapter((HttpServletRequest) servletRequest),
+            new JakartaResponseAdapter((HttpServletResponse) servletResponse),
             new IdsException(ErrorResponse.INVALID_USER_STATUS));
     }
 

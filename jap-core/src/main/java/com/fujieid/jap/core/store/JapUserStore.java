@@ -16,9 +16,8 @@
 package com.fujieid.jap.core.store;
 
 import com.fujieid.jap.core.JapUser;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 
 /**
  * Save, delete and obtain the login user information.By default, based on local caching,
@@ -38,7 +37,7 @@ public interface JapUserStore {
      * @param japUser  User information after successful login
      * @return JapUser
      */
-    JapUser save(HttpServletRequest request, HttpServletResponse response, JapUser japUser);
+    JapUser save(JapHttpRequest request, JapHttpResponse response, JapUser japUser);
 
     /**
      * Clear user information from cache
@@ -46,7 +45,7 @@ public interface JapUserStore {
      * @param request  current HTTP request
      * @param response current HTTP response
      */
-    void remove(HttpServletRequest request, HttpServletResponse response);
+    void remove(JapHttpRequest request, JapHttpResponse response);
 
     /**
      * Get the login user information from the cache, return {@code JapUser} if it exists,
@@ -56,5 +55,5 @@ public interface JapUserStore {
      * @param response current HTTP response
      * @return JapUser
      */
-    JapUser get(HttpServletRequest request, HttpServletResponse response);
+    JapUser get(JapHttpRequest request, JapHttpResponse response);
 }

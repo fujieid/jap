@@ -20,6 +20,8 @@ import com.fujieid.jap.core.cache.JapLocalCache;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
 import com.fujieid.jap.oauth2.OAuthConfig;
 import com.fujieid.jap.oauth2.Oauth2GrantType;
 import com.fujieid.jap.oauth2.Oauth2ResponseType;
@@ -42,32 +44,34 @@ public class AccessTokenHelperTest {
 
     @Mock
     private HttpServletRequest httpServletRequestMock;
+    public JapHttpRequest request;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+        this.request = new JakartaRequestAdapter(httpServletRequestMock);
     }
 
     @Test
     public void getTokenNullOAuthConfig() {
-        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, null));
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, null));
     }
 
     @Test
     public void getTokenEmptyOAuthConfig() {
-        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()));
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()));
     }
 
     @Test
     public void getTokenCodeResponseType() {
-        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setResponseType(Oauth2ResponseType.code)));
     }
 
     @Test
     public void getTokenCodeResponseTypeDoNotCheckState() {
         // Http url must be not blank!
-        Assert.assertThrows(IllegalArgumentException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(IllegalArgumentException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setVerifyState(false)
             .setResponseType(Oauth2ResponseType.code)));
     }
@@ -76,7 +80,7 @@ public class AccessTokenHelperTest {
     public void getTokenCodeResponseTypeNullCache() {
         JapAuthentication.setContext(new JapContext());
         JapAuthentication.getContext().setCache(null);
-        Assert.assertThrows(NullPointerException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(NullPointerException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setVerifyState(false)
             .setResponseType(Oauth2ResponseType.code)
             .setEnablePkce(true)
@@ -89,7 +93,7 @@ public class AccessTokenHelperTest {
         // UnknownHostException: setTokenUrl
         JapAuthentication.setContext(new JapContext());
         JapAuthentication.getContext().setCache(new JapLocalCache());
-        Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setVerifyState(false)
             .setResponseType(Oauth2ResponseType.code)
             .setEnablePkce(true)
@@ -100,14 +104,14 @@ public class AccessTokenHelperTest {
     @Test
     public void getTokenTokenResponseType() {
         // Oauth2Strategy failed to get AccessToken.
-        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setResponseType(Oauth2ResponseType.token)));
     }
 
     @Test
     public void getTokenPasswordGrantTypeNullTokenUrl() {
         // Http url must be not blank!
-        Assert.assertThrows(IllegalArgumentException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(IllegalArgumentException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setGrantType(Oauth2GrantType.password)
             .setScopes(new String[]{"read"})));
     }
@@ -115,7 +119,7 @@ public class AccessTokenHelperTest {
     @Test
     public void getTokenPasswordGrantTypeErrorTokenUrl() {
         // UnknownHostException: setTokenUrl
-        Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setGrantType(Oauth2GrantType.password)
             .setScopes(new String[]{"read"})
             .setTokenUrl("setTokenUrl")));
@@ -124,7 +128,7 @@ public class AccessTokenHelperTest {
     @Test
     public void getTokenClientCredentialsGrantTypeErrorTokenUrl() {
         // UnknownHostException: setTokenUrl
-        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setGrantType(Oauth2GrantType.client_credentials)
             .setScopes(new String[]{"read"})
             .setTokenUrl("setTokenUrl")));

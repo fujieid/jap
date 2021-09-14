@@ -27,14 +27,14 @@ import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.oauth2.pkce.PkceHelper;
 import com.fujieid.jap.oauth2.token.AccessToken;
 import com.fujieid.jap.oauth2.token.AccessTokenHelper;
 import com.xkcoding.json.util.Kv;
 import com.xkcoding.json.util.StringUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,7 +82,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
      * @param response The response to authenticate
      */
     @Override
-    public JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+    public JapResponse authenticate(AuthenticateConfig config, JapHttpRequest request, JapHttpResponse response) {
 
         try {
             Oauth2Util.checkOauthCallbackRequest(request.getParameter("error"), request.getParameter("error_description"),

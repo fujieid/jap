@@ -31,7 +31,9 @@ import com.fujieid.jap.core.exception.JapUserException;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
-import com.fujieid.jap.core.util.RequestUtil;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
+import com.fujieid.jap.http.RequestUtil;
 import com.xkcoding.json.JsonUtil;
 import me.zhyd.oauth.cache.AuthStateCache;
 import me.zhyd.oauth.config.AuthConfig;
@@ -42,8 +44,6 @@ import me.zhyd.oauth.model.AuthToken;
 import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthRequest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -151,7 +151,7 @@ public class SocialStrategy extends AbstractJapStrategy {
      * @return JapResponse
      */
     @Override
-    public JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+    public JapResponse authenticate(AuthenticateConfig config, JapHttpRequest request, JapHttpResponse response) {
 
         SocialConfig socialConfig = null;
         try {
@@ -230,7 +230,7 @@ public class SocialStrategy extends AbstractJapStrategy {
      * @param response The response to bind
      * @return JapResponse
      */
-    public JapResponse bind(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+    public JapResponse bind(AuthenticateConfig config, JapHttpRequest request, JapHttpResponse response) {
         SocialConfig socialConfig = null;
         try {
             this.checkAuthenticateConfig(config, SocialConfig.class);
@@ -391,7 +391,7 @@ public class SocialStrategy extends AbstractJapStrategy {
      * @param authCallback Parse the parameters obtained by the third party callback request
      * @param callback     callback function
      */
-    private JapResponse login(HttpServletRequest request, HttpServletResponse response, String source,
+    private JapResponse login(JapHttpRequest request, JapHttpResponse response, String source,
                               AuthRequest authRequest, AuthCallback authCallback, SocialFunc callback) throws JapUserException {
         AuthResponse<?> authUserAuthResponse = null;
         try {
@@ -444,7 +444,7 @@ public class SocialStrategy extends AbstractJapStrategy {
      * @param request Current callback request
      * @return AuthCallback
      */
-    private AuthCallback parseRequest(HttpServletRequest request) {
+    private AuthCallback parseRequest(JapHttpRequest request) {
         Map<String, String[]> params = request.getParameterMap();
         if (CollectionUtil.isEmpty(params)) {
             return new AuthCallback();

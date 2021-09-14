@@ -15,6 +15,7 @@
  */
 package com.fujieid.jap.ids.endpoint;
 
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.ids.exception.UnsupportedGrantTypeException;
 import com.fujieid.jap.ids.model.IdsRequestParam;
 import com.fujieid.jap.ids.model.IdsResponse;
@@ -24,8 +25,6 @@ import com.fujieid.jap.ids.provider.IdsRequestParamProvider;
 import com.fujieid.jap.ids.provider.IdsTokenProvider;
 import com.fujieid.jap.ids.util.TokenUtil;
 import com.xkcoding.json.util.StringUtil;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Token Endpoint. According to the request parameters, to obtain different types of access tokens, refer to:
@@ -44,7 +43,7 @@ public class TokenEndpoint extends AbstractEndpoint {
 
     private final IdsTokenProvider idsTokenProvider = new IdsTokenProvider(oauth2Service);
 
-    public IdsResponse<String, Object> getToken(HttpServletRequest request) {
+    public IdsResponse<String, Object> getToken(JapHttpRequest request) {
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
 
         if (StringUtil.isEmpty(param.getGrantType())) {
@@ -65,7 +64,7 @@ public class TokenEndpoint extends AbstractEndpoint {
         throw new UnsupportedGrantTypeException(ErrorResponse.UNSUPPORTED_GRANT_TYPE);
     }
 
-    public IdsResponse<String, Object> revokeToken(HttpServletRequest request) {
+    public IdsResponse<String, Object> revokeToken(JapHttpRequest request) {
         TokenUtil.invalidateToken(request);
         return new IdsResponse<>();
     }

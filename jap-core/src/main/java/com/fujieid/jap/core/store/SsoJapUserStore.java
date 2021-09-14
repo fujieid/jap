@@ -19,11 +19,10 @@ import cn.hutool.core.util.StrUtil;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.util.JapTokenHelper;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.sso.JapSsoHelper;
 import com.fujieid.jap.sso.config.JapSsoConfig;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Operation on users in SSO mode (cookie)
@@ -57,7 +56,7 @@ public class SsoJapUserStore extends SessionJapUserStore {
      * @return JapUser
      */
     @Override
-    public JapUser save(HttpServletRequest request, HttpServletResponse response, JapUser japUser) {
+    public JapUser save(JapHttpRequest request, JapHttpResponse response, JapUser japUser) {
         String token = JapSsoHelper.login(japUser.getUserId(), japUser.getUsername(), this.japSsoConfig, request, response);
         super.save(request, response, japUser);
         JapTokenHelper.saveUserToken(japUser.getUserId(), token);
@@ -71,7 +70,7 @@ public class SsoJapUserStore extends SessionJapUserStore {
      * @param response current HTTP response
      */
     @Override
-    public void remove(HttpServletRequest request, HttpServletResponse response) {
+    public void remove(JapHttpRequest request, JapHttpResponse response) {
         JapUser japUser = this.get(request, response);
         if (null != japUser) {
             JapTokenHelper.removeUserToken(japUser.getUserId());
@@ -89,7 +88,7 @@ public class SsoJapUserStore extends SessionJapUserStore {
      * @return JapUser
      */
     @Override
-    public JapUser get(HttpServletRequest request, HttpServletResponse response) {
+    public JapUser get(JapHttpRequest request, JapHttpResponse response) {
         String userId = JapSsoHelper.checkLogin(request);
         if (StrUtil.isBlank(userId)) {
             // The cookie has expired. Clear session content

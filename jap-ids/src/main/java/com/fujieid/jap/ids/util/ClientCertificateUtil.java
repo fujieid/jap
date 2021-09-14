@@ -16,14 +16,14 @@
 package com.fujieid.jap.ids.util;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.fujieid.jap.core.util.RequestUtil;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.RequestUtil;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.model.ClientCertificate;
 import com.fujieid.jap.ids.model.IdsConsts;
 import com.fujieid.jap.ids.model.enums.ClientSecretAuthMethod;
 import com.xkcoding.json.util.StringUtil;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class ClientCertificateUtil {
 
-    public static ClientCertificate getClientCertificate(HttpServletRequest request) {
+    public static ClientCertificate getClientCertificate(JapHttpRequest request) {
         List<ClientSecretAuthMethod> clientSecretAuthMethods = JapIds.getIdsConfig().getClientSecretAuthMethods();
         if (ObjectUtil.isEmpty(clientSecretAuthMethods)) {
             clientSecretAuthMethods = Collections.singletonList(ClientSecretAuthMethod.ALL);
@@ -63,13 +63,13 @@ public class ClientCertificateUtil {
         return new ClientCertificate();
     }
 
-    private static ClientCertificate getClientCertificateFromRequestParameter(HttpServletRequest request) {
+    private static ClientCertificate getClientCertificateFromRequestParameter(JapHttpRequest request) {
         String clientId = RequestUtil.getParam(IdsConsts.CLIENT_ID, request);
         String clientSecret = RequestUtil.getParam(IdsConsts.CLIENT_SECRET, request);
         return new ClientCertificate(clientId, clientSecret);
     }
 
-    private static ClientCertificate getClientCertificateFromHeader(HttpServletRequest request) {
+    private static ClientCertificate getClientCertificateFromHeader(JapHttpRequest request) {
         String authorizationHeader = RequestUtil.getHeader(IdsConsts.AUTHORIZATION_HEADER_NAME, request);
         if (StringUtil.isNotEmpty(authorizationHeader)) {
             BasicCredentials credentials = BasicCredentials.parse(authorizationHeader);

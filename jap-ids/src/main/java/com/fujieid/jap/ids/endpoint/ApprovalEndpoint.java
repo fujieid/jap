@@ -15,6 +15,8 @@
  */
 package com.fujieid.jap.ids.endpoint;
 
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.model.ClientDetail;
 import com.fujieid.jap.ids.model.IdsRequestParam;
@@ -26,8 +28,6 @@ import com.fujieid.jap.ids.util.EndpointUtil;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.ObjectUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
@@ -47,7 +47,7 @@ public class ApprovalEndpoint extends AbstractEndpoint {
      * @param response current HTTP response
      * @throws IOException IOException
      */
-    public void showConfirmPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void showConfirmPage(JapHttpRequest request, JapHttpResponse response) throws IOException {
         final String approvalContent = createConfirmPageHtml(request);
         response.setContentType("text/html;charset=UTF-8");
         response.getWriter().append(approvalContent);
@@ -59,7 +59,7 @@ public class ApprovalEndpoint extends AbstractEndpoint {
      * @param request HttpServletRequest
      * @return IdsResponse
      */
-    public IdsResponse<String, Map<String, Object>> getAuthClientInfo(HttpServletRequest request) {
+    public IdsResponse<String, Map<String, Object>> getAuthClientInfo(JapHttpRequest request) {
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(param.getClientId());
         OauthUtil.validClientDetail(clientDetail);
@@ -80,7 +80,7 @@ public class ApprovalEndpoint extends AbstractEndpoint {
      * @param request current HTTP request
      * @return Confirm the html of the authorization page
      */
-    private String createConfirmPageHtml(HttpServletRequest request) {
+    private String createConfirmPageHtml(JapHttpRequest request) {
         IdsRequestParam param = IdsRequestParamProvider.parseRequest(request);
         String clientId = param.getClientId();
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(clientId);
@@ -132,7 +132,7 @@ public class ApprovalEndpoint extends AbstractEndpoint {
      * @param request current HTTP request
      * @return the scope list of the authorization confirmation page
      */
-    private String createScopes(IdsRequestParam param, HttpServletRequest request) {
+    private String createScopes(IdsRequestParam param, JapHttpRequest request) {
         StringBuilder builder = new StringBuilder("<ul style=\"list-style: none;padding-inline-start: 20px;\">");
         List<Map<String, Object>> scopeInfo = getScopeInfo(param);
 

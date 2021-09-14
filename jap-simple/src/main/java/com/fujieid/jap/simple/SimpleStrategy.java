@@ -26,11 +26,10 @@ import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
-import com.fujieid.jap.core.util.RequestUtil;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.fujieid.jap.http.RequestUtil;
+import com.fujieid.jap.http.JapHttpCookie;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 
 /**
  * The local authentication strategy authenticates requests based on the credentials submitted through an HTML-based
@@ -64,7 +63,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
     }
 
     @Override
-    public JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+    public JapResponse authenticate(AuthenticateConfig config, JapHttpRequest request, JapHttpResponse response) {
         // Convert AuthenticateConfig to SimpleConfig
         try {
             this.checkAuthenticateConfig(config, SimpleConfig.class);
@@ -109,7 +108,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @param request      The request to authenticate
      * @param response     The response to authenticate
      */
-    private JapResponse loginSuccess(SimpleConfig simpleConfig, UsernamePasswordCredential credential, JapUser user, HttpServletRequest request, HttpServletResponse response) {
+    private JapResponse loginSuccess(SimpleConfig simpleConfig, UsernamePasswordCredential credential, JapUser user, JapHttpRequest request, JapHttpResponse response) {
         if (credential.isRememberMe()) {
             String cookieDomain = ObjectUtil.isNotEmpty(simpleConfig.getRememberMeCookieDomain()) ? simpleConfig.getRememberMeCookieDomain() : null;
             // add cookie
@@ -132,7 +131,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @param response     The response to authenticate
      * @return true to login success, false to login
      */
-    private JapUser checkSessionAndCookie(SimpleConfig simpleConfig, HttpServletRequest request, HttpServletResponse response) throws JapException {
+    private JapUser checkSessionAndCookie(SimpleConfig simpleConfig, JapHttpRequest request, JapHttpResponse response) throws JapException {
         JapUser sessionUser = this.checkSession(request, response);
         if (null != sessionUser) {
             return sessionUser;
@@ -141,7 +140,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
             return null;
         }
 
-        Cookie cookie = RequestUtil.getCookie(request, simpleConfig.getRememberMeCookieKey());
+        JapHttpCookie cookie = RequestUtil.getCookie(request, simpleConfig.getRememberMeCookieKey());
         if (ObjectUtil.isNull(cookie)) {
             return null;
         }
@@ -193,7 +192,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
      * @param simpleConfig Authenticate Config
      * @return Username password credential
      */
-    private UsernamePasswordCredential doResolveCredential(HttpServletRequest request, SimpleConfig simpleConfig) {
+    private UsernamePasswordCredential doResolveCredential(JapHttpRequest request, SimpleConfig simpleConfig) {
         String username = request.getParameter(simpleConfig.getUsernameField());
         String password = request.getParameter(simpleConfig.getPasswordField());
         if (null == username || null == password) {

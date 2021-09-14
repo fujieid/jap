@@ -13,16 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fujieid.jap.ids.filter;
+package com.fujieid.jap.web.filter;
 
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.adapter.jakarta.JakartaResponseAdapter;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.pipeline.IdsPipeline;
 import com.fujieid.jap.ids.util.TokenUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -47,12 +50,14 @@ public class IdsAccessTokenFilter extends AbstractIdsFilter implements Filter {
             return;
         }
         log.debug("{} - {}", request.getMethod(), request.getRequestURI());
-        String accessToken = TokenUtil.getAccessToken(request);
+        String accessToken = TokenUtil.getAccessToken(new JakartaRequestAdapter(request));
         try {
             TokenUtil.validateAccessToken(accessToken);
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {
-            this.getFilterErrorPipeline(idsFilterErrorPipeline).errorHandle(servletRequest, servletResponse, e);
+            this.getFilterErrorPipeline(idsFilterErrorPipeline)
+                .errorHandle(new JakartaRequestAdapter((HttpServletRequest) servletRequest),
+                    new JakartaResponseAdapter((HttpServletResponse) servletResponse), e);
         }
     }
 

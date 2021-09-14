@@ -15,10 +15,10 @@
  */
 package com.fujieid.jap.simple;
 
-import com.fujieid.jap.core.util.RequestUtil;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpSession;
+import com.fujieid.jap.http.RequestUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 
 /**
@@ -38,13 +38,13 @@ public class JapAuthenticationDetails implements Serializable {
 
     private final String sessionId;
 
-    public JapAuthenticationDetails(HttpServletRequest request) {
+    public JapAuthenticationDetails(JapHttpRequest request) {
 
         this.clientIp = RequestUtil.getIp(request);
         this.remoteAddress = request.getRemoteAddr();
-        this.userAgent = RequestUtil.getHeader("user-agent", request);
+        this.userAgent = RequestUtil.getUa(request);
 
-        HttpSession session = request.getSession(false);
+        JapHttpSession session = request.getSession();
         this.sessionId = (session != null) ? session.getId() : null;
     }
 

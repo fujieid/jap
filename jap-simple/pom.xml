@@ -21,6 +21,10 @@
       <artifactId>jap-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.fujieid</groupId>
+      <artifactId>jap-http</artifactId>
+    </dependency>
+    <dependency>
       <groupId>cn.hutool</groupId>
       <artifactId>hutool-crypto</artifactId>
     </dependency>

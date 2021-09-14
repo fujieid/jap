@@ -19,6 +19,7 @@ import com.fujieid.jap.core.spi.JapServiceLoader;
 import com.fujieid.jap.ids.pipeline.IdsFilterPipeline;
 import com.fujieid.jap.ids.pipeline.IdsPipeline;
 import com.fujieid.jap.ids.pipeline.IdsSignInPipeline;
+import com.fujieid.jap.ids.service.IdsUserService;
 import org.junit.Test;
 
 import java.util.List;
@@ -29,6 +30,16 @@ import java.util.List;
  * @since 1.0.0
  */
 public class ServiceLoaderTest {
+
+    @Test
+    public void idsUserService() {
+        // initialize
+        List<IdsUserService> list = JapServiceLoader.load(IdsUserService.class);
+        list.forEach(idsPipeline -> {
+            System.out.println(idsPipeline);
+            System.out.println(idsPipeline.getClass());
+        });
+    }
 
     @Test
     public void loadIdsPipeline() {

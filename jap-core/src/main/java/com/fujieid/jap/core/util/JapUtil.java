@@ -16,12 +16,9 @@
 package com.fujieid.jap.core.util;
 
 import com.fujieid.jap.core.JapUser;
-import com.fujieid.jap.core.exception.JapException;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.sso.JapSsoUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * The tool class of Jap only provides static methods common to all modules
@@ -35,20 +32,16 @@ public class JapUtil extends com.xkcoding.json.util.ObjectUtil {
     private static final String REDIRECT_ERROR = "JAP failed to redirect via HttpServletResponse.";
 
     @Deprecated
-    public static void redirect(String url, HttpServletResponse response) {
+    public static void redirect(String url, JapHttpResponse response) {
         redirect(url, REDIRECT_ERROR, response);
     }
 
     @Deprecated
-    public static void redirect(String url, String errorMessage, HttpServletResponse response) {
-        try {
-            response.sendRedirect(url);
-        } catch (IOException ex) {
-            throw new JapException(errorMessage, ex);
-        }
+    public static void redirect(String url, String errorMessage, JapHttpResponse response) {
+        response.redirect(url);
     }
 
-    public static String createToken(JapUser japUser, HttpServletRequest request) {
+    public static String createToken(JapUser japUser, JapHttpRequest request) {
         return JapSsoUtil.createToken(japUser.getUserId(), japUser.getUsername(), request);
     }
 }

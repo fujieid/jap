@@ -20,8 +20,9 @@ import com.fujieid.jap.core.cache.JapLocalCache;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
-import com.fujieid.jap.oauth2.token.AccessTokenHelper;
 import com.xkcoding.json.util.Kv;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,12 +41,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class Oauth2UtilTest {
 
+    public JapHttpRequest request;
     @Mock
     private HttpServletRequest httpServletRequestMock;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+        this.request = new JakartaRequestAdapter(httpServletRequestMock);
     }
 
     @Test
@@ -361,21 +364,21 @@ public class Oauth2UtilTest {
 
     @Test
     public void isCallbackCodeResponseType() {
-        boolean res = Oauth2Util.isCallback(httpServletRequestMock, new OAuthConfig()
+        boolean res = Oauth2Util.isCallback(request, new OAuthConfig()
             .setResponseType(Oauth2ResponseType.code));
         Assert.assertFalse(res);
     }
 
     @Test
     public void isCallbackTokenResponseType() {
-        boolean res = Oauth2Util.isCallback(httpServletRequestMock, new OAuthConfig()
+        boolean res = Oauth2Util.isCallback(request, new OAuthConfig()
             .setResponseType(Oauth2ResponseType.token));
         Assert.assertFalse(res);
     }
 
     @Test
     public void isCallbackNoneResponseType() {
-        boolean res = Oauth2Util.isCallback(httpServletRequestMock, new OAuthConfig()
+        boolean res = Oauth2Util.isCallback(request, new OAuthConfig()
             .setResponseType(Oauth2ResponseType.none));
         Assert.assertFalse(res);
     }

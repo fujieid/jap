@@ -16,6 +16,8 @@
 package com.fujieid.jap.sso;
 
 import com.baomidou.kisso.security.token.SSOToken;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +31,7 @@ import static org.mockito.Mockito.when;
 
 public class JapSsoUtilTest {
 
+    public JapHttpRequest request;
     @Mock
     private HttpServletRequest httpServletRequestMock;
     @Mock
@@ -39,13 +42,14 @@ public class JapSsoUtilTest {
         MockitoAnnotations.initMocks(this);
         // Arrange
         when(httpServletRequestMock.getSession()).thenReturn(httpsSessionMock);
+        this.request = new JakartaRequestAdapter(httpServletRequestMock);
     }
 
     @Test
     public void createSsoToken() {
         when(httpServletRequestMock.getHeader("x-forwarded-for")).thenReturn("127.0.0.1");
         when(httpServletRequestMock.getHeader("user-agent")).thenReturn("ua");
-        SSOToken ssoToken = JapSsoUtil.createSsoToken("userId", "userName", httpServletRequestMock);
+        SSOToken ssoToken = JapSsoUtil.createSsoToken("userId", "userName", request);
         System.out.println(ssoToken);
         Assert.assertNotNull(ssoToken);
     }
@@ -54,7 +58,7 @@ public class JapSsoUtilTest {
     public void createToken() {
         when(httpServletRequestMock.getHeader("x-forwarded-for")).thenReturn("127.0.0.1");
         when(httpServletRequestMock.getHeader("user-agent")).thenReturn("ua");
-        String token = JapSsoUtil.createToken("userId", "userName", httpServletRequestMock);
+        String token = JapSsoUtil.createToken("userId", "userName", request);
         System.out.println(token);
         Assert.assertNotNull(token);
     }
