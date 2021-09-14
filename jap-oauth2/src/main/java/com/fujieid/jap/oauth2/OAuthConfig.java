@@ -57,6 +57,16 @@ public class OAuthConfig extends AuthenticateConfig {
     private String tokenUrl;
 
     /**
+     * URL used to refresh access_token
+     */
+    private String refreshTokenUrl;
+
+    /**
+     * URL used to revoke access_token
+     */
+    private String revokeTokenUrl;
+
+    /**
      * URL used to obtain an userinfo
      */
     private String userinfoUrl;
@@ -138,6 +148,20 @@ public class OAuthConfig extends AuthenticateConfig {
      * and some third-party platforms have limited request methods, such as post and get.
      */
     private Oauth2EndpointMethodType accessTokenEndpointMethodType = Oauth2EndpointMethodType.POST;
+    /**
+     * method of refreshToken endpoint, default is POST
+     * <p>
+     * Different third-party platforms may use different request methods,
+     * and some third-party platforms have limited request methods, such as post and get.
+     */
+    private Oauth2EndpointMethodType refreshTokenEndpointMethodType = Oauth2EndpointMethodType.POST;
+    /**
+     * method of revokeToken endpoint, default is POST
+     * <p>
+     * Different third-party platforms may use different request methods,
+     * and some third-party platforms have limited request methods, such as post and get.
+     */
+    private Oauth2EndpointMethodType revokeTokenEndpointMethodType = Oauth2EndpointMethodType.POST;
 
     public String getClientId() {
         return clientId;
@@ -181,6 +205,24 @@ public class OAuthConfig extends AuthenticateConfig {
 
     public OAuthConfig setTokenUrl(String tokenUrl) {
         this.tokenUrl = tokenUrl;
+        return this;
+    }
+
+    public String getRefreshTokenUrl() {
+        return refreshTokenUrl;
+    }
+
+    public OAuthConfig setRefreshTokenUrl(String refreshTokenUrl) {
+        this.refreshTokenUrl = refreshTokenUrl;
+        return this;
+    }
+
+    public String getRevokeTokenUrl() {
+        return revokeTokenUrl;
+    }
+
+    public OAuthConfig setRevokeTokenUrl(String revokeTokenUrl) {
+        this.revokeTokenUrl = revokeTokenUrl;
         return this;
     }
 
@@ -307,6 +349,24 @@ public class OAuthConfig extends AuthenticateConfig {
 
     public OAuthConfig setAccessTokenEndpointMethodType(Oauth2EndpointMethodType accessTokenEndpointMethodType) {
         this.accessTokenEndpointMethodType = accessTokenEndpointMethodType;
+        return this;
+    }
+
+    public Oauth2EndpointMethodType getRefreshTokenEndpointMethodType() {
+        return refreshTokenEndpointMethodType;
+    }
+
+    public OAuthConfig setRefreshTokenEndpointMethodType(Oauth2EndpointMethodType refreshTokenEndpointMethodType) {
+        this.refreshTokenEndpointMethodType = refreshTokenEndpointMethodType;
+        return this;
+    }
+
+    public Oauth2EndpointMethodType getRevokeTokenEndpointMethodType() {
+        return revokeTokenEndpointMethodType;
+    }
+
+    public OAuthConfig setRevokeTokenEndpointMethodType(Oauth2EndpointMethodType revokeTokenEndpointMethodType) {
+        this.revokeTokenEndpointMethodType = revokeTokenEndpointMethodType;
         return this;
     }
 }

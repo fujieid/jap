@@ -21,6 +21,7 @@ import org.jose4j.jwk.*;
 import org.jose4j.keys.EllipticCurves;
 import org.jose4j.lang.JoseException;
 
+import java.security.spec.ECParameterSpec;
 import java.util.Arrays;
 
 /**
@@ -46,6 +47,7 @@ public class JwkUtil {
         RsaJsonWebKey jwk = null;
         try {
             jwk = RsaJwkGenerator.generateJwk(2048);
+            jwk.setUse(Use.SIGNATURE);
             jwk.setKeyId(keyId);
             jwk.setAlgorithm(signingAlg.getAlg());
         } catch (JoseException e) {
@@ -91,8 +93,18 @@ public class JwkUtil {
             throw new InvalidJwksException("Unable to create ES Json Web Key. Unsupported jwk algorithm, only supports ES256, ES384, ES512");
         }
         EllipticCurveJsonWebKey jwk = null;
+
+        ECParameterSpec spec = null;
+        if (signingAlg == TokenSigningAlg.ES256) {
+            spec = EllipticCurves.P256;
+        } else if (signingAlg == TokenSigningAlg.ES384) {
+            spec = EllipticCurves.P384;
+        } else {
+            spec = EllipticCurves.P521;
+        }
+
         try {
-            jwk = EcJwkGenerator.generateJwk(EllipticCurves.P256);
+            jwk = EcJwkGenerator.generateJwk(spec);
             jwk.setUse(Use.SIGNATURE);
             jwk.setKeyId(keyId);
             jwk.setAlgorithm(signingAlg.getAlg());

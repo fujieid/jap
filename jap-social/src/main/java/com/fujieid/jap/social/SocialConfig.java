@@ -56,6 +56,18 @@ public class SocialConfig extends AuthenticateConfig {
      */
     private String[] exclusionClassNames;
 
+    /**
+     * Whether the mark is an operation of binding a third-party user.
+     */
+    private boolean bindUser;
+
+    /**
+     * The user id that needs to be bound, this is a user of the business system, not a user of the third-party platform.
+     * <p>
+     * When {@link com.fujieid.jap.social.SocialConfig#bindUser} is true, {@code bindUserId} cannot be empty
+     */
+    private String bindUserId;
+
     public String getPlatform() {
         return platform;
     }
@@ -98,6 +110,24 @@ public class SocialConfig extends AuthenticateConfig {
 
     public SocialConfig setExclusionClassNames(String[] exclusionClassNames) {
         this.exclusionClassNames = exclusionClassNames;
+        return this;
+    }
+
+    public boolean isBindUser() {
+        return bindUser;
+    }
+
+    public SocialConfig setBindUser(boolean bindUser) {
+        this.bindUser = bindUser;
+        return this;
+    }
+
+    public String getBindUserId() {
+        return bindUserId;
+    }
+
+    public SocialConfig setBindUserId(String bindUserId) {
+        this.bindUserId = bindUserId;
         return this;
     }
 }

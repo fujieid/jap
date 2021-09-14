@@ -1,4 +1,33 @@
-## v1.0.2 (2021-05-23)
+## v1.0.4 (2021-08-**)
+
+- fix: [jap-ids] Support to generate custom token. (Gitee[#I3U1ON](https://gitee.com/fujieid/jap/issues/I3U1ON))
+- fix: [jap-ids] Support custom verification of client_secret, such as: BCrypt, etc. (Gitee[#I44032](https://gitee.com/fujieid/jap/issues/I44032))
+- feat: [jap-ids] When `IdsConfig#enableDynamicIssuer` is `true`, custom `context-path` is supported.
+- fix: [jap-ids] Solve the problem of "After refreshing the token, the user information cannot be obtained with the new access token". ([#I3XHTK](https://gitee.com/fujieid/jap/issues/I3XHTK))
+- feat: [jap-oauth2] `Oauth2Strategy` supports the following methods: `refreshToken`, `revokeToken`, `getUserInfo`
+- fix: [jap-social] Cannot customize `JapCache` and `AuthStateCache` of `SocialStrategy` at the same time. (Github[#6](https://github.com/fujieid/jap/issues/6))
+- fix: [jap-core] fix npe bug. (Github[#5](https://github.com/fujieid/jap/issues/5))
+- doc: change the template of issue and PR
+
+----
+- fix: [jap-ids] 支持生成自定义 token（包含 access_token 和 refresh_token）。 (Gitee[#I3U1ON](https://gitee.com/fujieid/jap/issues/I3U1ON))
+- fix: [jap-ids] 支持自定义验证 `client_secret`，适配多种场景，如：BCrypt 等。 (Gitee[#I44032](https://gitee.com/fujieid/jap/issues/I44032))
+- feat: [jap-ids] 当启用 `IdsConfig#enableDynamicIssuer` 时，支持自定义 `context-path`
+- fix: [jap-ids] 解决“刷新token后，用新的access_token无法获取用户信息”问题。 (Gitee[#I3XHTK](https://gitee.com/fujieid/jap/issues/I3XHTK))
+- feat: [jap-oauth2] `Oauth2Strategy` 支持使用以下方法： `refreshToken`、`revokeToken`、`getUserInfo`
+- fix: [jap-social] 无法同时自定义`SocialStrategy`的 `JapCache` and `AuthStateCache`.(Github[#6](https://github.com/fujieid/jap/issues/6))
+- fix: [jap-core] 修复 `userId` 为空时 NPE 异常. (Github[#5](https://github.com/fujieid/jap/issues/5))
+- doc: 更改 issue 和 pr 的模板
+
+## v1.0.3 (2021-07-28)
+
+- (**fix**): a bug of JwkUtil
+- (**fix**): cannot refresh token
+- (**pr**): Merge Gitee PR [#16](https://gitee.com/fujieid/jap/pulls/16) by [@lowis](https://gitee.com/lowis)
+- (**issue**): Fix Gitee [#I3YWTD](https://gitee.com/fujieid/jap/issues/I3YWTD)
+- Upgrade justauth to 1.16.2
+
+## v1.0.2 (2021-05-24)
 
 ### New features
 

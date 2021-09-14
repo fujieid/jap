@@ -21,6 +21,7 @@ import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.exception.IdsException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 /**
  * Get the request url of each api of the oauth endpoint
@@ -36,7 +37,12 @@ public class EndpointUtil {
         if (config.isEnableDynamicIssuer() && null == request) {
             throw new IdsException("The second-level domain name verification has been enabled, the HTTP request cannot be empty");
         }
-        return config.isEnableDynamicIssuer() ? RequestUtil.getFullDomainName(request) : config.getIssuer();
+        return config.isEnableDynamicIssuer() ?
+            RequestUtil.getFullDomainName(request)
+                .concat(Optional
+                    .ofNullable(config.getContextPath())
+                    .orElse("")) :
+            config.getIssuer();
     }
 
 

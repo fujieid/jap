@@ -38,8 +38,25 @@ public class IdsConfig {
      * Get the password from request through {@code request.getParameter(`passwordField`)}, which defaults to "password"
      */
     private String passwordField = "password";
+    /**
+     * Get the captcha from request through {@code request.getParameter(`captchaField`)}, which defaults to "captcha"
+     * <p>
+     * It can be graphic captcha, behavior captcha, one-time password, etc.
+     */
+    private String captchaField = "captcha";
 
+    /**
+     * enable dynamic acquisition of issuer,
+     * <p>
+     * When this parameter is {@code true}, {@code issuer} will be extracted from the request url,
+     * <p>
+     * For example: {@code https://justauth.plus/index/ids} will be parsed out {@code https://justauth.plus}
+     */
     private boolean enableDynamicIssuer;
+    /**
+     * The {@code context-path} property of the application. Enable if and only if {@link IdsConfig#enableDynamicIssuer} is true
+     */
+    private String contextPath;
     /**
      * Identity provider
      */
@@ -147,6 +164,24 @@ public class IdsConfig {
 
     public IdsConfig setPasswordField(String passwordField) {
         this.passwordField = passwordField;
+        return this;
+    }
+
+    public String getCaptchaField() {
+        return captchaField;
+    }
+
+    public IdsConfig setCaptchaField(String captchaField) {
+        this.captchaField = captchaField;
+        return this;
+    }
+
+    public String getContextPath() {
+        return contextPath;
+    }
+
+    public IdsConfig setContextPath(String contextPath) {
+        this.contextPath = contextPath;
         return this;
     }
 

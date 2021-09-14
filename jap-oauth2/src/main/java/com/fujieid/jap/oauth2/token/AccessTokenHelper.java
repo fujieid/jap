@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Access token helper. Provides a unified access token method {@link AccessTokenHelper#getToken(HttpServletRequest, OAuthConfig)}
+ * Access token helper. Provides a unified access token method {@link AccessTokenHelper#getToken(HttpServletRequest, OAuthConfig, Object[])}
  * for different authorization methods
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -46,11 +46,12 @@ public class AccessTokenHelper {
      *
      * @param request     Current callback request
      * @param oAuthConfig oauth config
+     * @param obj         Optional parameters
      * @return AccessToken
      */
-    public static AccessToken getToken(HttpServletRequest request, OAuthConfig oAuthConfig) throws JapOauth2Exception {
+    public static AccessToken getToken(HttpServletRequest request, OAuthConfig oAuthConfig, Object... obj) throws JapOauth2Exception {
         if (null == oAuthConfig) {
-            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. OAuthConfig cannot be empty");
+            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. OAuthConfig cannot be empty.");
         }
         if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {
             return getAccessTokenOfAuthorizationCodeMode(request, oAuthConfig);
@@ -64,7 +65,14 @@ public class AccessTokenHelper {
         if (oAuthConfig.getGrantType() == Oauth2GrantType.client_credentials) {
             return getAccessTokenOfClientMode(request, oAuthConfig);
         }
-        throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. Missing required parameters");
+        if (oAuthConfig.getGrantType() == Oauth2GrantType.refresh_token) {
+            String refreshToken = null;
+            if (null == obj || obj.length == 0 || null == obj[0] || (refreshToken = String.valueOf(obj[0])).isEmpty()) {
+                throw new JapOauth2Exception("Failed to refresh token, refresh_token is empty.");
+            }
+            return refreshToken(oAuthConfig, refreshToken);
+        }
+        throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. Missing required parameters.");
     }
 
 
@@ -89,6 +97,9 @@ public class AccessTokenHelper {
         if (StrUtil.isNotBlank(oAuthConfig.getCallbackUrl())) {
             params.put("redirect_uri", oAuthConfig.getCallbackUrl());
         }
+        if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
+            params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
+        }
         // PKCE is only applicable to authorization code mode
         if (Oauth2ResponseType.code == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
             params.put(PkceParams.CODE_VERIFIER, PkceHelper.getCacheCodeVerifier(oAuthConfig.getClientId()));
@@ -98,7 +109,7 @@ public class AccessTokenHelper {
         Oauth2Util.checkOauthResponse(tokenInfo, "Oauth2Strategy failed to get AccessToken.");
 
         if (!tokenInfo.containsKey("access_token")) {
-            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenInfo.toString());
+            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenInfo);
         }
 
         return mapToAccessToken(tokenInfo);
@@ -149,7 +160,7 @@ public class AccessTokenHelper {
         Oauth2Util.checkOauthResponse(tokenInfo, "Oauth2Strategy failed to get AccessToken.");
 
         if (!tokenInfo.containsKey("access_token")) {
-            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenInfo.toString());
+            throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken." + tokenInfo);
         }
         return mapToAccessToken(tokenInfo);
     }
@@ -177,6 +188,24 @@ public class AccessTokenHelper {
 //        }
 //
 //        return mapToAccessToken(tokenInfo);
+    }
+
+    private static AccessToken refreshToken(OAuthConfig oAuthConfig, String refreshToken) {
+        Map<String, String> params = new HashMap<>(6);
+        params.put("grant_type", oAuthConfig.getGrantType().name());
+        params.put("refresh_token", refreshToken);
+
+        if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
+            params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
+        }
+
+        Kv tokenInfo = Oauth2Util.request(oAuthConfig.getRefreshTokenEndpointMethodType(), oAuthConfig.getRefreshTokenUrl(), params);
+
+        Oauth2Util.checkOauthResponse(tokenInfo, "Oauth2Strategy failed to refresh access_token.");
+        if (!tokenInfo.containsKey("access_token")) {
+            throw new JapOauth2Exception("Oauth2Strategy failed to refresh access_token." + tokenInfo);
+        }
+        return mapToAccessToken(tokenInfo);
     }
 
     private static AccessToken mapToAccessToken(Kv tokenMap) {

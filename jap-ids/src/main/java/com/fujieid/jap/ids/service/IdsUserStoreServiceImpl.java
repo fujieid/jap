@@ -19,6 +19,7 @@ import com.fujieid.jap.ids.model.IdsConsts;
 import com.fujieid.jap.ids.model.UserInfo;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -28,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 public class IdsUserStoreServiceImpl implements IdsUserStoreService {
 
     /**
-     * Save user data, and store user information in {@link javax.servlet.http.HttpSession} by default.
+     * Save user data, and store user information in {@link HttpSession} by default.
      * <p>
      * Developers can implement this method to save user information in other media, such as cache, database, etc.
      *

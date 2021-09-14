@@ -13,29 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fujieid.jap.oauth2;
+package com.fujieid.jap.ids.service;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
  * @since 1.0.0
  */
-public enum Oauth2GrantType {
-
+public class IdsTokenServiceImpl implements IdsTokenService {
     /**
-     * Authorization Code Grant
+     * Check the availability of access token
+     *
+     * @param accessToken access_token
+     * @return bool
      */
-    authorization_code,
-    /**
-     * Resource Owner Password Credentials Grant
-     */
-    password,
-    /**
-     * Client Credentials Grant
-     */
-    client_credentials,
-    /**
-     * Refreshing an Access Token
-     */
-    refresh_token
+    @Override
+    public boolean verifyAccessToken(String accessToken) {
+        return false;
+    }
 }

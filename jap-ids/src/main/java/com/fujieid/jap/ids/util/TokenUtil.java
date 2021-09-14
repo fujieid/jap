@@ -16,13 +16,14 @@
 package com.fujieid.jap.ids.util;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.crypto.SecureUtil;
 import com.fujieid.jap.core.util.RequestUtil;
 import com.fujieid.jap.ids.JapIds;
+import com.fujieid.jap.ids.exception.IdsTokenException;
 import com.fujieid.jap.ids.exception.InvalidTokenException;
 import com.fujieid.jap.ids.model.*;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.model.enums.TokenAuthMethod;
+import com.fujieid.jap.ids.service.IdsTokenService;
 import com.xkcoding.json.util.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -109,10 +110,14 @@ public class TokenUtil {
         String clientId = clientDetail.getClientId();
 
         long accessTokenExpiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
-        long refreshTokenExpiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getRefreshTokenExpiresIn());
+        long refreshTokenExpiresIn = OauthUtil.getRefreshTokenExpiresIn(clientDetail.getRefreshTokenExpiresIn());
 
-        String accessTokenStr = JwtUtil.createJwtToken(clientId, user, accessTokenExpiresIn, nonce, issuer);
-        String refreshTokenStr = SecureUtil.sha256(clientId.concat(scope).concat(System.currentTimeMillis() + ""));
+        IdsTokenService tokenService = JapIds.getContext().getTokenService();
+        if (null == tokenService) {
+            throw new IdsTokenException("com.fujieid.jap.ids.service.IdsTokenService has not been injected");
+        }
+        String accessTokenStr = tokenService.createAccessToken(clientId, user, accessTokenExpiresIn, nonce, issuer, null);
+        String refreshTokenStr = tokenService.createRefreshToken(clientId, OauthUtil.convertStrToList(scope));
 
         AccessToken accessToken = new AccessToken();
         accessToken.setAccessToken(accessTokenStr);
@@ -131,23 +136,29 @@ public class TokenUtil {
         accessToken.setAccessTokenExpiration(OauthUtil.getAccessTokenExpiresAt(accessTokenExpiresIn));
         accessToken.setRefreshTokenExpiration(OauthUtil.getRefreshTokenExpiresAt(refreshTokenExpiresIn));
 
-        String token = IdsConsts.OAUTH_ACCESS_TOKEN_CACHE_KEY + accessTokenStr;
-        String rtoken = IdsConsts.OAUTH_REFRESH_TOKEN_CACHE_KEY + refreshTokenStr;
-        JapIds.getContext().getCache().set(token, accessToken, accessTokenExpiresIn * 1000);
-        JapIds.getContext().getCache().set(rtoken, accessToken, refreshTokenExpiresIn * 1000);
+        String tokenCacheKey = IdsConsts.OAUTH_ACCESS_TOKEN_CACHE_KEY + accessTokenStr;
+        String rtokenCacheKey = IdsConsts.OAUTH_REFRESH_TOKEN_CACHE_KEY + refreshTokenStr;
+        JapIds.getContext().getCache().set(tokenCacheKey, accessToken, accessTokenExpiresIn * 1000);
+        JapIds.getContext().getCache().set(rtokenCacheKey, accessToken, refreshTokenExpiresIn * 1000);
         return accessToken;
     }
 
     public static AccessToken refreshAccessToken(UserInfo user, ClientDetail clientDetail, AccessToken accessToken, String nonce, String issuer) {
         String rawToken = accessToken.getAccessToken();
-        String accessTokenStr = JwtUtil.createJwtToken(clientDetail.getClientId(), user, clientDetail.getAccessTokenExpiresIn(), nonce, issuer);
-        accessToken.setAccessToken(accessTokenStr);
-        accessToken.setAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
+        Long accessTokenExpiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
 
-        accessToken.setAccessTokenExpiration(OauthUtil.getAccessTokenExpiresAt(clientDetail.getAccessTokenExpiresIn()));
+        IdsTokenService tokenService = JapIds.getContext().getTokenService();
+        if (null == tokenService) {
+            throw new IdsTokenException("com.fujieid.jap.ids.service.IdsTokenService has not been injected");
+        }
+        String accessTokenStr = tokenService.createAccessToken(clientDetail.getClientId(), user, accessTokenExpiresIn, nonce, issuer, null);
+        accessToken.setAccessToken(accessTokenStr);
+        accessToken.setAccessTokenExpiresIn(accessTokenExpiresIn);
+
+        accessToken.setAccessTokenExpiration(OauthUtil.getAccessTokenExpiresAt(accessTokenExpiresIn));
 
         String tokenCacheKey = IdsConsts.OAUTH_ACCESS_TOKEN_CACHE_KEY + accessTokenStr;
-        JapIds.getContext().getCache().set(tokenCacheKey, accessTokenStr, clientDetail.getAccessTokenExpiresIn() * 1000);
+        JapIds.getContext().getCache().set(tokenCacheKey, accessToken, accessTokenExpiresIn * 1000);
 
         String rawTokenCacheKey = IdsConsts.OAUTH_ACCESS_TOKEN_CACHE_KEY + rawToken;
         JapIds.getContext().getCache().removeKey(rawTokenCacheKey);

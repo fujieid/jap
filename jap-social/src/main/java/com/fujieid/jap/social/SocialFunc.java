@@ -13,29 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fujieid.jap.oauth2;
+package com.fujieid.jap.social;
+
+import com.fujieid.jap.core.JapUser;
+import com.fujieid.jap.core.result.JapResponse;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
  * @since 1.0.0
  */
-public enum Oauth2GrantType {
+@FunctionalInterface
+public interface SocialFunc {
 
-    /**
-     * Authorization Code Grant
-     */
-    authorization_code,
-    /**
-     * Resource Owner Password Credentials Grant
-     */
-    password,
-    /**
-     * Client Credentials Grant
-     */
-    client_credentials,
-    /**
-     * Refreshing an Access Token
-     */
-    refresh_token
+    JapResponse exec(JapUser japUser, HttpServletRequest request, HttpServletResponse response);
 }

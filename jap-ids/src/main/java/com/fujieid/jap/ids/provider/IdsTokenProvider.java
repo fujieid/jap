@@ -15,6 +15,8 @@
  */
 package com.fujieid.jap.ids.provider;
 
+import cn.hutool.log.Log;
+import cn.hutool.log.LogFactory;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.*;
@@ -36,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
  * @since 1.0.0
  */
 public class IdsTokenProvider {
+    private static final Log log = LogFactory.get();
 
     private final Oauth2Service oauth2Service;
 
@@ -170,30 +173,34 @@ public class IdsTokenProvider {
     public IdsResponse<String, Object> generateRefreshTokenResponse(IdsRequestParam param, HttpServletRequest request) {
         TokenUtil.validateRefreshToken(param.getRefreshToken());
 
+        AccessToken token = TokenUtil.getByRefreshToken(param.getRefreshToken());
+
+        ClientDetail clientDetail = null;
         try {
-            AccessToken token = TokenUtil.getByRefreshToken(param.getRefreshToken());
 
-            ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(token.getClientId());
-            String requestScope = param.getScope();
-
-            OauthUtil.validClientDetail(clientDetail);
-            OauthUtil.validateScope(requestScope, clientDetail.getScopes());
-            OauthUtil.validateGrantType(param.getGrantType(), clientDetail.getGrantTypes(), GrantType.REFRESH_TOKEN);
-            OauthUtil.validateSecret(param, clientDetail, oauth2Service);
-
-            UserInfo user = JapIds.getContext().getUserService().getById(token.getUserId());
-
-            long expiresIn = OauthUtil.getRefreshTokenExpiresIn(clientDetail.getRefreshTokenExpiresIn());
-
-            AccessToken accessToken = TokenUtil.refreshAccessToken(user, clientDetail, token, param.getNonce(), EndpointUtil.getIssuer(request));
-            return new IdsResponse<String, Object>()
-                .add(IdsConsts.ACCESS_TOKEN, accessToken.getAccessToken())
-                .add(IdsConsts.REFRESH_TOKEN, accessToken.getRefreshToken())
-                .add(IdsConsts.EXPIRES_IN, expiresIn)
-                .add(IdsConsts.TOKEN_TYPE, IdsConsts.TOKEN_TYPE_BEARER)
-                .add(IdsConsts.SCOPE, requestScope);
+            clientDetail = JapIds.getContext().getClientDetailService().getByClientId(token.getClientId());
         } catch (Exception e) {
-            throw new IdsException(ErrorResponse.SERVER_ERROR);
+            log.error(e);
+            throw new IdsException(ErrorResponse.INVALID_CLIENT);
         }
+
+        String requestScope = param.getScope();
+
+        OauthUtil.validClientDetail(clientDetail);
+        OauthUtil.validateScope(requestScope, clientDetail.getScopes());
+        OauthUtil.validateGrantType(param.getGrantType(), clientDetail.getGrantTypes(), GrantType.REFRESH_TOKEN);
+        OauthUtil.validateSecret(param, clientDetail, oauth2Service);
+
+        UserInfo user = JapIds.getContext().getUserService().getById(token.getUserId());
+
+        long expiresIn = OauthUtil.getAccessTokenExpiresIn(clientDetail.getAccessTokenExpiresIn());
+
+        AccessToken accessToken = TokenUtil.refreshAccessToken(user, clientDetail, token, param.getNonce(), EndpointUtil.getIssuer(request));
+        return new IdsResponse<String, Object>()
+            .add(IdsConsts.ACCESS_TOKEN, accessToken.getAccessToken())
+            .add(IdsConsts.REFRESH_TOKEN, accessToken.getRefreshToken())
+            .add(IdsConsts.EXPIRES_IN, expiresIn)
+            .add(IdsConsts.TOKEN_TYPE, IdsConsts.TOKEN_TYPE_BEARER)
+            .add(IdsConsts.SCOPE, requestScope);
     }
 }
