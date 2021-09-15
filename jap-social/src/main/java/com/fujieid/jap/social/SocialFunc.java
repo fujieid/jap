@@ -21,6 +21,7 @@ import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.http.JapHttpResponse;
 
 /**
+ *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
  * @since 1.0.0
@@ -28,5 +29,13 @@ import com.fujieid.jap.http.JapHttpResponse;
 @FunctionalInterface
 public interface SocialFunc {
 
+    /**
+     * The function interface in social strategy is responsible for handling the business logic after the third-party user logs in successfully.
+     *
+     * @param japUser  jap user
+     * @param request  current request
+     * @param response current response
+     * @return Jap Response
+     */
     JapResponse exec(JapUser japUser, JapHttpRequest request, JapHttpResponse response);
 }
