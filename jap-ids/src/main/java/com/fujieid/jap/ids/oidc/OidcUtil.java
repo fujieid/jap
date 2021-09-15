@@ -50,7 +50,7 @@ public class OidcUtil {
 
         String issuer = EndpointUtil.getIssuer(request);
 
-        Map<String, Object> model = new HashMap<>();
+        Map<String, Object> model = new HashMap<>(33);
         model.put("issuer", issuer);
         model.put("authorization_endpoint", EndpointUtil.getAuthorizeUrl(request));
         model.put("token_endpoint", EndpointUtil.getTokenUrl(request));

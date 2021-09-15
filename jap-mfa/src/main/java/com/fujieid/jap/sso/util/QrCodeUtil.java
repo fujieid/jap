@@ -262,7 +262,7 @@ public class QrCodeUtil {
          */
         public HashMap<EncodeHintType, Object> toHints() {
             // 配置
-            final HashMap<EncodeHintType, Object> hints = new HashMap<>();
+            final HashMap<EncodeHintType, Object> hints = new HashMap<>(7);
             if (null != this.charset) {
                 hints.put(EncodeHintType.CHARACTER_SET, charset.toString().toLowerCase());
             }

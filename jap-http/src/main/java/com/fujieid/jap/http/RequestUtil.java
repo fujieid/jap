@@ -215,7 +215,7 @@ public class RequestUtil {
     public static Map<String, JapHttpCookie> getCookieMap(JapHttpRequest request) {
         final JapHttpCookie[] cookies = request.getCookies();
         if (null == cookies || cookies.length == 0) {
-            return new HashMap<>();
+            return new HashMap<>(0);
         }
 
         return Arrays.stream(cookies).collect(Collectors.toMap(JapHttpCookie::getName, v -> v, (k1, k2) -> k1));
