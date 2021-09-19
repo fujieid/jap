@@ -98,7 +98,7 @@ public class OAuthConfig extends AuthenticateConfig {
     private String state;
 
     /**
-     * The scope supported by the OAuth platform
+     * Whether to enable PKCE mode
      */
     private boolean enablePkce;
 
