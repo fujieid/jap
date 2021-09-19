@@ -33,10 +33,6 @@
       <groupId>com.warrenstrange</groupId>
       <artifactId>googleauth</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.fujieid</groupId>
-      <artifactId>jap-http</artifactId>
-    </dependency>
   </dependencies>
 
 </project>
