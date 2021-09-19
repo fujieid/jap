@@ -21,7 +21,6 @@ import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.IdsResponse;
 import com.xkcoding.json.JsonUtil;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -57,11 +56,7 @@ public interface IdsPipeline<T> {
         String errorResponseStr = JsonUtil.toJsonString(idsResponse);
         response.setContentType("text/html;charset=UTF-8");
         response.setContentLength(errorResponseStr.getBytes(StandardCharsets.UTF_8).length);
-        try {
-            response.getWriter().write(errorResponseStr);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        response.write(errorResponseStr);
     }
 
     /**

@@ -29,6 +29,7 @@ import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.ObjectUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -50,7 +51,8 @@ public class ApprovalEndpoint extends AbstractEndpoint {
     public void showConfirmPage(JapHttpRequest request, JapHttpResponse response) throws IOException {
         final String approvalContent = createConfirmPageHtml(request);
         response.setContentType("text/html;charset=UTF-8");
-        response.getWriter().append(approvalContent);
+        response.setContentLength(approvalContent.getBytes(StandardCharsets.UTF_8).length);
+        response.write(approvalContent);
     }
 
     /**

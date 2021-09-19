@@ -56,7 +56,7 @@ public class ErrorEndpoint extends AbstractEndpoint {
         String errorPageHtml = createErrorPageHtml(errorResponse.getError(), errorResponse.getErrorDescription());
         response.setContentType("text/html;charset=UTF-8");
         response.setContentLength(errorPageHtml.getBytes(StandardCharsets.UTF_8).length);
-        response.getWriter().write(errorPageHtml);
+        response.write(errorPageHtml);
     }
 
     /**
@@ -71,7 +71,7 @@ public class ErrorEndpoint extends AbstractEndpoint {
         String errorPageHtml = createErrorPageHtml(error, errorDescription);
         response.setContentType("text/html;charset=UTF-8");
         response.setContentLength(errorPageHtml.getBytes(StandardCharsets.UTF_8).length);
-        response.getWriter().write(errorPageHtml);
+        response.write(errorPageHtml);
     }
 
 

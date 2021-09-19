@@ -55,7 +55,7 @@ public class LoginEndpoint extends AbstractEndpoint {
         String loginPageHtml = generateLoginPageHtml(request);
         response.setContentType("text/html;charset=UTF-8");
         response.setContentLength(loginPageHtml.getBytes(StandardCharsets.UTF_8).length);
-        response.getWriter().write(loginPageHtml);
+        response.write(loginPageHtml);
     }
 
     private String generateLoginPageHtml(JapHttpRequest request) {
