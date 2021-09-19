@@ -15,8 +15,8 @@
  */
 package com.fujieid.jap.web.filter;
 
-import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
-import com.fujieid.jap.http.adapter.jakarta.JakartaResponseAdapter;
+import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.jakarta.JakartaResponseAdapter;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;

@@ -18,15 +18,5 @@
       <artifactId>jap-ids</artifactId>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>com.fujieid</groupId>
-      <artifactId>jap-http-adapter</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
 </project>
