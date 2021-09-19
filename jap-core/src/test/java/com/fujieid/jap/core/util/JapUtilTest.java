@@ -17,7 +17,7 @@ package com.fujieid.jap.core.util;
 
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.http.JapHttpRequest;
-import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
