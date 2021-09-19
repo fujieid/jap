@@ -2,10 +2,11 @@ package com.fujieid.jap.httpapi.subject;
 
 /**
  * The WWW-Authenticate Response Header
- * @see <a href="https://datatracker.ietf.org/doc/html/rfc2069#section-2.1.1" target="_blank">https://datatracker.ietf.org/doc/html/rfc2069#section-2.1.1</a>
+ *
  * @author zhihai.yu (mvbbb(a)foxmail.com)
  * @version 1.0.0
- * @since 1.0.0
+ * @see <a href="https://datatracker.ietf.org/doc/html/rfc2069#section-2.1.1" target="_blank">https://datatracker.ietf.org/doc/html/rfc2069#section-2.1.1</a>
+ * @since 1.0.5
  */
 public class DigestWwwAuthenticateSubject {
     private String realm;
@@ -16,6 +17,9 @@ public class DigestWwwAuthenticateSubject {
     private String stale;
     private String qop;
 
+    public DigestWwwAuthenticateSubject() {
+    }
+
     public String getQop() {
         return qop;
     }
@@ -23,9 +27,6 @@ public class DigestWwwAuthenticateSubject {
     public DigestWwwAuthenticateSubject setQop(String qop) {
         this.qop = qop;
         return this;
-    }
-
-    public DigestWwwAuthenticateSubject() {
     }
 
     public String getRealm() {

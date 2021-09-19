@@ -5,9 +5,10 @@ import java.nio.IntBuffer;
 
 /**
  * refer: https://github.com/meyfa/java-sha256/blob/master/src/main/java/net/meyfa/sha256/Sha256.java
+ *
  * @author zhihai.yu (mvbbb(a)foxmail.com)
  * @version 1.0.0
- * @since 1.0.0
+ * @since 1.0.5
  */
 public class DigestSha256Util {
     private static final int[] K = {

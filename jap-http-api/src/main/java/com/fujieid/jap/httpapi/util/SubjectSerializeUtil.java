@@ -7,42 +7,43 @@ import java.util.Objects;
 
 /**
  * used to convert "Authorization Request Header" and "WWW-Authenticate Response Header" between string and object
+ *
  * @author zhihai.yu (mvbbb(a)foxmail.com)
  * @version 1.0.0
- * @since 1.0.0
+ * @since 1.0.5
  */
 public final class SubjectSerializeUtil {
 
-
     /**
      * Deserialize string to object
-     * @param clazz
-     * @param str
-     * @return
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     * @throws InstantiationException
+     *
+     * @param str   a <code>String</code> to be deserialized
+     * @param clazz The target type to deserialize
+     * @return Return an object
+     * @throws NoSuchMethodException     no such method
+     * @throws IllegalAccessException    illegal access
+     * @throws InvocationTargetException invocation target
+     * @throws InstantiationException    instantiation
      */
-    public static Object deSerialize(Class<?> clazz,String str) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        str = str.replace("\\","").replace("\"","").trim();
+    public static <T> T deserialize(String str, Class<T> clazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        str = str.replace("\\", "").replace("\"", "").trim();
         String[] split = str.split(",");
         HashMap<String, String> params = new HashMap<>(8);
         for (String s : split) {
             String[] param = s.split("=");
             String paramKey = param[0].trim();
             String paramValue = param[1].trim();
-            params.put(paramKey,paramValue);
+            params.put(paramKey, paramValue);
         }
 
         Field[] fields = clazz.getDeclaredFields();
 
-        Object t = clazz.getDeclaredConstructor().newInstance();
+        T t = clazz.getDeclaredConstructor().newInstance();
 
         for (Field field : fields) {
             field.setAccessible(true);
             String name = field.getName();
-            field.set(t,params.get(name));
+            field.set(t, params.get(name));
         }
 
         return t;
@@ -50,9 +51,10 @@ public final class SubjectSerializeUtil {
 
     /**
      * Serialize object to string
-     * @param t
-     * @return
-     * @throws IllegalAccessException
+     *
+     * @param t Objects that need to be serialized
+     * @return return a <code>string</code> after serialization
+     * @throws IllegalAccessException illegal access
      */
     public static String serialize(Object t) throws IllegalAccessException {
         Class<?> clazz = t.getClass();
@@ -63,10 +65,10 @@ public final class SubjectSerializeUtil {
             field.setAccessible(true);
             String paramName = field.getName();
             String paramVal = ((String) field.get(t));
-            if(Objects.isNull(paramVal)){
+            if (Objects.isNull(paramVal)) {
                 continue;
             }
-            if(!firstParam){
+            if (!firstParam) {
                 sb.append(",");
             }
             firstParam = false;

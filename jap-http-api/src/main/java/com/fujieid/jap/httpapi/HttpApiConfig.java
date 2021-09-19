@@ -8,20 +8,18 @@ import com.fujieid.jap.httpapi.enums.ForBearerTokenEnum;
 import com.fujieid.jap.httpapi.enums.HttpMethodEnum;
 import com.fujieid.jap.httpapi.strategy.GetTokenFromResponseStrategy;
 import com.fujieid.jap.httpapi.strategy.RequestBodyToJapUserStrategy;
-import com.fujieid.jap.httpapi.util.SimpleAuthJsonUtil;
 import com.xkcoding.json.JsonUtil;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *  Configuration file for http api authorization module
+ * Configuration file for http api authorization module
  *
  * @author zhihai.yu (mvbbb(a)foxmail.com)
  * @version 1.0.0
- * @since 1.0.0
+ * @since 1.0.5
  */
 public class HttpApiConfig extends AuthenticateConfig {
 
@@ -48,17 +46,17 @@ public class HttpApiConfig extends AuthenticateConfig {
     /**
      * custom headers will be carried when request third-party system.
      */
-    private Map<String,String> customHeaders;
+    private Map<String, String> customHeaders;
 
     /**
      * custom params will be carried when request third-party system.
      */
-    private Map<String,String> customParams;
+    private Map<String, String> customParams;
 
     /**
      * custom body will be carried when request third-party system in json format.
      */
-    private Map<String,String> customBody;
+    private Map<String, String> customBody;
 
     /**
      * define this field when authSchema is BEARER
@@ -68,22 +66,19 @@ public class HttpApiConfig extends AuthenticateConfig {
     /**
      * if user auth info field is "body", by default, analyze user auth info by json format. ex:
      * {
-     *     "username":"admin",
-     *     "password":"123456"
+     * "username":"admin",
+     * "password":"123456"
      * }
      * Developer's system should customize requestBodyToJapUserStrategy to get userinfo form request if user auth info is not this format.
      */
-    private RequestBodyToJapUserStrategy requestBodyToJapUserStrategy = new RequestBodyToJapUserStrategy(){
-        @Override
-        public JapUser decode(HttpServletRequest request) throws Exception {
-            BufferedReader reader = request.getReader();
-            StringBuilder body = new StringBuilder();
-            String str = null;
-            while ((str = reader.readLine()) != null) {
-                body.append(str);
-            }
-            return JsonUtil.toBean(body.toString(),JapUser.class);
+    private RequestBodyToJapUserStrategy requestBodyToJapUserStrategy = request -> {
+        BufferedReader reader = request.getReader();
+        StringBuilder body = new StringBuilder();
+        String str = null;
+        while ((str = reader.readLine()) != null) {
+            body.append(str);
         }
+        return JsonUtil.toBean(body.toString(), JapUser.class);
     };
 
     /**
@@ -99,25 +94,22 @@ public class HttpApiConfig extends AuthenticateConfig {
      * Use this strategy to extract the token from response body.
      * By default, search for field like "token":"xxxxxxxx" in response.
      */
-    private GetTokenFromResponseStrategy getTokenFromResponseStrategy = new GetTokenFromResponseStrategy() {
-        @Override
-        public String getToken(String body) {
-            try{
-                int i1 = body.indexOf("\"token\"")+7;
-                int i2 = body.indexOf(':', i1);
-                int i3 = body.indexOf("\"",i2)+1;
-                int i4 = body.indexOf("\"", i3+1);
-                return body.substring(i3,i4);
-            }catch (Exception e){
-                return null;
-            }
+    private GetTokenFromResponseStrategy getTokenFromResponseStrategy = body -> {
+        try {
+            int i1 = body.indexOf("\"token\"") + 7;
+            int i2 = body.indexOf(':', i1);
+            int i3 = body.indexOf("\"", i2) + 1;
+            int i4 = body.indexOf("\"", i3 + 1);
+            return body.substring(i3, i4);
+        } catch (Exception e) {
+            return null;
         }
     };
 
     public HttpApiConfig() {
     }
 
-    public HttpApiConfig(HttpApiConfig httpApiConfig,String loginUrl) {
+    public HttpApiConfig(HttpApiConfig httpApiConfig, String loginUrl) {
         this.authSchema = httpApiConfig.authSchema;
         this.httpMethod = httpApiConfig.httpMethod;
         this.loginUrl = loginUrl;
@@ -189,13 +181,13 @@ public class HttpApiConfig extends AuthenticateConfig {
         return customParams;
     }
 
-    public Map<String, Object> getCustomParamsObjects() {
-        return new HashMap<>(customParams);
-    }
-
     public HttpApiConfig setCustomParams(Map<String, String> customParams) {
         this.customParams = customParams;
         return this;
+    }
+
+    public Map<String, Object> getCustomParamsObjects() {
+        return new HashMap<>(customParams);
     }
 
     public Map<String, String> getCustomBody() {

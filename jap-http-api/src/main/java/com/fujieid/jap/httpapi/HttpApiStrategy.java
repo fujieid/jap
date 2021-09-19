@@ -1,5 +1,6 @@
 package com.fujieid.jap.httpapi;
 
+import cn.hutool.core.codec.Base64;
 import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.JapUserService;
 import com.fujieid.jap.core.cache.JapCache;
@@ -9,22 +10,21 @@ import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.httpapi.enums.AuthSchemaEnum;
 import com.fujieid.jap.httpapi.enums.HttpMethodEnum;
 import com.fujieid.jap.httpapi.subject.DigestAuthorizationSubject;
 import com.fujieid.jap.httpapi.subject.DigestWwwAuthenticateSubject;
 import com.fujieid.jap.httpapi.subject.HttpAuthResponse;
 import com.fujieid.jap.httpapi.util.*;
-import me.zhyd.oauth.utils.Base64Utils;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * The strategy for jap-http-api module to request third party system.
+ *
  * @author zhihai.yu (mvbbb(a)foxmail.com)
  * @version 1.0.0
- * @since 1.0.0
+ * @since 1.0.5
  */
 public class HttpApiStrategy extends AbstractJapStrategy {
 
@@ -34,7 +34,7 @@ public class HttpApiStrategy extends AbstractJapStrategy {
     }
 
     @Override
-    public JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+    public JapResponse authenticate(AuthenticateConfig config, JapHttpRequest request, JapHttpResponse response) {
         try {
             checkAuthenticateConfig(config, HttpApiConfig.class);
         } catch (JapException e) {
@@ -46,39 +46,39 @@ public class HttpApiStrategy extends AbstractJapStrategy {
         return this.doAuthenticate(httpApiConfig, request, response);
     }
 
-    private JapResponse doAuthenticate(HttpApiConfig config, HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
+    private JapResponse doAuthenticate(HttpApiConfig config, JapHttpRequest request, JapHttpResponse response) {
 
         HttpAuthResponse authResponse = null;
         JapUser japUser = null;
 
         try {
-            japUser = getJapUser(servletRequest, config);
+            japUser = getJapUser(request, config);
 
             if (japUser == null) {
                 return JapResponse.error(JapErrorCode.MISS_CREDENTIALS);
             }
 
             switch (config.getAuthSchema()) {
-                case basic:
-                    authResponse = doBasicAuth(japUser, config, servletResponse);
+                case BASIC:
+                    authResponse = doBasicAuth(japUser, config, response);
                     break;
-                case digest:
-                    authResponse = doDigestAuth(japUser,config,servletResponse);
+                case DIGEST:
+                    authResponse = doDigestAuth(japUser, config, response);
                     break;
-                case bearer:
-                    authResponse = doBearerAuth(japUser,config,servletResponse);
+                case BEARER:
+                    authResponse = doBearerAuth(japUser, config, response);
                     break;
                 default:
                     break;
             }
-        }catch (JapException e){
-            return JapResponse.error(e.getErrorCode(),e.getErrorMessage());
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (authResponse!=null&&authResponse.isSuccess()) {
-            if(config.getAuthSchema()== AuthSchemaEnum.basic||config.getAuthSchema()==AuthSchemaEnum.digest){
+        if (authResponse != null && authResponse.isSuccess()) {
+            if (config.getAuthSchema() == AuthSchemaEnum.BASIC || config.getAuthSchema() == AuthSchemaEnum.DIGEST) {
                 japUserService.createAndGetHttpApiUser(japUser);
             }
             return JapResponse.success(authResponse.getBody());
@@ -87,19 +87,19 @@ public class HttpApiStrategy extends AbstractJapStrategy {
         }
     }
 
-    private HttpAuthResponse doDigestAuth(JapUser japUser, HttpApiConfig config, HttpServletResponse servletResponse) {
+    private HttpAuthResponse doDigestAuth(JapUser japUser, HttpApiConfig config, JapHttpResponse response) {
 
         /*
          * send a request to third-party server to get a random number and encryption algorithm
          * see： https://datatracker.ietf.org/doc/html/rfc2069#section-2.1.1
          */
-        HttpAuthResponse responseForWWWAuth =  HttpAuthUtil.sendRequest(config.getLoginUrl(),
-                                                                        HttpMethodEnum.get,
-                                                                        config.getCustomHeaders(),
-                                                                        config.getCustomParams(),
-                                                                        SimpleAuthJsonUtil.getJsonStrByParams(config.getCustomBody()));
+        HttpAuthResponse responseForWWWAuth = HttpAuthUtil.sendRequest(config.getLoginUrl(),
+            HttpMethodEnum.GET,
+            config.getCustomHeaders(),
+            config.getCustomParams(),
+            SimpleAuthJsonUtil.getJsonStrByParams(config.getCustomBody()));
 
-        if(responseForWWWAuth==null||responseForWWWAuth.getHeaders()==null){
+        if (responseForWWWAuth == null || responseForWWWAuth.getHeaders() == null) {
             return null;
         }
         HttpAuthResponse result = null;
@@ -107,7 +107,7 @@ public class HttpApiStrategy extends AbstractJapStrategy {
 
         try {
             wwwAuthenticate = responseForWWWAuth.getHeaders().get("WWW-Authenticate").get(0).replaceFirst("Digest ", "");
-            DigestWwwAuthenticateSubject wwwAuthenticateSubject = (DigestWwwAuthenticateSubject) SubjectSerializeUtil.deSerialize(DigestWwwAuthenticateSubject.class, wwwAuthenticate);
+            DigestWwwAuthenticateSubject wwwAuthenticateSubject = SubjectSerializeUtil.deserialize(wwwAuthenticate, DigestWwwAuthenticateSubject.class);
 
             String username = japUser.getUsername();
             String realm = wwwAuthenticateSubject.getRealm();
@@ -122,7 +122,7 @@ public class HttpApiStrategy extends AbstractJapStrategy {
 
             String ha1 = DigestMD5Util.encode(username, realm, password);
             String ha2 = DigestUtil.getHa2ByQop(qop, method, digestUri);
-            String response = DigestUtil.getResponseByQop(ha1, nonce, nc, cnonce, qop, ha2);
+            String qopResponse = DigestUtil.getResponseByQop(ha1, nonce, nc, cnonce, qop, ha2);
 
             DigestAuthorizationSubject authorizationSubject = new DigestAuthorizationSubject()
                 .setCnonce(cnonce)
@@ -132,14 +132,14 @@ public class HttpApiStrategy extends AbstractJapStrategy {
                 .setRealm(realm)
                 .setUsername(username)
                 .setUri(digestUri)
-                .setResponse(response)
+                .setResponse(qopResponse)
                 .setAlgorithm(wwwAuthenticateSubject.getAlgorithm())
                 .setOpaque(opaque);
 
             String authStr = SubjectSerializeUtil.serialize(authorizationSubject);
 
             // send authorization request
-            config.getCustomHeaders().put("Authorization","Digest "+authStr);
+            config.getCustomHeaders().put("Authorization", "Digest " + authStr);
             result = HttpAuthUtil.sendRequest(config.getLoginUrl(),
                 config.getHttpMethod(),
                 config.getCustomHeaders(),
@@ -152,48 +152,46 @@ public class HttpApiStrategy extends AbstractJapStrategy {
         return null;
     }
 
-    private HttpAuthResponse doBasicAuth(JapUser japUser, HttpApiConfig config, HttpServletResponse servletResponse) {
+    private HttpAuthResponse doBasicAuth(JapUser japUser, HttpApiConfig config, JapHttpResponse response) {
 
         /*
          * see： The 'Basic' HTTP Authentication Scheme：https://datatracker.ietf.org/doc/html/rfc7617
          */
-        String basicAuth = "Basic " + Base64Utils.encode(japUser.getUsername() + ":" + japUser.getPassword());
-        config.getCustomHeaders().put("authorization",basicAuth);
+        String basicAuth = "Basic " + Base64.encode(japUser.getUsername() + ":" + japUser.getPassword());
+        config.getCustomHeaders().put("authorization", basicAuth);
 
-        HttpAuthResponse httpAuthResponse = HttpAuthUtil.sendRequest(config.getLoginUrl(),
+        return HttpAuthUtil.sendRequest(config.getLoginUrl(),
             config.getHttpMethod(),
             config.getCustomHeaders(),
             config.getCustomParams(),
             SimpleAuthJsonUtil.getJsonStrByParams(config.getCustomBody()));
-        return httpAuthResponse;
     }
 
-    private HttpAuthResponse sendBearerTokenAuthRequest(String token, HttpApiConfig config){
+    private HttpAuthResponse sendBearerTokenAuthRequest(String token, HttpApiConfig config) {
         String bearerToken = "Bearer " + token;
-        config.getCustomHeaders().put("Authorization",bearerToken);
-        HttpAuthResponse result = HttpAuthUtil.sendRequest(config.getLoginUrl(),
+        config.getCustomHeaders().put("Authorization", bearerToken);
+        return HttpAuthUtil.sendRequest(config.getLoginUrl(),
             config.getHttpMethod(),
             config.getCustomHeaders(),
             config.getCustomParams(),
             SimpleAuthJsonUtil.getJsonStrByParams(config.getCustomBody()));
-        return result;
     }
 
-    private HttpAuthResponse doBearerAuth(JapUser japUser, HttpApiConfig config, HttpServletResponse servletResponse) {
+    private HttpAuthResponse doBearerAuth(JapUser japUser, HttpApiConfig config, JapHttpResponse response) {
 
         JapUser japUserInDb = japUserService.getByName(japUser.getUsername());
         String token = null;
-        if (japUserInDb==null||japUserInDb.getToken() == null) {
-            token = doPreAuthForBearerToken(japUser, config, servletResponse);
-        }else{
+        if (japUserInDb == null || japUserInDb.getToken() == null) {
+            token = doPreAuthForBearerToken(japUser, config, response);
+        } else {
             token = japUserInDb.getToken();
         }
 
         HttpAuthResponse result = sendBearerTokenAuthRequest(token, config);
 
         // old token expired, request for new token
-        if(result==null||!result.isSuccess()){
-            String newToken = doPreAuthForBearerToken(japUser, config, servletResponse);
+        if (result == null || !result.isSuccess()) {
+            String newToken = doPreAuthForBearerToken(japUser, config, response);
             result = sendBearerTokenAuthRequest(newToken, config);
         }
         return result;
@@ -202,59 +200,59 @@ public class HttpApiStrategy extends AbstractJapStrategy {
     /**
      * do a pre-auth in Bearer auth to get token for this user
      *
-     * @param japUser
-     * @param config
-     * @param servletResponse
+     * @param japUser  jap user
+     * @param config   Http api config
+     * @param response current http response
      */
-    private String doPreAuthForBearerToken(JapUser japUser, HttpApiConfig config, HttpServletResponse servletResponse) {
-        HttpAuthResponse response = null;
+    private String doPreAuthForBearerToken(JapUser japUser, HttpApiConfig config, JapHttpResponse response) {
+        HttpAuthResponse httpAuthResponse = null;
         // clean old auth token
         config.getCustomHeaders().remove("Authorization");
         config.getCustomHeaders().remove("authorization");
         switch (config.getForBearerTokenEnum()) {
-            case by_basic:
-                response = this.doBasicAuth(japUser, new HttpApiConfig(config,config.getBearerTokenIssueUrl()), servletResponse);
+            case BY_BASIC:
+                httpAuthResponse = this.doBasicAuth(japUser, new HttpApiConfig(config, config.getBearerTokenIssueUrl()), response);
                 break;
-            case by_digest:
-                response = this.doDigestAuth(japUser, new HttpApiConfig(config,config.getBearerTokenIssueUrl()), servletResponse);
+            case BY_DIGEST:
+                httpAuthResponse = this.doDigestAuth(japUser, new HttpApiConfig(config, config.getBearerTokenIssueUrl()), response);
                 break;
-            case by_header:
-                config.getCustomHeaders().put("username",japUser.getUsername());
-                config.getCustomHeaders().put("password",japUser.getPassword());
-                response = HttpAuthUtil.sendRequest(config.getLoginUrl(),
-                                                    config.getHttpMethod(),
-                                                    config.getCustomHeaders(),
-                                                    config.getCustomParams(),
-                                                    SimpleAuthJsonUtil.getJsonStrByParams(config.getCustomBody()));
+            case BY_HEADER:
+                config.getCustomHeaders().put("username", japUser.getUsername());
+                config.getCustomHeaders().put("password", japUser.getPassword());
+                httpAuthResponse = HttpAuthUtil.sendRequest(config.getLoginUrl(),
+                    config.getHttpMethod(),
+                    config.getCustomHeaders(),
+                    config.getCustomParams(),
+                    SimpleAuthJsonUtil.getJsonStrByParams(config.getCustomBody()));
                 break;
-            case by_params:
-                config.getCustomParams().put("username",japUser.getUsername());
-                config.getCustomParams().put("password",japUser.getPassword());
-                response = HttpAuthUtil.sendRequest(config.getLoginUrl(),
-                                                    config.getHttpMethod(),
-                                                    config.getCustomHeaders(),
-                                                    config.getCustomParams(),
-                                                    SimpleAuthJsonUtil.getJsonStrByParams(config.getCustomBody()));
+            case BY_PARAMS:
+                config.getCustomParams().put("username", japUser.getUsername());
+                config.getCustomParams().put("password", japUser.getPassword());
+                httpAuthResponse = HttpAuthUtil.sendRequest(config.getLoginUrl(),
+                    config.getHttpMethod(),
+                    config.getCustomHeaders(),
+                    config.getCustomParams(),
+                    SimpleAuthJsonUtil.getJsonStrByParams(config.getCustomBody()));
                 break;
-            case by_body:
-                String body = SimpleAuthJsonUtil.getJsonStrByJapUserAndParams(japUser,config.getCustomBody());
-                response = HttpAuthUtil.sendRequest(config.getLoginUrl(),
-                                                    config.getHttpMethod(),
-                                                    config.getCustomHeaders(),
-                                                    config.getCustomParams(),
-                                                    body);
+            case BY_BODY:
+                String body = SimpleAuthJsonUtil.getJsonStrByJapUserAndParams(japUser, config.getCustomBody());
+                httpAuthResponse = HttpAuthUtil.sendRequest(config.getLoginUrl(),
+                    config.getHttpMethod(),
+                    config.getCustomHeaders(),
+                    config.getCustomParams(),
+                    body);
                 break;
             default:
                 break;
         }
 
         // pre-auth field
-        if (response==null||!response.isSuccess()) {
+        if (httpAuthResponse == null || !httpAuthResponse.isSuccess()) {
             return null;
         }
 
-        // get token from response body
-        String token = config.getGetTokenFromResponseStrategy().getToken(response.getBody());
+        // get token from httpAuthResponse body
+        String token = config.getGetTokenFromResponseStrategy().getToken(httpAuthResponse.getBody());
         if (token == null || token.length() == 0) {
             return null;
         }
@@ -268,29 +266,29 @@ public class HttpApiStrategy extends AbstractJapStrategy {
     /**
      * get user information from request according to http api config.
      *
-     * @param request
-     * @param config
+     * @param request current http request
+     * @param config  http api config
      * @return jap user contains username and password
      */
-    public JapUser getJapUser(HttpServletRequest request, HttpApiConfig config) {
+    public JapUser getJapUser(JapHttpRequest request, HttpApiConfig config) {
         JapUser japUser = null;
         String username = null;
         String password = null;
 
         switch (config.getAuthInfoField()) {
-            case params:
+            case PARAMS:
                 username = request.getParameter("username");
                 password = request.getParameter("password");
                 japUser = new JapUser().setUsername(username).setPassword(password);
                 break;
 
-            case header:
+            case HEADER:
                 username = request.getHeader("username");
                 password = request.getHeader("password");
                 japUser = new JapUser().setUsername(username).setPassword(password);
                 break;
 
-            case body:
+            case BODY:
                 try {
                     // get auth info body from request body.
                     japUser = config.getRequestBodyToJapUserStrategy().decode(request);
@@ -312,11 +310,12 @@ public class HttpApiStrategy extends AbstractJapStrategy {
     /**
      * check http api config.
      * NOTICE:
-     *  1. When use "GET" as request method, custom body is not supported.
-     *  2. Can not custom body and params at the same time.
+     * 1. When use "GET" as request method, custom body is not supported.
+     * 2. Can not custom body and params at the same time.
+     *
      * @param sourceConfig      The parameters passed in by the caller
      * @param targetConfigClazz The actual parameter class type
-     * @throws JapException
+     * @throws JapException Jap exception will be thrown when http api config configuration error
      */
     @Override
     protected void checkAuthenticateConfig(AuthenticateConfig sourceConfig, Class<?> targetConfigClazz) throws JapException {
@@ -327,9 +326,9 @@ public class HttpApiStrategy extends AbstractJapStrategy {
             config.getHttpMethod() == null ||
             config.getLoginUrl() == null ||
             config.getAuthInfoField() == null ||
-            (config.getHttpMethod()==HttpMethodEnum.get&&(config.getCustomBody()!=null&&config.getCustomBody().size()!=0))||
-            ((config.getCustomBody()!=null&&config.getCustomBody().size()!=0)&&(config.getCustomParams()!=null&&config.getCustomParams().size()!=0))
-        ){
+            (config.getHttpMethod() == HttpMethodEnum.GET && (config.getCustomBody() != null && config.getCustomBody().size() != 0)) ||
+            ((config.getCustomBody() != null && config.getCustomBody().size() != 0) && (config.getCustomParams() != null && config.getCustomParams().size() != 0))
+        ) {
             throw new JapException(JapErrorCode.ERROR_HTTP_API_CONFIG);
         }
     }

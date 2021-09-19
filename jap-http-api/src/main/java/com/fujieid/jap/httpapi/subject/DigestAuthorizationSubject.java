@@ -2,13 +2,14 @@ package com.fujieid.jap.httpapi.subject;
 
 /**
  * The Authorization Request Header
- * @see <a href="https://en.wikipedia.org/wiki/Digest_access_authentication" target="_blank">https://en.wikipedia.org/wiki/Digest_access_authentication</a>
- * @see <a href="https://datatracker.ietf.org/doc/html/rfc2069#section-2.1.2" target="_blank">https://datatracker.ietf.org/doc/html/rfc2069#section-2.1.2</a>
+ *
  * @author zhihai.yu (mvbbb(a)foxmail.com)
  * @version 1.0.0
- * @since 1.0.0
+ * @see <a href="https://en.wikipedia.org/wiki/Digest_access_authentication" target="_blank">https://en.wikipedia.org/wiki/Digest_access_authentication</a>
+ * @see <a href="https://datatracker.ietf.org/doc/html/rfc2069#section-2.1.2" target="_blank">https://datatracker.ietf.org/doc/html/rfc2069#section-2.1.2</a>
+ * @since 1.0.5
  */
-public class DigestAuthorizationSubject{
+public class DigestAuthorizationSubject {
     private String username;
     private String realm;
     private String nonce;
