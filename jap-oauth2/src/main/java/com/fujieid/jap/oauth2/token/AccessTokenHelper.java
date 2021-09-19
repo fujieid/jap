@@ -53,19 +53,19 @@ public class AccessTokenHelper {
         if (null == oAuthConfig) {
             throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. OAuthConfig cannot be empty.");
         }
-        if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {
+        if (oAuthConfig.getResponseType() == Oauth2ResponseType.CODE) {
             return getAccessTokenOfAuthorizationCodeMode(request, oAuthConfig);
         }
-        if (oAuthConfig.getResponseType() == Oauth2ResponseType.token) {
+        if (oAuthConfig.getResponseType() == Oauth2ResponseType.TOKEN) {
             return getAccessTokenOfImplicitMode(request);
         }
-        if (oAuthConfig.getGrantType() == Oauth2GrantType.password) {
+        if (oAuthConfig.getGrantType() == Oauth2GrantType.PASSWORD) {
             return getAccessTokenOfPasswordMode(oAuthConfig);
         }
-        if (oAuthConfig.getGrantType() == Oauth2GrantType.client_credentials) {
+        if (oAuthConfig.getGrantType() == Oauth2GrantType.CLIENT_CREDENTIALS) {
             return getAccessTokenOfClientMode(request, oAuthConfig);
         }
-        if (oAuthConfig.getGrantType() == Oauth2GrantType.refresh_token) {
+        if (oAuthConfig.getGrantType() == Oauth2GrantType.REFRESH_TOKEN) {
             String refreshToken = null;
             if (null == obj || obj.length == 0 || null == obj[0] || (refreshToken = String.valueOf(obj[0])).isEmpty()) {
                 throw new JapOauth2Exception("Failed to refresh token, refresh_token is empty.");
@@ -90,7 +90,7 @@ public class AccessTokenHelper {
 
         String code = request.getParameter("code");
         Map<String, String> params = new HashMap<>(6);
-        params.put("grant_type", Oauth2GrantType.authorization_code.name());
+        params.put("grant_type", Oauth2GrantType.AUTHORIZATION_CODE.name());
         params.put("code", code);
         params.put("client_id", oAuthConfig.getClientId());
         params.put("client_secret", oAuthConfig.getClientSecret());
@@ -101,7 +101,7 @@ public class AccessTokenHelper {
             params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
         }
         // PKCE is only applicable to authorization code mode
-        if (Oauth2ResponseType.code == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
+        if (Oauth2ResponseType.CODE == oAuthConfig.getResponseType() && oAuthConfig.isEnablePkce()) {
             params.put(PkceParams.CODE_VERIFIER, PkceHelper.getCacheCodeVerifier(oAuthConfig.getClientId()));
         }
 
@@ -148,7 +148,7 @@ public class AccessTokenHelper {
      */
     private static AccessToken getAccessTokenOfPasswordMode(OAuthConfig oAuthConfig) throws JapOauth2Exception {
         Map<String, String> params = new HashMap<>(6);
-        params.put("grant_type", Oauth2GrantType.password.name());
+        params.put("grant_type", Oauth2GrantType.PASSWORD.name());
         params.put("username", oAuthConfig.getUsername());
         params.put("password", oAuthConfig.getPassword());
         params.put("client_id", oAuthConfig.getClientId());

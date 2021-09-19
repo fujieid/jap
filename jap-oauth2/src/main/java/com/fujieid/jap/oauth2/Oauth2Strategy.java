@@ -109,8 +109,8 @@ public class Oauth2Strategy extends AbstractJapStrategy {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
         }
 
-        boolean isPasswordOrClientMode = authConfig.getGrantType() == Oauth2GrantType.password
-            || authConfig.getGrantType() == Oauth2GrantType.client_credentials;
+        boolean isPasswordOrClientMode = authConfig.getGrantType() == Oauth2GrantType.PASSWORD
+            || authConfig.getGrantType() == Oauth2GrantType.CLIENT_CREDENTIALS;
 
         // If it is not a callback request, it must be a request to jump to the authorization link
         // If it is a password authorization request or a client authorization request, the token will be obtained directly
@@ -152,7 +152,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
         }
         OAuthConfig authConfig = (OAuthConfig) config;
-        if (authConfig.getGrantType() != Oauth2GrantType.refresh_token) {
+        if (authConfig.getGrantType() != Oauth2GrantType.REFRESH_TOKEN) {
             return JapResponse.error(JapErrorCode.INVALID_GRANT_TYPE);
         }
         AccessToken accessToken = null;
@@ -233,8 +233,8 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         String url = null;
         // 4.1.  Authorization Code Grant https://tools.ietf.org/html/rfc6749#section-4.1
         // 4.2.  Implicit Grant https://tools.ietf.org/html/rfc6749#section-4.2
-        if (authConfig.getResponseType() == Oauth2ResponseType.code ||
-            authConfig.getResponseType() == Oauth2ResponseType.token) {
+        if (authConfig.getResponseType() == Oauth2ResponseType.CODE ||
+            authConfig.getResponseType() == Oauth2ResponseType.TOKEN) {
             url = generateAuthorizationCodeGrantUrl(authConfig);
         }
         return url;
@@ -267,7 +267,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
         params.put("state", authConfig.getState());
         JapAuthentication.getContext().getCache().set(Oauth2Const.STATE_CACHE_KEY.concat(authConfig.getClientId()), state);
         // Pkce is only applicable to authorization code mode
-        if (Oauth2ResponseType.code == authConfig.getResponseType() && authConfig.isEnablePkce()) {
+        if (Oauth2ResponseType.CODE == authConfig.getResponseType() && authConfig.isEnablePkce()) {
             params.putAll(PkceHelper.generatePkceParameters(authConfig));
         }
         String query = URLUtil.buildQuery(params, StandardCharsets.UTF_8);

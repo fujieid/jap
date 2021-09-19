@@ -77,12 +77,12 @@ public class OAuthConfig extends AuthenticateConfig {
      * "token" for requesting an access token (implicit grant) as described by Section 4.2.1 (<a href="https://tools.ietf.org/html/rfc6749#section-4.2.1" target="_blank">https://tools.ietf.org/html/rfc6749#section-4.2.1</a>),
      * or a registered extension value as described by Section 8.4 (<a href="https://tools.ietf.org/html/rfc6749#section-8.4" target="_blank">https://tools.ietf.org/html/rfc6749#section-8.4</a>).
      */
-    private Oauth2ResponseType responseType = Oauth2ResponseType.none;
+    private Oauth2ResponseType responseType = Oauth2ResponseType.NONE;
 
     /**
-     * The optional value is: {@code authorization_code}, {@code password}, {@code client_credentials}
+     * The optional value is: {@code AUTHORIZATION_CODE}, {@code PASSWORD}, {@code CLIENT_CREDENTIALS}
      */
-    private Oauth2GrantType grantType = Oauth2GrantType.authorization_code;
+    private Oauth2GrantType grantType = Oauth2GrantType.AUTHORIZATION_CODE;
 
     /**
      * The scope supported by the OAuth platform

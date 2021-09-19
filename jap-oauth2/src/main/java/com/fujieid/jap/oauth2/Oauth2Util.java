@@ -132,11 +132,11 @@ public class Oauth2Util {
         // For authorization code mode and implicit authorization mode
         // refer to: https://tools.ietf.org/html/rfc6749#section-4.1
         // refer to: https://tools.ietf.org/html/rfc6749#section-4.2
-        if (oAuthConfig.getResponseType() == Oauth2ResponseType.code ||
-            oAuthConfig.getResponseType() == Oauth2ResponseType.token) {
+        if (oAuthConfig.getResponseType() == Oauth2ResponseType.CODE ||
+            oAuthConfig.getResponseType() == Oauth2ResponseType.TOKEN) {
 
-            if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {
-                if (oAuthConfig.getGrantType() != Oauth2GrantType.authorization_code) {
+            if (oAuthConfig.getResponseType() == Oauth2ResponseType.CODE) {
+                if (oAuthConfig.getGrantType() != Oauth2GrantType.AUTHORIZATION_CODE) {
                     throw new JapOauth2Exception("Invalid grantType `" + oAuthConfig.getGrantType() + "`. " +
                         "When using authorization code mode, grantType must be `authorization_code`");
                 }
@@ -165,11 +165,11 @@ public class Oauth2Util {
         // For password mode
         // refer to: https://tools.ietf.org/html/rfc6749#section-4.3
         else {
-            if (oAuthConfig.getGrantType() != Oauth2GrantType.password && oAuthConfig.getGrantType() != Oauth2GrantType.client_credentials) {
+            if (oAuthConfig.getGrantType() != Oauth2GrantType.PASSWORD && oAuthConfig.getGrantType() != Oauth2GrantType.CLIENT_CREDENTIALS) {
                 throw new JapOauth2Exception("When the response type is none in the oauth2 strategy, a grant type other " +
                     "than the authorization code must be used: " + oAuthConfig.getGrantType());
             }
-            if (oAuthConfig.getGrantType() == Oauth2GrantType.password) {
+            if (oAuthConfig.getGrantType() == Oauth2GrantType.PASSWORD) {
                 if (!StrUtil.isAllNotEmpty(oAuthConfig.getUsername(), oAuthConfig.getPassword())) {
                     throw new JapOauth2Exception("Oauth2Strategy requires username and password in password certificate grant");
                 }
@@ -188,10 +188,10 @@ public class Oauth2Util {
      * @return When true is returned, the current HTTP request is a callback request
      */
     public static boolean isCallback(JapHttpRequest request, OAuthConfig oAuthConfig) {
-        if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {
+        if (oAuthConfig.getResponseType() == Oauth2ResponseType.CODE) {
             String code = request.getParameter("code");
             return !StrUtil.isEmpty(code);
-        } else if (oAuthConfig.getResponseType() == Oauth2ResponseType.token) {
+        } else if (oAuthConfig.getResponseType() == Oauth2ResponseType.TOKEN) {
             String accessToken = request.getParameter("access_token");
             return !StrUtil.isEmpty(accessToken);
         }

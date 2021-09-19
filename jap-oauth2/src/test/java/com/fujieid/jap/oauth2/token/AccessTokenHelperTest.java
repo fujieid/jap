@@ -21,7 +21,7 @@ import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.http.JapHttpRequest;
-import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
 import com.fujieid.jap.oauth2.OAuthConfig;
 import com.fujieid.jap.oauth2.Oauth2GrantType;
 import com.fujieid.jap.oauth2.Oauth2ResponseType;
@@ -42,9 +42,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class AccessTokenHelperTest {
 
+    public JapHttpRequest request;
     @Mock
     private HttpServletRequest httpServletRequestMock;
-    public JapHttpRequest request;
 
     @Before
     public void init() {
@@ -65,7 +65,7 @@ public class AccessTokenHelperTest {
     @Test
     public void getTokenCodeResponseType() {
         Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
-            .setResponseType(Oauth2ResponseType.code)));
+            .setResponseType(Oauth2ResponseType.CODE)));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class AccessTokenHelperTest {
         // Http url must be not blank!
         Assert.assertThrows(IllegalArgumentException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setVerifyState(false)
-            .setResponseType(Oauth2ResponseType.code)));
+            .setResponseType(Oauth2ResponseType.CODE)));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class AccessTokenHelperTest {
         JapAuthentication.getContext().setCache(null);
         Assert.assertThrows(NullPointerException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setVerifyState(false)
-            .setResponseType(Oauth2ResponseType.code)
+            .setResponseType(Oauth2ResponseType.CODE)
             .setEnablePkce(true)
             .setCallbackUrl("setCallbackUrl")
             .setTokenUrl("setTokenUrl")));
@@ -95,7 +95,7 @@ public class AccessTokenHelperTest {
         JapAuthentication.getContext().setCache(new JapLocalCache());
         Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setVerifyState(false)
-            .setResponseType(Oauth2ResponseType.code)
+            .setResponseType(Oauth2ResponseType.CODE)
             .setEnablePkce(true)
             .setCallbackUrl("setCallbackUrl")
             .setTokenUrl("setTokenUrl")));
@@ -105,14 +105,14 @@ public class AccessTokenHelperTest {
     public void getTokenTokenResponseType() {
         // Oauth2Strategy failed to get AccessToken.
         Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
-            .setResponseType(Oauth2ResponseType.token)));
+            .setResponseType(Oauth2ResponseType.TOKEN)));
     }
 
     @Test
     public void getTokenPasswordGrantTypeNullTokenUrl() {
         // Http url must be not blank!
         Assert.assertThrows(IllegalArgumentException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
-            .setGrantType(Oauth2GrantType.password)
+            .setGrantType(Oauth2GrantType.PASSWORD)
             .setScopes(new String[]{"read"})));
     }
 
@@ -120,7 +120,7 @@ public class AccessTokenHelperTest {
     public void getTokenPasswordGrantTypeErrorTokenUrl() {
         // UnknownHostException: setTokenUrl
         Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
-            .setGrantType(Oauth2GrantType.password)
+            .setGrantType(Oauth2GrantType.PASSWORD)
             .setScopes(new String[]{"read"})
             .setTokenUrl("setTokenUrl")));
     }
@@ -129,7 +129,7 @@ public class AccessTokenHelperTest {
     public void getTokenClientCredentialsGrantTypeErrorTokenUrl() {
         // UnknownHostException: setTokenUrl
         Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
-            .setGrantType(Oauth2GrantType.client_credentials)
+            .setGrantType(Oauth2GrantType.CLIENT_CREDENTIALS)
             .setScopes(new String[]{"read"})
             .setTokenUrl("setTokenUrl")));
     }

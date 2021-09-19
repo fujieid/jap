@@ -23,8 +23,8 @@ import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.http.JapHttpResponse;
-import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
-import com.fujieid.jap.http.adapter.jakarta.JakartaResponseAdapter;
+import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.jakarta.JakartaResponseAdapter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -127,7 +127,7 @@ public class Oauth2StrategyTest {
         // Redirect to authorization url
         oauth2Strategy.authenticate(new OAuthConfig()
             .setTokenUrl("TokenUrl")
-            .setResponseType(Oauth2ResponseType.token)
+            .setResponseType(Oauth2ResponseType.TOKEN)
             .setClientSecret("ClientSecret")
             .setClientId("ClientId")
             .setAuthorizationUrl("AuthorizationUrl")
