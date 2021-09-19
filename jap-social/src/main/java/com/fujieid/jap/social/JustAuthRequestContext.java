@@ -63,8 +63,8 @@ public class JustAuthRequestContext {
     /**
      * Default classes that do not need to be registered
      */
-    private static final String[] DEFAULT_EXCLUSION_CLASS_NAMES = {"AuthDefaultRequest",
-            "AbstractAuthWeChatEnterpriseRequest", "AuthRequest"};
+    private static final String[] DEFAULT_EXCLUSION_CLASS_NAMES = {"AuthRequest", "AuthDefaultRequest",
+            "AbstractAuthWeChatEnterpriseRequest", "AbstractAuthMicrosoftRequest", "AbstractAuthDingtalkRequest"};
 
     /**
      * When the value is {@code true}, the {@link JustAuthRequestContext#loadRequest(String[], String[])}

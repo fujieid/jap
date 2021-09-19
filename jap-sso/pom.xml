@@ -17,26 +17,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.fujieid</groupId>
-      <artifactId>jap-http-adapter</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>com.baomidou</groupId>
       <artifactId>kisso</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fujieid</groupId>
-      <artifactId>jap-http</artifactId>
-    </dependency>
-
-    <!-- servlet -->
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 
