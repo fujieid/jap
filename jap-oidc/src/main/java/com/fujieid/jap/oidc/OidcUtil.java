@@ -46,7 +46,7 @@ public class OidcUtil {
 
         SimpleHttpResponse response = null;
         try {
-            response = HttpUtil.get(discoveryUrl);
+            response = HttpUtil.get(discoveryUrl).getBody();
         } catch (Exception e) {
             throw new OidcException("Cannot access discovery url: " + discoveryUrl);
         }

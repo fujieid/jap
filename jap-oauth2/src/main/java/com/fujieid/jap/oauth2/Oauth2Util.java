@@ -215,9 +215,9 @@ public class Oauth2Util {
 
         SimpleHttpResponse res = null;
         if (null == endpointMethodType || Oauth2EndpointMethodType.GET == endpointMethodType) {
-            res = HttpUtil.get(url, params, false);
+            res = HttpUtil.get(url, params, false).getBody();
         } else {
-            res = HttpUtil.post(url, params, false);
+            res = HttpUtil.post(url, params, false).getBody();
         }
         return JsonUtil.parseKv(res.getBody());
     }
