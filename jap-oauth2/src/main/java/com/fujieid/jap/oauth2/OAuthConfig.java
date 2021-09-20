@@ -111,6 +111,11 @@ public class OAuthConfig extends AuthenticateConfig {
     private PkceCodeChallengeMethod codeChallengeMethod = PkceCodeChallengeMethod.S256;
 
     /**
+     * In pkce mode, the expiration time of codeverifier, in milliseconds, default is 3 minutes
+     */
+    private long codeVerifierTimeout = 180000;
+
+    /**
      * The username in `Resource Owner Password Credentials Grant`
      *
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">https://tools.ietf.org/html/rfc6749#section-4.3</a>
@@ -123,11 +128,6 @@ public class OAuthConfig extends AuthenticateConfig {
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">https://tools.ietf.org/html/rfc6749#section-4.3</a>
      */
     private String password;
-
-    /**
-     * In pkce mode, the expiration time of codeverifier, in milliseconds, default is 3 minutes
-     */
-    private long codeVerifierTimeout = 180000;
 
     /**
      * When {@code verifyState} is true, it will check whether the state in authorization request is consistent with that in callback request
