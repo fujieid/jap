@@ -22,6 +22,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
+import com.fujieid.jap.core.exception.OidcException;
 import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import com.xkcoding.http.HttpUtil;
@@ -215,9 +216,17 @@ public class Oauth2Util {
 
         SimpleHttpResponse res = null;
         if (null == endpointMethodType || Oauth2EndpointMethodType.GET == endpointMethodType) {
-            res = HttpUtil.get(url, params, false).getBody();
+            res = HttpUtil.get(url, params, false);
         } else {
-            res = HttpUtil.post(url, params, false).getBody();
+            res = HttpUtil.post(url, params, false);
+        }
+
+        if (!res.isSuccess()) {
+            throw new OidcException("Cannot access url: " + url
+                + " , method: " + endpointMethodType
+                + " , params: " + params
+                + " , error details: " + res.getError()
+            );
         }
         return JsonUtil.parseKv(res.getBody());
     }

@@ -44,12 +44,11 @@ public class OidcUtil {
         }
         String discoveryUrl = issuer.concat(DISCOVERY_URL);
 
-        SimpleHttpResponse response = null;
-        try {
-            response = HttpUtil.get(discoveryUrl).getBody();
-        } catch (Exception e) {
-            throw new OidcException("Cannot access discovery url: " + discoveryUrl);
+        SimpleHttpResponse response = HttpUtil.get(discoveryUrl);
+        if(!response.isSuccess()) {
+            throw new OidcException("Cannot access discovery url: " + discoveryUrl + ", " + response.getError());
         }
+
         Kv oidcDiscoveryInfo = JsonUtil.parseKv(response.getBody());
         if (CollectionUtil.isEmpty(oidcDiscoveryInfo)) {
             throw new OidcException("Unable to parse IDP service discovery configuration information.");
