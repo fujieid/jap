@@ -19,10 +19,10 @@ import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.sso.util.QrCodeUtil;
 import com.warrenstrange.googleauth.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -122,7 +122,7 @@ public class JapMfa {
      * @param issuer   The issuer name. This parameter cannot contain the colon (:) character.
      * @param response HttpServletResponse
      */
-    public void createOtpQrcode(String username, String issuer, HttpServletResponse response) {
+    public void createOtpQrcode(String username, String issuer, JapHttpResponse response) {
         try {
             QrCodeUtil.generate(getTotpUrl(username, issuer),
                 mfaConfig.getQrcodeWidth(), mfaConfig.getQrcodeHeight(),

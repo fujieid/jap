@@ -20,6 +20,9 @@ import com.fujieid.jap.core.cache.JapLocalCache;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
+import com.fujieid.jap.core.exception.OidcException;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
 import com.fujieid.jap.oauth2.OAuthConfig;
 import com.fujieid.jap.oauth2.Oauth2GrantType;
 import com.fujieid.jap.oauth2.Oauth2ResponseType;
@@ -40,45 +43,47 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class AccessTokenHelperTest {
 
+    public JapHttpRequest request;
     @Mock
     private HttpServletRequest httpServletRequestMock;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+        this.request = new JakartaRequestAdapter(httpServletRequestMock);
     }
 
     @Test
     public void getTokenNullOAuthConfig() {
-        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, null));
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, null));
     }
 
     @Test
     public void getTokenEmptyOAuthConfig() {
-        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()));
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()));
     }
 
     @Test
     public void getTokenCodeResponseType() {
-        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
-            .setResponseType(Oauth2ResponseType.code)));
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
+            .setResponseType(Oauth2ResponseType.CODE)));
     }
 
     @Test
     public void getTokenCodeResponseTypeDoNotCheckState() {
         // Http url must be not blank!
-        Assert.assertThrows(IllegalArgumentException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(IllegalArgumentException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setVerifyState(false)
-            .setResponseType(Oauth2ResponseType.code)));
+            .setResponseType(Oauth2ResponseType.CODE)));
     }
 
     @Test
     public void getTokenCodeResponseTypeNullCache() {
         JapAuthentication.setContext(new JapContext());
         JapAuthentication.getContext().setCache(null);
-        Assert.assertThrows(NullPointerException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(NullPointerException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setVerifyState(false)
-            .setResponseType(Oauth2ResponseType.code)
+            .setResponseType(Oauth2ResponseType.CODE)
             .setEnablePkce(true)
             .setCallbackUrl("setCallbackUrl")
             .setTokenUrl("setTokenUrl")));
@@ -89,9 +94,9 @@ public class AccessTokenHelperTest {
         // UnknownHostException: setTokenUrl
         JapAuthentication.setContext(new JapContext());
         JapAuthentication.getContext().setCache(new JapLocalCache());
-        Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setVerifyState(false)
-            .setResponseType(Oauth2ResponseType.code)
+            .setResponseType(Oauth2ResponseType.CODE)
             .setEnablePkce(true)
             .setCallbackUrl("setCallbackUrl")
             .setTokenUrl("setTokenUrl")));
@@ -100,23 +105,23 @@ public class AccessTokenHelperTest {
     @Test
     public void getTokenTokenResponseType() {
         // Oauth2Strategy failed to get AccessToken.
-        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
-            .setResponseType(Oauth2ResponseType.token)));
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
+            .setResponseType(Oauth2ResponseType.TOKEN)));
     }
 
     @Test
     public void getTokenPasswordGrantTypeNullTokenUrl() {
         // Http url must be not blank!
-        Assert.assertThrows(IllegalArgumentException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
-            .setGrantType(Oauth2GrantType.password)
+        Assert.assertThrows(IllegalArgumentException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
+            .setGrantType(Oauth2GrantType.PASSWORD)
             .setScopes(new String[]{"read"})));
     }
 
     @Test
     public void getTokenPasswordGrantTypeErrorTokenUrl() {
         // UnknownHostException: setTokenUrl
-        Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
-            .setGrantType(Oauth2GrantType.password)
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
+            .setGrantType(Oauth2GrantType.PASSWORD)
             .setScopes(new String[]{"read"})
             .setTokenUrl("setTokenUrl")));
     }
@@ -124,8 +129,8 @@ public class AccessTokenHelperTest {
     @Test
     public void getTokenClientCredentialsGrantTypeErrorTokenUrl() {
         // UnknownHostException: setTokenUrl
-        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(httpServletRequestMock, new OAuthConfig()
-            .setGrantType(Oauth2GrantType.client_credentials)
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
+            .setGrantType(Oauth2GrantType.CLIENT_CREDENTIALS)
             .setScopes(new String[]{"read"})
             .setTokenUrl("setTokenUrl")));
     }

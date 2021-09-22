@@ -25,17 +25,17 @@ public enum Oauth2GrantType {
     /**
      * Authorization Code Grant
      */
-    authorization_code,
+    AUTHORIZATION_CODE,
     /**
      * Resource Owner Password Credentials Grant
      */
-    password,
+    PASSWORD,
     /**
      * Client Credentials Grant
      */
-    client_credentials,
+    CLIENT_CREDENTIALS,
     /**
      * Refreshing an Access Token
      */
-    refresh_token
+    REFRESH_TOKEN
 }

@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fujieid.jap.ids.filter;
+package com.fujieid.jap.web.filter;
 
-import cn.hutool.log.Log;
-import cn.hutool.log.LogFactory;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.pipeline.IdsPipeline;
 import com.xkcoding.json.util.StringUtil;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +35,6 @@ import java.util.List;
  * @since 1.0.0
  */
 public class AbstractIdsFilter {
-    protected static final Log log = LogFactory.get();
     protected final List<String> ignoreUrls = new ArrayList<>();
 
     /**
@@ -111,8 +108,8 @@ public class AbstractIdsFilter {
         if (null == idsFilterErrorPipeline) {
             idsFilterErrorPipeline = new IdsPipeline<Object>() {
                 @Override
-                public void errorHandle(ServletRequest servletRequest, ServletResponse servletResponse, Throwable throwable) {
-                    IdsPipeline.super.errorHandle(servletRequest, servletResponse, throwable);
+                public void errorHandle(JapHttpRequest request, JapHttpResponse response, Throwable throwable) {
+                    IdsPipeline.super.errorHandle(request, response, throwable);
                 }
             };
         }

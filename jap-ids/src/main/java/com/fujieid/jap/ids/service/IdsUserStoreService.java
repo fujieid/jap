@@ -15,9 +15,8 @@
  */
 package com.fujieid.jap.ids.service;
 
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.ids.model.UserInfo;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * When the user logs in, store and operate the user's login information
@@ -29,14 +28,14 @@ import javax.servlet.http.HttpServletRequest;
 public interface IdsUserStoreService {
 
     /**
-     * Save user data, and store user information in {@link javax.servlet.http.HttpSession} by default.
+     * Save user data, and store user information in {@link com.fujieid.jap.http.JapHttpSession} by default.
      * <p>
      * Developers can implement this method to save user information in other media, such as cache, database, etc.
      *
      * @param userInfo User information after login
      * @param request  current HTTP request
      */
-    void save(UserInfo userInfo, HttpServletRequest request);
+    void save(UserInfo userInfo, JapHttpRequest request);
 
     /**
      * Get logged-in user information
@@ -44,12 +43,12 @@ public interface IdsUserStoreService {
      * @param request current HTTP request
      * @return UserInfo
      */
-    UserInfo get(HttpServletRequest request);
+    UserInfo get(JapHttpRequest request);
 
     /**
      * Delete logged-in user information
      *
      * @param request current HTTP request
      */
-    void remove(HttpServletRequest request);
+    void remove(JapHttpRequest request);
 }

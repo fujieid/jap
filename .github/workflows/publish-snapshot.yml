@@ -7,8 +7,14 @@ on:
   workflow_dispatch:
   push:
     branches: [ dev ]
+    paths:
+      - src/**
+      - pom.xml
   pull_request:
     branches: [ dev ]
+    paths:
+      - src/**
+      - pom.xml
 
 jobs:
   publish:
@@ -30,7 +36,22 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
 
-      - name: Publish to the Maven Central Repository
+      - name: Cache m2 package
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: get current project version to set env.VERSION
+        run: echo "VERSION=`mvn help:evaluate -Dexpression=project.version -q -DforceStdout`" >> $GITHUB_ENV
+
+      - name: set snapshot version
+        if: ${{ !endsWith( env.VERSION , '-SNAPSHOT') }}
+        run: mvn versions:set -DnewVersion=${{ env.VERSION }}-SNAPSHOT
+
+      - name: deploy snapshot to oss repository
         run: mvn clean deploy -P release
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}

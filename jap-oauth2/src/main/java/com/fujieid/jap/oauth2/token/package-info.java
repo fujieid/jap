@@ -16,7 +16,7 @@
 /**
  * To provide processing methods for business in OAuth authorization process, the usage is as follows:
  * <p>
- * {@link com.fujieid.jap.oauth2.token.AccessTokenHelper#getToken(HttpServletRequest, OAuthConfig, Object[])}
+ * {@link com.fujieid.jap.oauth2.token.AccessTokenHelper#getToken(com.fujieid.jap.http.JapHttpRequest, OAuthConfig, Object[])}
  * According to the parameters in {@link com.fujieid.jap.oauth2.OAuthConfig}, determine which authorization mode token data to obtain
  * <p>
  * For OAuth's grant type, the following private methods are provided:
@@ -36,6 +36,5 @@
  */
 package com.fujieid.jap.oauth2.token;
 
-import com.fujieid.jap.oauth2.OAuthConfig;
 
-import javax.servlet.http.HttpServletRequest;
+import com.fujieid.jap.oauth2.OAuthConfig;

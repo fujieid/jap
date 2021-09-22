@@ -78,7 +78,13 @@ public class OauthUtil {
     public static Set<String> validateScope(String requestScopes, String clientScopes) {
 
         if (StringUtil.isEmpty(requestScopes)) {
-            throw new InvalidScopeException(ErrorResponse.INVALID_SCOPE);
+            // OPTIONAL.  The scope of the access request.
+            // https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.1
+            // https://datatracker.ietf.org/doc/html/rfc6749#section-4.2.1
+            // https://datatracker.ietf.org/doc/html/rfc6749#section-4.3.2
+            // https://datatracker.ietf.org/doc/html/rfc6749#section-4.4.2
+            // https://datatracker.ietf.org/doc/html/rfc6749#section-6
+            return new HashSet<>();
         }
         Set<String> scopes = OauthUtil.convertStrToList(requestScopes);
 

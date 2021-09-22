@@ -22,6 +22,10 @@ import com.fujieid.jap.core.cache.JapLocalCache;
 import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.store.JapUserStore;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
+import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.jakarta.JakartaResponseAdapter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,9 +43,14 @@ public class JapAuthenticationTest {
     @Mock
     public HttpServletResponse httpServletResponseMock;
 
+    public JapHttpRequest request;
+    public JapHttpResponse response;
+
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+        this.request = new JakartaRequestAdapter(httpServletRequestMock);
+        this.response = new JakartaResponseAdapter(httpServletResponseMock);
     }
 
     @Test
@@ -71,7 +80,7 @@ public class JapAuthenticationTest {
         JapContext japContext = new JapContext(japUserStore, japCache, japConfig);
         JapAuthentication.setContext(japContext);
 
-        JapUser japUser = JapAuthentication.getContext().getUserStore().get(httpServletRequestMock, httpServletResponseMock);
+        JapUser japUser = JapAuthentication.getContext().getUserStore().get(request, response);
         Assert.assertNull(japUser);
     }
 
@@ -83,8 +92,8 @@ public class JapAuthenticationTest {
         JapContext japContext = new JapContext(japUserStore, japCache, japConfig);
         JapAuthentication.setContext(japContext);
 
-        JapAuthentication.getContext().getUserStore().save(httpServletRequestMock, httpServletResponseMock, new JapUser());
-        JapUser japUser = JapAuthentication.getContext().getUserStore().get(httpServletRequestMock, httpServletResponseMock);
+        JapAuthentication.getContext().getUserStore().save(request, response, new JapUser());
+        JapUser japUser = JapAuthentication.getContext().getUserStore().get(request, response);
         Assert.assertNotNull(japUser);
     }
 
@@ -96,7 +105,7 @@ public class JapAuthenticationTest {
         JapContext japContext = new JapContext(japUserStore, japCache, japConfig);
         JapAuthentication.setContext(japContext);
 
-        JapUser japUser = JapAuthentication.getUser(httpServletRequestMock, httpServletResponseMock);
+        JapUser japUser = JapAuthentication.getUser(request, response);
         Assert.assertNull(japUser);
     }
 
@@ -108,8 +117,8 @@ public class JapAuthenticationTest {
         JapContext japContext = new JapContext(japUserStore, japCache, japConfig);
         JapAuthentication.setContext(japContext);
 
-        JapResponse response = JapAuthentication.checkUser(httpServletRequestMock, httpServletResponseMock);
-        Assert.assertEquals(response.getCode(), 401);
+        JapResponse japResponse = JapAuthentication.checkUser(request, response);
+        Assert.assertEquals(japResponse.getCode(), 401);
     }
 
     @Test
@@ -120,9 +129,9 @@ public class JapAuthenticationTest {
         JapContext japContext = new JapContext(japUserStore, japCache, japConfig);
         JapAuthentication.setContext(japContext);
 
-        JapAuthentication.getContext().getUserStore().save(httpServletRequestMock, httpServletResponseMock, new JapUser());
-        JapResponse response = JapAuthentication.checkUser(httpServletRequestMock, httpServletResponseMock);
-        Assert.assertEquals(response.getCode(), 200);
+        JapAuthentication.getContext().getUserStore().save(request, response, new JapUser());
+        JapResponse japResponse = JapAuthentication.checkUser(request, response);
+        Assert.assertEquals(japResponse.getCode(), 200);
     }
 
     @Test
@@ -195,7 +204,7 @@ public class JapAuthenticationTest {
         JapContext japContext = new JapContext(japUserStore, japCache, japConfig);
         JapAuthentication.setContext(japContext);
 
-        boolean result = JapAuthentication.logout(httpServletRequestMock, httpServletResponseMock);
+        boolean result = JapAuthentication.logout(request, response);
         Assert.assertTrue(result);
     }
 
@@ -207,7 +216,7 @@ public class JapAuthenticationTest {
         JapContext japContext = new JapContext(japUserStore, japCache, japConfig);
         JapAuthentication.setContext(japContext);
 
-        boolean result = JapAuthentication.logout(httpServletRequestMock, httpServletResponseMock);
+        boolean result = JapAuthentication.logout(request, response);
         Assert.assertFalse(result);
     }
 
@@ -224,7 +233,7 @@ public class JapAuthenticationTest {
          * @return JapUser
          */
         @Override
-        public JapUser save(HttpServletRequest request, HttpServletResponse response, JapUser japUser) {
+        public JapUser save(JapHttpRequest request, JapHttpResponse response, JapUser japUser) {
             STORE.put(USER_KEY, japUser);
             return japUser;
         }
@@ -236,7 +245,7 @@ public class JapAuthenticationTest {
          * @param response current HTTP response
          */
         @Override
-        public void remove(HttpServletRequest request, HttpServletResponse response) {
+        public void remove(JapHttpRequest request, JapHttpResponse response) {
             STORE.remove(USER_KEY);
         }
 
@@ -249,7 +258,7 @@ public class JapAuthenticationTest {
          * @return JapUser
          */
         @Override
-        public JapUser get(HttpServletRequest request, HttpServletResponse response) {
+        public JapUser get(JapHttpRequest request, JapHttpResponse response) {
             return (JapUser) STORE.get(USER_KEY);
         }
     }

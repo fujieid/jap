@@ -15,15 +15,14 @@
  */
 package com.fujieid.jap.ids.endpoint;
 
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.IdsResponse;
 import com.fujieid.jap.ids.model.UserInfo;
 import com.fujieid.jap.ids.pipeline.IdsPipeline;
 import com.fujieid.jap.ids.util.EndpointUtil;
-
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Logout Endpoint
@@ -34,7 +33,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class LogoutEndpoint extends AbstractEndpoint {
 
-    public IdsResponse<String, String> logout(HttpServletRequest request, ServletResponse response) {
+    public IdsResponse<String, String> logout(JapHttpRequest request, JapHttpResponse response) {
         IdsPipeline<UserInfo> logoutPipeline = JapIds.getContext().getLogoutPipeline();
         logoutPipeline = this.getUserInfoIdsPipeline(logoutPipeline);
         if (!logoutPipeline.preHandle(request, response)) {

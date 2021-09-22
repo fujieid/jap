@@ -22,12 +22,14 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
+import com.fujieid.jap.core.exception.OidcException;
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import com.xkcoding.http.HttpUtil;
+import com.xkcoding.http.support.SimpleHttpResponse;
 import com.xkcoding.json.JsonUtil;
 import com.xkcoding.json.util.Kv;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
@@ -82,7 +84,7 @@ public class Oauth2Util {
         }
         if (responseKv.containsKey("error") && ObjectUtil.isNotEmpty(responseKv.get("error"))) {
             throw new JapOauth2Exception(Optional.ofNullable(errorMsg).orElse("") +
-                responseKv.get("error_description") + " " + responseKv.toString());
+                responseKv.get("error_description") + " " + responseKv);
         }
     }
 
@@ -131,11 +133,11 @@ public class Oauth2Util {
         // For authorization code mode and implicit authorization mode
         // refer to: https://tools.ietf.org/html/rfc6749#section-4.1
         // refer to: https://tools.ietf.org/html/rfc6749#section-4.2
-        if (oAuthConfig.getResponseType() == Oauth2ResponseType.code ||
-            oAuthConfig.getResponseType() == Oauth2ResponseType.token) {
+        if (oAuthConfig.getResponseType() == Oauth2ResponseType.CODE ||
+            oAuthConfig.getResponseType() == Oauth2ResponseType.TOKEN) {
 
-            if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {
-                if (oAuthConfig.getGrantType() != Oauth2GrantType.authorization_code) {
+            if (oAuthConfig.getResponseType() == Oauth2ResponseType.CODE) {
+                if (oAuthConfig.getGrantType() != Oauth2GrantType.AUTHORIZATION_CODE) {
                     throw new JapOauth2Exception("Invalid grantType `" + oAuthConfig.getGrantType() + "`. " +
                         "When using authorization code mode, grantType must be `authorization_code`");
                 }
@@ -164,11 +166,11 @@ public class Oauth2Util {
         // For password mode
         // refer to: https://tools.ietf.org/html/rfc6749#section-4.3
         else {
-            if (oAuthConfig.getGrantType() != Oauth2GrantType.password && oAuthConfig.getGrantType() != Oauth2GrantType.client_credentials) {
+            if (oAuthConfig.getGrantType() != Oauth2GrantType.PASSWORD && oAuthConfig.getGrantType() != Oauth2GrantType.CLIENT_CREDENTIALS) {
                 throw new JapOauth2Exception("When the response type is none in the oauth2 strategy, a grant type other " +
                     "than the authorization code must be used: " + oAuthConfig.getGrantType());
             }
-            if (oAuthConfig.getGrantType() == Oauth2GrantType.password) {
+            if (oAuthConfig.getGrantType() == Oauth2GrantType.PASSWORD) {
                 if (!StrUtil.isAllNotEmpty(oAuthConfig.getUsername(), oAuthConfig.getPassword())) {
                     throw new JapOauth2Exception("Oauth2Strategy requires username and password in password certificate grant");
                 }
@@ -186,11 +188,11 @@ public class Oauth2Util {
      * @param oAuthConfig OAuthConfig
      * @return When true is returned, the current HTTP request is a callback request
      */
-    public static boolean isCallback(HttpServletRequest request, OAuthConfig oAuthConfig) {
-        if (oAuthConfig.getResponseType() == Oauth2ResponseType.code) {
+    public static boolean isCallback(JapHttpRequest request, OAuthConfig oAuthConfig) {
+        if (oAuthConfig.getResponseType() == Oauth2ResponseType.CODE) {
             String code = request.getParameter("code");
             return !StrUtil.isEmpty(code);
-        } else if (oAuthConfig.getResponseType() == Oauth2ResponseType.token) {
+        } else if (oAuthConfig.getResponseType() == Oauth2ResponseType.TOKEN) {
             String accessToken = request.getParameter("access_token");
             return !StrUtil.isEmpty(accessToken);
         }
@@ -212,12 +214,20 @@ public class Oauth2Util {
      */
     public static Kv request(Oauth2EndpointMethodType endpointMethodType, String url, Map<String, String> params) {
 
-        String res = null;
+        SimpleHttpResponse res = null;
         if (null == endpointMethodType || Oauth2EndpointMethodType.GET == endpointMethodType) {
             res = HttpUtil.get(url, params, false);
         } else {
             res = HttpUtil.post(url, params, false);
         }
-        return JsonUtil.parseKv(res);
+
+        if (!res.isSuccess()) {
+            throw new JapOauth2Exception("Cannot access url: " + url
+                + " , method: " + endpointMethodType
+                + " , params: " + params
+                + " , error details: " + res.getError()
+            );
+        }
+        return JsonUtil.parseKv(res.getBody());
     }
 }

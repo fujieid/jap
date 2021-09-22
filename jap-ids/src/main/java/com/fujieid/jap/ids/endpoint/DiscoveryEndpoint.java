@@ -15,10 +15,9 @@
  */
 package com.fujieid.jap.ids.endpoint;
 
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.ids.model.OidcDiscoveryDto;
 import com.fujieid.jap.ids.oidc.OidcUtil;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * OpenID Provider Endpoint
@@ -46,7 +45,7 @@ public class DiscoveryEndpoint extends AbstractEndpoint {
      * @see <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata" target="_blank">OpenID Provider Metadata</a>
      * @see <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfigurationRequest">OpenID Provider Configuration Response</a>
      */
-    public OidcDiscoveryDto getOidcDiscoveryInfo(HttpServletRequest request) {
+    public OidcDiscoveryDto getOidcDiscoveryInfo(JapHttpRequest request) {
         return OidcUtil.getOidcDiscoveryInfo(request);
     }
 

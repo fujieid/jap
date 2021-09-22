@@ -36,7 +36,7 @@ public class JapMfaConfig {
      */
     private long period = 30000;
     /**
-     * the crypto algorithm (HmacSHA1, HmacSHA256, HmacSHA512)
+     * the crypto algorithm (HMACSHA1, HMACSHA256, HMACSHA512)
      */
     private JapMfaAlgorithm algorithm = JapMfaAlgorithm.HmacSHA1;
 

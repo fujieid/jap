@@ -21,6 +21,10 @@ import com.fujieid.jap.core.cache.JapCache;
 import com.fujieid.jap.core.config.AuthenticateConfig;
 import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.result.JapResponse;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
+import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.jakarta.JakartaResponseAdapter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +48,8 @@ import static org.mockito.Mockito.when;
  */
 public class Oauth2StrategyTest {
 
+    public JapHttpRequest request;
+    public JapHttpResponse response;
     @Mock
     private HttpServletRequest httpServletRequestMock;
     @Mock
@@ -56,6 +62,8 @@ public class Oauth2StrategyTest {
         MockitoAnnotations.initMocks(this);
         // Arrange
         when(httpServletRequestMock.getSession()).thenReturn(httpsSessionMock);
+        this.request = new JakartaRequestAdapter(httpServletRequestMock);
+        this.response = new JakartaResponseAdapter(httpServletResponseMock);
     }
 
     @Test
@@ -99,7 +107,7 @@ public class Oauth2StrategyTest {
         JapUserService japUserService = getJapUserService();
         Oauth2Strategy oauth2Strategy = new Oauth2Strategy(japUserService, new JapConfig());
 
-        JapResponse response = oauth2Strategy.authenticate(null, httpServletRequestMock, httpServletResponseMock);
+        JapResponse response = oauth2Strategy.authenticate(null, this.request, this.response);
         Assert.assertEquals(1005, response.getCode());
     }
 
@@ -108,7 +116,7 @@ public class Oauth2StrategyTest {
         JapUserService japUserService = getJapUserService();
         Oauth2Strategy oauth2Strategy = new Oauth2Strategy(japUserService, new JapConfig());
 
-        JapResponse response = oauth2Strategy.authenticate(new NotOAuthConfig(), httpServletRequestMock, httpServletResponseMock);
+        JapResponse response = oauth2Strategy.authenticate(new NotOAuthConfig(), this.request, this.response);
         Assert.assertEquals(500, response.getCode());
     }
 
@@ -119,11 +127,11 @@ public class Oauth2StrategyTest {
         // Redirect to authorization url
         oauth2Strategy.authenticate(new OAuthConfig()
             .setTokenUrl("TokenUrl")
-            .setResponseType(Oauth2ResponseType.token)
+            .setResponseType(Oauth2ResponseType.TOKEN)
             .setClientSecret("ClientSecret")
             .setClientId("ClientId")
             .setAuthorizationUrl("AuthorizationUrl")
-            .setUserinfoUrl("UserinfoUrl"), httpServletRequestMock, httpServletResponseMock);
+            .setUserinfoUrl("UserinfoUrl"), this.request, this.response);
     }
 
     private JapUserService getJapUserService() {

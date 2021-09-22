@@ -15,9 +15,10 @@
  */
 package com.fujieid.jap.sso;
 
+import com.baomidou.kisso.common.util.StringUtils;
 import com.baomidou.kisso.security.token.SSOToken;
-
-import javax.servlet.http.HttpServletRequest;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.RequestUtil;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -26,16 +27,16 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class JapSsoUtil {
 
-    public static SSOToken createSsoToken(Object userId, String username, HttpServletRequest request) {
+    public static SSOToken createSsoToken(Object userId, String username, JapHttpRequest request) {
         return new SSOToken()
             .setId(userId)
             .setIssuer(username)
-            .setIp(request)
-            .setUserAgent(request)
+            .setIp(getIp(request))
+            .setUserAgent(RequestUtil.getUa(request))
             .setTime(System.currentTimeMillis());
     }
 
-    public static String createToken(Object userId, String username, HttpServletRequest request) {
+    public static String createToken(Object userId, String username, JapHttpRequest request) {
         return createSsoToken(userId, username, request).getToken();
     }
 
@@ -45,5 +46,50 @@ public class JapSsoUtil {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static String getIp(JapHttpRequest request) {
+        if (null == request) {
+            return "";
+        }
+        String[] headers = {"X-Forwarded-For", "X-Real-IP", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR"};
+        String ip;
+        for (String header : headers) {
+            ip = request.getHeader(header);
+            if (isValidIp(ip)) {
+                return getMultistageReverseProxyIp(ip);
+            }
+        }
+        ip = request.getRemoteAddr();
+        return getMultistageReverseProxyIp(ip);
+    }
+
+    /**
+     * Obtain the first non-unknown ip address from the multi-level reverse proxy
+     *
+     * @param ip IP
+     * @return The first non-unknown ip address
+     */
+    private static String getMultistageReverseProxyIp(String ip) {
+        if (ip != null && ip.indexOf(",") > 0) {
+            final String[] ips = ip.trim().split(",");
+            for (String subIp : ips) {
+                if (isValidIp(subIp)) {
+                    ip = subIp;
+                    break;
+                }
+            }
+        }
+        return ip;
+    }
+
+    /**
+     * Verify ip legitimacy
+     *
+     * @param ip ip
+     * @return boolean
+     */
+    private static boolean isValidIp(String ip) {
+        return !StringUtils.isEmpty(ip) && !"unknown".equalsIgnoreCase(ip);
     }
 }

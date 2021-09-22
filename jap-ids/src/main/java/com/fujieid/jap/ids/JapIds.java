@@ -16,6 +16,7 @@
 package com.fujieid.jap.ids;
 
 import com.fujieid.jap.core.spi.JapServiceLoader;
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.context.IdsContext;
 import com.fujieid.jap.ids.exception.IdsException;
@@ -25,7 +26,6 @@ import com.fujieid.jap.ids.pipeline.IdsLogoutPipeline;
 import com.fujieid.jap.ids.pipeline.IdsSignInPipeline;
 import com.fujieid.jap.ids.service.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 /**
@@ -90,21 +90,21 @@ public class JapIds implements Serializable {
         return context;
     }
 
-    public static boolean isAuthenticated(HttpServletRequest request) {
+    public static boolean isAuthenticated(JapHttpRequest request) {
         return null != getUserInfo(request);
     }
 
-    public static void saveUserInfo(UserInfo userInfo, HttpServletRequest request) {
+    public static void saveUserInfo(UserInfo userInfo, JapHttpRequest request) {
         IdsContext context = getContext();
         context.getUserStoreService().save(userInfo, request);
     }
 
-    public static UserInfo getUserInfo(HttpServletRequest request) {
+    public static UserInfo getUserInfo(JapHttpRequest request) {
         IdsContext context = getContext();
         return context.getUserStoreService().get(request);
     }
 
-    public static void removeUserInfo(HttpServletRequest request) {
+    public static void removeUserInfo(JapHttpRequest request) {
         IdsContext context = getContext();
         context.getUserStoreService().remove(request);
     }

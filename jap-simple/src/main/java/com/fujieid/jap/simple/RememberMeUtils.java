@@ -22,8 +22,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.result.JapErrorCode;
+import com.fujieid.jap.http.JapHttpRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 
 import static com.fujieid.jap.core.JapConst.DEFAULT_DELIMITER;
@@ -48,7 +48,7 @@ public class RememberMeUtils {
      * @param simpleConfig simpleConfig
      * @return boolean
      */
-    public static boolean enableRememberMe(HttpServletRequest request, SimpleConfig simpleConfig) {
+    public static boolean enableRememberMe(JapHttpRequest request, SimpleConfig simpleConfig) {
         return BooleanUtil.toBoolean(request.getParameter(simpleConfig.getRememberMeField()));
     }
 

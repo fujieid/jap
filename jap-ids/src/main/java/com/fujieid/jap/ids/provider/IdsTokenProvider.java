@@ -17,6 +17,7 @@ package com.fujieid.jap.ids.provider;
 
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.model.*;
@@ -27,8 +28,6 @@ import com.fujieid.jap.ids.util.EndpointUtil;
 import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.TokenUtil;
 import com.xkcoding.json.util.StringUtil;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * The token endpoint creates a token, and returns different token information for different authorization types
@@ -54,7 +53,7 @@ public class IdsTokenProvider {
      * @return IdsResponse
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.1" target="_blank">4.1.  Authorization Code Grant</a>
      */
-    public IdsResponse<String, Object> generateAuthorizationCodeResponse(IdsRequestParam param, HttpServletRequest request) {
+    public IdsResponse<String, Object> generateAuthorizationCodeResponse(IdsRequestParam param, JapHttpRequest request) {
         AuthCode codeInfo = oauth2Service.validateAndGetAuthrizationCode(param.getGrantType(), param.getCode());
 
         String scope = codeInfo.getScope();
@@ -93,7 +92,7 @@ public class IdsTokenProvider {
      * @return IdsResponse
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.3" target="_blank">4.3.  Resource Owner Password Credentials Grant</a>
      */
-    public IdsResponse<String, Object> generatePasswordResponse(IdsRequestParam param, HttpServletRequest request) {
+    public IdsResponse<String, Object> generatePasswordResponse(IdsRequestParam param, JapHttpRequest request) {
         String username = param.getUsername();
         String password = param.getPassword();
         String clientId = param.getClientId();
@@ -135,7 +134,7 @@ public class IdsTokenProvider {
      * @return IdsResponse
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-4.4" target="_blank">4.4.  Client Credentials Grant</a>
      */
-    public IdsResponse<String, Object> generateClientCredentialsResponse(IdsRequestParam param, HttpServletRequest request) {
+    public IdsResponse<String, Object> generateClientCredentialsResponse(IdsRequestParam param, JapHttpRequest request) {
         String clientId = param.getClientId();
 
         ClientDetail clientDetail = JapIds.getContext().getClientDetailService().getByClientId(clientId);
@@ -170,7 +169,7 @@ public class IdsTokenProvider {
      * @return IdsResponse
      * @see <a href="https://tools.ietf.org/html/rfc6749#section-6" target="_blank">6.  Refreshing an Access Token</a>
      */
-    public IdsResponse<String, Object> generateRefreshTokenResponse(IdsRequestParam param, HttpServletRequest request) {
+    public IdsResponse<String, Object> generateRefreshTokenResponse(IdsRequestParam param, JapHttpRequest request) {
         TokenUtil.validateRefreshToken(param.getRefreshToken());
 
         AccessToken token = TokenUtil.getByRefreshToken(param.getRefreshToken());

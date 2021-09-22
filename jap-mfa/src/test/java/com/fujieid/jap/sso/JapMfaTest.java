@@ -46,8 +46,8 @@ public class JapMfaTest {
     private static void varifyCode(JapMfa japMfa) {
         String secretKey = japMfa.getSecretKey(username);
 
-        System.out.println("1. 你需要打开生成的文件（或者将 Base64 字符串直接粘贴到浏览器地址会回车）");
-        System.out.println("2. 然后使用 OTP 工具扫描二维码");
+        System.out.println("1. 点击上方打印的URL链接");
+        System.out.println("2. 然后使用 OTP 工具扫描二维码（如果无法识别，请保存到本地后打开本地文件重新进行识别）");
         System.out.println("3. 在控制台输入 code");
         Scanner scanner = new Scanner(System.in);
         Integer consoleInput = null;

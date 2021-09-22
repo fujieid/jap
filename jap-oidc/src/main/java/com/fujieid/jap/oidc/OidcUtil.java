@@ -19,6 +19,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fujieid.jap.core.exception.OidcException;
 import com.xkcoding.http.HttpUtil;
+import com.xkcoding.http.support.SimpleHttpResponse;
 import com.xkcoding.json.JsonUtil;
 import com.xkcoding.json.util.Kv;
 
@@ -43,13 +44,12 @@ public class OidcUtil {
         }
         String discoveryUrl = issuer.concat(DISCOVERY_URL);
 
-        String response = null;
-        try {
-            response = HttpUtil.get(discoveryUrl);
-        } catch (Exception e) {
-            throw new OidcException("Cannot access discovery url: " + discoveryUrl);
+        SimpleHttpResponse response = HttpUtil.get(discoveryUrl);
+        if(!response.isSuccess()) {
+            throw new OidcException("Cannot access discovery url: " + discoveryUrl + ", " + response.getError());
         }
-        Kv oidcDiscoveryInfo = JsonUtil.parseKv(response);
+
+        Kv oidcDiscoveryInfo = JsonUtil.parseKv(response.getBody());
         if (CollectionUtil.isEmpty(oidcDiscoveryInfo)) {
             throw new OidcException("Unable to parse IDP service discovery configuration information.");
         }

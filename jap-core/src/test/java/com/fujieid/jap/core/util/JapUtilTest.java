@@ -16,6 +16,8 @@
 package com.fujieid.jap.core.util;
 
 import com.fujieid.jap.core.JapUser;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,9 +32,12 @@ public class JapUtilTest {
     @Mock
     public HttpServletRequest httpServletRequestMock;
 
+    public JapHttpRequest request;
+
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+        this.request = new JakartaRequestAdapter(httpServletRequestMock);
     }
 
     @Test
@@ -41,7 +46,7 @@ public class JapUtilTest {
         when(httpServletRequestMock.getHeader("user-agent")).thenReturn("ua");
         String token = JapUtil.createToken(new JapUser()
             .setUserId("11111")
-            .setUsername("username"), httpServletRequestMock);
+            .setUsername("username"), request);
         Assert.assertNotNull(token);
     }
 }

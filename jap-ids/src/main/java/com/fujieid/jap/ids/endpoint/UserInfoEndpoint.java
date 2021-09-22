@@ -15,6 +15,7 @@
  */
 package com.fujieid.jap.ids.endpoint;
 
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.exception.IdsException;
 import com.fujieid.jap.ids.exception.InvalidTokenException;
@@ -27,7 +28,6 @@ import com.fujieid.jap.ids.util.OauthUtil;
 import com.fujieid.jap.ids.util.TokenUtil;
 import com.xkcoding.json.JsonUtil;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,7 +51,7 @@ public class UserInfoEndpoint extends AbstractEndpoint {
      * @see <a href="https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse" target="_blank">5.3.2.  Successful UserInfo Response</a>
      * @see <a href="https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims" target="_blank">5.4.  Requesting Claims using Scope Values</a>
      */
-    public IdsResponse<String, Object> getCurrentUserInfo(HttpServletRequest request) {
+    public IdsResponse<String, Object> getCurrentUserInfo(JapHttpRequest request) {
 
         String accessTokenStr = TokenUtil.getAccessToken(request);
 

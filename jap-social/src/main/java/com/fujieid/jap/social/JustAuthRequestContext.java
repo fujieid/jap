@@ -63,8 +63,8 @@ public class JustAuthRequestContext {
     /**
      * Default classes that do not need to be registered
      */
-    private static final String[] DEFAULT_EXCLUSION_CLASS_NAMES = {"AuthDefaultRequest",
-            "AbstractAuthWeChatEnterpriseRequest", "AuthRequest"};
+    private static final String[] DEFAULT_EXCLUSION_CLASS_NAMES = {"AuthRequest", "AuthDefaultRequest",
+            "AbstractAuthWeChatEnterpriseRequest", "AbstractAuthMicrosoftRequest", "AbstractAuthDingtalkRequest"};
 
     /**
      * When the value is {@code true}, the {@link JustAuthRequestContext#loadRequest(String[], String[])}
@@ -154,14 +154,23 @@ public class JustAuthRequestContext {
             case "WeChatMp":
                 source = "WECHAT_MP";
                 break;
-            case "StackOverflow":
-                source = "STACK_OVERFLOW";
-                break;
             case "WeChatEnterpriseQrcode":
                 source = "WECHAT_ENTERPRISE";
                 break;
+            case "WeChatEnterpriseThirdQrcode":
+                source = "WECHAT_ENTERPRISE_QRCODE_THIRD";
+                break;
             case "WeChatEnterpriseWeb":
                 source = "WECHAT_ENTERPRISE_WEB";
+                break;
+            case "StackOverflow":
+                source = "STACK_OVERFLOW";
+                break;
+            case "DingTalkAccount":
+                source = "DINGTALK_ACCOUNT";
+                break;
+            case "MicrosoftCn":
+                source = "MICROSOFT_CN";
                 break;
             default:
                 break;

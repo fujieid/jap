@@ -25,13 +25,13 @@ public enum Oauth2ResponseType {
     /**
      * When authorization code mode or implicit authorization mode is not used, ResponseType needs to be set to {@code none}
      */
-    none,
+    NONE,
     /**
      * Authorization Code Grant
      */
-    code,
+    CODE,
     /**
      * Implicit Grant
      */
-    token
+    TOKEN
 }

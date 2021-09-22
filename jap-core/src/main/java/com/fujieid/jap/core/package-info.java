@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * Jap core module, external specification interface standard
+ * Jap core module, Provide external standard interface support
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0

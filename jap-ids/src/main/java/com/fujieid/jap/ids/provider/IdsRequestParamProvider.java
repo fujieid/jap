@@ -16,6 +16,7 @@
 package com.fujieid.jap.ids.provider;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.exception.InvalidRequestException;
@@ -24,8 +25,6 @@ import com.fujieid.jap.ids.model.IdsConsts;
 import com.fujieid.jap.ids.model.IdsRequestParam;
 import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.util.ClientCertificateUtil;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Parameter parser for oauth request
@@ -36,7 +35,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class IdsRequestParamProvider {
 
-    public static IdsRequestParam parseRequest(HttpServletRequest request) {
+    public static IdsRequestParam parseRequest(JapHttpRequest request) {
         if (ObjectUtil.isEmpty(request.getParameterMap())) {
             throw new InvalidRequestException(ErrorResponse.INVALID_REQUEST);
         }

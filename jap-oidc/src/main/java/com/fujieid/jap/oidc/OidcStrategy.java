@@ -25,11 +25,10 @@ import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.exception.OidcException;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.oauth2.OAuthConfig;
 import com.fujieid.jap.oauth2.Oauth2Strategy;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol.
@@ -72,7 +71,7 @@ public class OidcStrategy extends Oauth2Strategy {
      * @param response The response to authenticate
      */
     @Override
-    public JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+    public JapResponse authenticate(AuthenticateConfig config, JapHttpRequest request, JapHttpResponse response) {
 
         try {
             this.checkAuthenticateConfig(config, OidcConfig.class);

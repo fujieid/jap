@@ -15,13 +15,14 @@
  */
 package com.fujieid.jap.ids.pipeline;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 
 /**
  * For the filter of jap-ids, a pipeline interface is provided. When an exception occurs in the filter,
  * <p>
- * you can use {@link com.fujieid.jap.ids.pipeline.IdsFilterPipeline#errorHandle(ServletRequest, ServletResponse, Throwable)} to handle the exception information .
+ * you can use {@link com.fujieid.jap.ids.pipeline.IdsFilterPipeline#errorHandle(JapHttpRequest, JapHttpResponse, Throwable)} to handle the exception information .
  * <p>
  * The data in json format is returned by default:
  *
@@ -32,7 +33,7 @@ import javax.servlet.ServletResponse;
  * }
  * </code>
  * <p>
- * Note: Only need to implement the {@link com.fujieid.jap.ids.pipeline.IdsFilterPipeline#errorHandle(ServletRequest, ServletResponse, Throwable)} method of this interface.
+ * Note: Only need to implement the {@link com.fujieid.jap.ids.pipeline.IdsFilterPipeline#errorHandle(JapHttpRequest, JapHttpResponse, Throwable)} method of this interface.
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
@@ -42,50 +43,50 @@ public interface IdsFilterPipeline extends IdsPipeline<Object> {
     /**
      * Callback when the program is abnormal
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
-     * @param throwable       any exception thrown on handler execution, if any.
+     * @param request   current HTTP request
+     * @param response  current HTTP response
+     * @param throwable any exception thrown on handler execution, if any.
      */
     @Override
-    default void errorHandle(ServletRequest servletRequest, ServletResponse servletResponse, Throwable throwable) {
-        IdsPipeline.super.errorHandle(servletRequest, servletResponse, throwable);
+    default void errorHandle(JapHttpRequest request, JapHttpResponse response, Throwable throwable) {
+        IdsPipeline.super.errorHandle(request, response, throwable);
     }
 
     /**
      * Operations before business process processing, such as initializing resources, etc.
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @return boolean
      */
     @Deprecated
     @Override
-    default boolean preHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
-        return IdsPipeline.super.preHandle(servletRequest, servletResponse);
+    default boolean preHandle(JapHttpRequest request, JapHttpResponse response) {
+        return IdsPipeline.super.preHandle(request, response);
     }
 
     /**
      * Intercept the execution of a handler
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      * @return Object
      */
     @Deprecated
     @Override
-    default Object postHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
-        return IdsPipeline.super.postHandle(servletRequest, servletResponse);
+    default Object postHandle(JapHttpRequest request, JapHttpResponse response) {
+        return IdsPipeline.super.postHandle(request, response);
     }
 
     /**
      * Callback after business process processing is completed, such as recycling resources, recording status, etc.
      *
-     * @param servletRequest  current HTTP request
-     * @param servletResponse current HTTP response
+     * @param request  current HTTP request
+     * @param response current HTTP response
      */
     @Deprecated
     @Override
-    default void afterHandle(ServletRequest servletRequest, ServletResponse servletResponse) {
-        IdsPipeline.super.afterHandle(servletRequest, servletResponse);
+    default void afterHandle(JapHttpRequest request, JapHttpResponse response) {
+        IdsPipeline.super.afterHandle(request, response);
     }
 }

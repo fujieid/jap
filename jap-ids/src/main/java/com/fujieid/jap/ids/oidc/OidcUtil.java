@@ -18,6 +18,7 @@ package com.fujieid.jap.ids.oidc;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.model.IdsConsts;
@@ -32,7 +33,6 @@ import org.jose4j.jwk.JsonWebKey;
 import org.jose4j.jwk.JsonWebKeySet;
 import org.jose4j.jwt.ReservedClaimNames;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,14 +43,14 @@ import java.util.stream.Collectors;
  */
 public class OidcUtil {
 
-    public static OidcDiscoveryDto getOidcDiscoveryInfo(HttpServletRequest request) {
+    public static OidcDiscoveryDto getOidcDiscoveryInfo(JapHttpRequest request) {
 
         IdsConfig config = JapIds.getIdsConfig();
         List<String> scopes = IdsScopeProvider.getScopeCodes();
 
         String issuer = EndpointUtil.getIssuer(request);
 
-        Map<String, Object> model = new HashMap<>();
+        Map<String, Object> model = new HashMap<>(33);
         model.put("issuer", issuer);
         model.put("authorization_endpoint", EndpointUtil.getAuthorizeUrl(request));
         model.put("token_endpoint", EndpointUtil.getTokenUrl(request));
@@ -80,14 +80,14 @@ public class OidcUtil {
         }
 
         model.put("request_object_signing_alg_values_supported", Arrays.asList(
-            "none",
-            "RS256",
-            "ES256"
+                "none",
+                "RS256",
+                "ES256"
             )
         );
         model.put("userinfo_signing_alg_values_supported", Arrays.asList(
-            "RS256",
-            "ES256"
+                "RS256",
+                "ES256"
             )
         );
         model.put("request_parameter_supported", true);
@@ -95,8 +95,8 @@ public class OidcUtil {
         model.put("require_request_uri_registration", false);
         model.put("claims_parameter_supported", true);
         model.put("id_token_signing_alg_values_supported", Arrays.asList(
-            "RS256",
-            "ES256"
+                "RS256",
+                "ES256"
             )
         );
         model.put("subject_types_supported", Collections.singletonList("public"));

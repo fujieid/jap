@@ -32,10 +32,9 @@ import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.store.SessionJapUserStore;
 import com.fujieid.jap.core.store.SsoJapUserStore;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.sso.JapSsoHelper;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * General policy handling methods and parameters, policies of other platforms can inherit
@@ -106,11 +105,11 @@ public abstract class AbstractJapStrategy implements JapStrategy {
      * @param response current HTTP response
      * @return boolean
      */
-    protected JapUser checkSession(HttpServletRequest request, HttpServletResponse response) {
+    protected JapUser checkSession(JapHttpRequest request, JapHttpResponse response) {
         return japContext.getUserStore().get(request, response);
     }
 
-    protected JapResponse loginSuccess(JapUser japUser, HttpServletRequest request, HttpServletResponse response) {
+    protected JapResponse loginSuccess(JapUser japUser, JapHttpRequest request, JapHttpResponse response) {
         japContext.getUserStore().save(request, response, japUser);
         return JapResponse.success(japUser);
     }

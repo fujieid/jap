@@ -51,7 +51,6 @@ build/
 .vscode/
 
 ### other ###
-/jap-simple/src/main/java/com/fujieid/jap/simple/SimpleCallback.java
 /docs/bin/deploy.sh
 /jap-core/pom.xml.versionsBackup
 /jap-oauth2/pom.xml.versionsBackup

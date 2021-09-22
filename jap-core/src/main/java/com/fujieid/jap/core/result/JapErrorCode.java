@@ -38,6 +38,7 @@ public enum JapErrorCode {
     MISS_ISSUER(1006, "OidcStrategy requires a issuer option."),
     MISS_CREDENTIALS(1007, "Missing credentials"),
     INVALID_GRANT_TYPE(1008, "The grant type is not supported by the authorization server, or the current client is not authorized for the grant type."),
+    ERROR_HTTP_API_CONFIG(1008,"http api config error,please check")
     ;
 
     private final int errroCode;

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 /**
- * ids The service endpoint that needs to be provided externally
+ * API methods that need to be provided externally,
+ * <p>
+ * such as: obtaining authorization, obtaining AccessToken, refreshing AccessToken, obtaining IDS service discovery configuration, etc.
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0

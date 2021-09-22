@@ -25,12 +25,12 @@ import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.util.JapTokenHelper;
-import com.fujieid.jap.core.util.RequestUtil;
+import com.fujieid.jap.http.JapHttpCookie;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
+import com.fujieid.jap.http.RequestUtil;
 import com.xkcoding.json.util.Kv;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
@@ -74,7 +74,7 @@ public class JapAuthentication implements Serializable {
      * @param response current HTTP response
      * @return JapUser
      */
-    public static JapUser getUser(HttpServletRequest request, HttpServletResponse response) {
+    public static JapUser getUser(JapHttpRequest request, JapHttpResponse response) {
         if (null == context) {
             return null;
         }
@@ -107,7 +107,7 @@ public class JapAuthentication implements Serializable {
      * @param response current HTTP response
      * @return JapResponse
      */
-    public static JapResponse checkUser(HttpServletRequest request, HttpServletResponse response) {
+    public static JapResponse checkUser(JapHttpRequest request, JapHttpResponse response) {
         JapUser japUser = getUser(request, response);
         if (null == japUser) {
             return JapResponse.error(JapErrorCode.NOT_LOGGED_IN);
@@ -154,7 +154,7 @@ public class JapAuthentication implements Serializable {
      * @param response current HTTP response
      * @return boolean
      */
-    public static boolean logout(HttpServletRequest request, HttpServletResponse response) {
+    public static boolean logout(JapHttpRequest request, JapHttpResponse response) {
         JapUserStore japUserStore = context.getUserStore();
         if (null == japUserStore) {
             return false;
@@ -162,7 +162,7 @@ public class JapAuthentication implements Serializable {
         japUserStore.remove(request, response);
 
         // Clear all cookie information
-        Map<String, Cookie> cookieMap = RequestUtil.getCookieMap(request);
+        Map<String, JapHttpCookie> cookieMap = RequestUtil.getCookieMap(request);
         if (CollectionUtil.isNotEmpty(cookieMap)) {
             cookieMap.forEach((key, cookie) -> {
                 cookie.setMaxAge(0);

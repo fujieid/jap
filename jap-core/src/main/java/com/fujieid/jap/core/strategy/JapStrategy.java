@@ -18,9 +18,8 @@ package com.fujieid.jap.core.strategy;
 import com.fujieid.jap.core.config.AuthenticateConfig;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 
 /**
  * The unified implementation interface of JAP Strategy, which must be implemented for all specific business policies.
@@ -39,7 +38,7 @@ public interface JapStrategy {
      * @param response The response to authenticate
      * @return JapResponse
      */
-    default JapResponse authenticate(AuthenticateConfig config, HttpServletRequest request, HttpServletResponse response) {
+    default JapResponse authenticate(AuthenticateConfig config, JapHttpRequest request, JapHttpResponse response) {
         return JapResponse.error(JapErrorCode.ERROR.getErrroCode(), "JapStrategy#authenticate(AuthenticateConfig, HttpServletRequest, HttpServletResponse) must be overridden by subclass");
     }
 }

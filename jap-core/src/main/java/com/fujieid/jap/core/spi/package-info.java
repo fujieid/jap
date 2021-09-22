@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 /**
- * ids filter, including access token filter and user status filter
+ * Supports SPI features. When implementing an interface, developers can pass parameters through the <code>setXx</code> method,
+ * or through the SPI specification. for example:
+ * <p>
+ * For the <code>JapUserService</code> interface provided by jap, developers can set the interface implementation class through <code>xx.setUserService</code>,
+ * You can also configure the implementation class of the interface in a file named after the interface name in the <code>resources/META-INF/services</code> folder, such as:
+ * <code>resources/META-INF/services/com.fujieid.jap.core.JapUserService</code>, the content of the file is <code>xx.xxx.xx.JapUserServiceImpl</code>
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
  * @since 1.0.0
  */
-package com.fujieid.jap.ids.filter;
+package com.fujieid.jap.core.spi;

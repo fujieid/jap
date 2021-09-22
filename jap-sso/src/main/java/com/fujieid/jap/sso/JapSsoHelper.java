@@ -19,6 +19,8 @@ import com.baomidou.kisso.SSOConfig;
 import com.baomidou.kisso.SSOHelper;
 import com.baomidou.kisso.security.token.SSOToken;
 import com.baomidou.kisso.service.ConfigurableAbstractKissoService;
+import com.fujieid.jap.http.JapHttpRequest;
+import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.sso.config.JapSsoConfig;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,14 +45,14 @@ public class JapSsoHelper {
      * @param response     current HTTP response
      * @return String
      */
-    public static String login(Object userId, String username, JapSsoConfig japSsoConfig, HttpServletRequest request, HttpServletResponse response) {
+    public static String login(Object userId, String username, JapSsoConfig japSsoConfig, JapHttpRequest request, JapHttpResponse response) {
         // Initialize Jap SSO config to prevent NPE
         japSsoConfig = null == japSsoConfig ? new JapSsoConfig() : japSsoConfig;
         // Reset kisso config
         resetKissoConfig(japSsoConfig);
         // set jap cookie
         SSOToken ssoToken = JapSsoUtil.createSsoToken(userId, username, request);
-        KiSsoHelper.setCookie(request, response, ssoToken, true);
+        KiSsoHelper.setCookie((javax.servlet.http.HttpServletRequest) request.getSource(), (HttpServletResponse) response.getSource(), ssoToken, true);
         return ssoToken.getToken();
     }
 
@@ -88,8 +90,8 @@ public class JapSsoHelper {
      * @param request current HTTP request
      * @return The ID of the current login user
      */
-    public static String checkLogin(HttpServletRequest request) {
-        SSOToken ssoToken = KiSsoHelper.getSSOToken(request);
+    public static String checkLogin(JapHttpRequest request) {
+        SSOToken ssoToken = KiSsoHelper.getSSOToken((HttpServletRequest) request.getSource());
         return null == ssoToken ? null : ssoToken.getId();
     }
 
@@ -99,8 +101,8 @@ public class JapSsoHelper {
      * @param request  current HTTP request
      * @param response current HTTP response
      */
-    public static void logout(HttpServletRequest request, HttpServletResponse response) {
-        KiSsoHelper.clearLogin(request, response);
+    public static void logout(JapHttpRequest request, JapHttpResponse response) {
+        KiSsoHelper.clearLogin((javax.servlet.http.HttpServletRequest) request.getSource(), (HttpServletResponse) response.getSource());
     }
 
     /**
