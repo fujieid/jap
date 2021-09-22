@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * Support openid connect
+ * Support for openid connect, including Id Token and OIDC tools
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0

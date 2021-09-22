@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 /**
- * Jap core module, Provide external standard interface support
+ * The cache component of jap has a built-in local cache based on MAP.
+ * <p>
+ * Developers can implement specific cache solutions based on the {@link com.fujieid.jap.core.cache.JapCache} interface,
+ * such as redis cache.
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
  * @since 1.0.0
  */
-package com.fujieid.jap.core;
+package com.fujieid.jap.core.cache;
