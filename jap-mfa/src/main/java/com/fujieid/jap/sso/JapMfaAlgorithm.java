@@ -28,13 +28,13 @@ public enum JapMfaAlgorithm {
     /**
      * SHA1
      */
-    HMACSHA1,
+    HmacSHA1,
     /**
      * SHA256
      */
-    HMACSHA256,
+    HmacSHA256,
     /**
      * SHA512
      */
-    HMACSHA512
+    HmacSHA512
 }

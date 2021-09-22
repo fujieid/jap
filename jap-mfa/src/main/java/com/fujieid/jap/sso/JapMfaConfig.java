@@ -38,7 +38,7 @@ public class JapMfaConfig {
     /**
      * the crypto algorithm (HMACSHA1, HMACSHA256, HMACSHA512)
      */
-    private JapMfaAlgorithm algorithm = JapMfaAlgorithm.HMACSHA1;
+    private JapMfaAlgorithm algorithm = JapMfaAlgorithm.HmacSHA1;
 
     private String qrcodeTempPath = System.getProperties().getProperty("user.home") + File.separator + "jap" + File.separator + "temp";
 
