@@ -14,9 +14,13 @@ public class URLUtil {
 
     /**
      * Get relative uri from uri.
-     * https://www.google.com ==>> www.google.com
+     * for example:
      *
-     * @param uri URI with protocol. For example: https://www.google.com
+     * <code>
+     * https://www.justauth.plus return to www.justauth.plus
+     * </code>
+     *
+     * @param uri URI with protocol. For example: https://www.justauth.plus
      * @return Return only the domain name part in the uri
      */
     public static String getRelativeUri(String uri) {

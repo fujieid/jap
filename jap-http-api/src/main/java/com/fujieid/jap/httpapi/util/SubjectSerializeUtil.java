@@ -19,6 +19,7 @@ public final class SubjectSerializeUtil {
      *
      * @param str   a <code>String</code> to be deserialized
      * @param clazz The target type to deserialize
+     * @param <T>   Actual class type
      * @return Return an object
      * @throws NoSuchMethodException     no such method
      * @throws IllegalAccessException    illegal access
