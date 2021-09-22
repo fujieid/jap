@@ -154,14 +154,23 @@ public class JustAuthRequestContext {
             case "WeChatMp":
                 source = "WECHAT_MP";
                 break;
-            case "StackOverflow":
-                source = "STACK_OVERFLOW";
-                break;
             case "WeChatEnterpriseQrcode":
                 source = "WECHAT_ENTERPRISE";
                 break;
+            case "WeChatEnterpriseThirdQrcode":
+                source = "WECHAT_ENTERPRISE_QRCODE_THIRD";
+                break;
             case "WeChatEnterpriseWeb":
                 source = "WECHAT_ENTERPRISE_WEB";
+                break;
+            case "StackOverflow":
+                source = "STACK_OVERFLOW";
+                break;
+            case "DingTalkAccount":
+                source = "DINGTALK_ACCOUNT";
+                break;
+            case "MicrosoftCn":
+                source = "MICROSOFT_CN";
                 break;
             default:
                 break;
