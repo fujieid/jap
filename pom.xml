@@ -78,7 +78,7 @@
     <jose4j.version>0.7.6</jose4j.version>
     <slf4j-api.version>1.7.30</slf4j-api.version>
     <jedis.version>3.2.0</jedis.version>
-    <kisso.version>3.7.6</kisso.version>
+    <kisso.version>3.7.7</kisso.version>
     <simple-json.version>0.0.2</simple-json.version>
     <simple-http.version>1.0.5</simple-http.version>
     <zxing.version>3.3.3</zxing.version>
