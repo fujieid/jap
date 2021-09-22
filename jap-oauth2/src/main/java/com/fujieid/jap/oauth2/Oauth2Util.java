@@ -222,7 +222,7 @@ public class Oauth2Util {
         }
 
         if (!res.isSuccess()) {
-            throw new OidcException("Cannot access url: " + url
+            throw new JapOauth2Exception("Cannot access url: " + url
                 + " , method: " + endpointMethodType
                 + " , params: " + params
                 + " , error details: " + res.getError()

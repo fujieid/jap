@@ -20,6 +20,7 @@ import com.fujieid.jap.core.cache.JapLocalCache;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
+import com.fujieid.jap.core.exception.OidcException;
 import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
 import com.fujieid.jap.oauth2.OAuthConfig;
@@ -93,7 +94,7 @@ public class AccessTokenHelperTest {
         // UnknownHostException: setTokenUrl
         JapAuthentication.setContext(new JapContext());
         JapAuthentication.getContext().setCache(new JapLocalCache());
-        Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setVerifyState(false)
             .setResponseType(Oauth2ResponseType.CODE)
             .setEnablePkce(true)
@@ -119,7 +120,7 @@ public class AccessTokenHelperTest {
     @Test
     public void getTokenPasswordGrantTypeErrorTokenUrl() {
         // UnknownHostException: setTokenUrl
-        Assert.assertThrows(IORuntimeException.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
+        Assert.assertThrows(JapOauth2Exception.class, () -> AccessTokenHelper.getToken(request, new OAuthConfig()
             .setGrantType(Oauth2GrantType.PASSWORD)
             .setScopes(new String[]{"read"})
             .setTokenUrl("setTokenUrl")));
