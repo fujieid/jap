@@ -5,6 +5,8 @@
 - feat: add HTTP servlet adapter to decouple jakarta servlets. **Note [1]**
 - feat: [jap-social] Support to bind the account of the third-party platform. (Gitee Issue [#I46J6W](https://gitee.com/fujieid/jap/issues/I46J6W))
 - change: [jap-ids] scope changed to optional.
+- change: [jap-sso] Upgrade `kisso` to 3.7.7, **Solve the vulnerability of jackson**.
+- change: [jap-mfa] Upgrade `googleauth` to 1.5.0, **Solve the vulnerability of apache httpclient**.
 - change: Upgrade `simple-http` to 1.0.5.
 - change: Upgrade `JustAuth` to 1.16.4.
 - change: Optimize code.
@@ -45,6 +47,8 @@ XxJapStrategy.authenticate(config, new JakartaRequestAdapter(request), new Jakar
 - feat: 添加 HTTP servlet 适配器以解耦 jakarta servlet。**注[1]**
 - feat: [jap-social] 支持绑定第三方平台账号，该版本将社会化登录和绑定账号独立开来，以使其更加使用与多场景。 (Gitee Issue [#I46J6W](https://gitee.com/fujieid/jap/issues/I46J6W))
 - change: [jap-ids] `scope` 在各个流程中都更改为可选，遵循 RFC6749 规范。
+- change: [jap-sso] 升级 `kisso` 的版本为 3.7.7, **解决 jackson 的漏洞**。
+- change: [jap-mfa] 升级 `googleauth` 的版本为 1.5.0, **解决 apache httpclient 的漏洞**。
 - change: 升级 `simple-http` 的版本为 1.0.5.
 - change: 升级 `JustAuth` 的版本为 1.16.4.
 - change: 优化代码。
