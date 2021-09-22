@@ -26,10 +26,10 @@ import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
-import com.fujieid.jap.http.RequestUtil;
 import com.fujieid.jap.http.JapHttpCookie;
 import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.http.JapHttpResponse;
+import com.fujieid.jap.http.RequestUtil;
 
 /**
  * The local authentication strategy authenticates requests based on the credentials submitted through an HTML-based
