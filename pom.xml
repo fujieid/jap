@@ -82,7 +82,7 @@
     <simple-json.version>0.0.2</simple-json.version>
     <simple-http.version>1.0.5</simple-http.version>
     <zxing.version>3.3.3</zxing.version>
-    <googleauth.version>1.4.0</googleauth.version>
+    <googleauth.version>1.5.0</googleauth.version>
     <commons-cli.version>1.4</commons-cli.version>
     <jap-http.version>1.0.0</jap-http.version>
     <jap-http-adapter.version>1.0.0</jap-http-adapter.version>
