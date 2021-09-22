@@ -17,7 +17,7 @@ package com.fujieid.jap.sso;
 
 import com.baomidou.kisso.security.token.SSOToken;
 import com.fujieid.jap.http.JapHttpRequest;
-import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

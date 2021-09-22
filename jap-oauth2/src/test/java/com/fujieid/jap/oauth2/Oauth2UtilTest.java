@@ -21,7 +21,7 @@ import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.context.JapContext;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.http.JapHttpRequest;
-import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
 import com.fujieid.jap.oauth2.pkce.PkceCodeChallengeMethod;
 import com.xkcoding.json.util.Kv;
 import org.junit.Assert;

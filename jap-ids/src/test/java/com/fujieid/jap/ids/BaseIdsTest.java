@@ -1,7 +1,7 @@
 package com.fujieid.jap.ids;
 
 import com.fujieid.jap.http.JapHttpRequest;
-import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
 import com.fujieid.jap.ids.config.IdsConfig;
 import com.fujieid.jap.ids.config.JwtConfig;
 import com.fujieid.jap.ids.context.IdsContext;

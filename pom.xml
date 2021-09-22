@@ -84,10 +84,10 @@
     <zxing.version>3.3.3</zxing.version>
     <googleauth.version>1.5.0</googleauth.version>
     <commons-cli.version>1.4</commons-cli.version>
+    <jap-http.version>1.0.0</jap-http.version>
+    <jap-http-jakarta-adapter.version>1.0.1</jap-http-jakarta-adapter.version>
     <!-- Only for jap-mfa -->
     <httpclient.version>4.5.13</httpclient.version>
-    <jap-http.version>1.0.0</jap-http.version>
-    <jap-http-adapter.version>1.0.0</jap-http-adapter.version>
   </properties>
 
   <dependencies>
@@ -117,7 +117,7 @@
       <artifactId>jap-http</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.fujieid.jap.http</groupId>
+      <groupId>com.fujieid.jap.http.adapter</groupId>
       <artifactId>jap-http-jakarta-adapter</artifactId>
     </dependency>
   </dependencies>
@@ -257,9 +257,9 @@
         <version>${jap-http.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.fujieid.jap.http</groupId>
+        <groupId>com.fujieid.jap.http.adapter</groupId>
         <artifactId>jap-http-jakarta-adapter</artifactId>
-        <version>${jap-http-adapter.version}</version>
+        <version>${jap-http-jakarta-adapter.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

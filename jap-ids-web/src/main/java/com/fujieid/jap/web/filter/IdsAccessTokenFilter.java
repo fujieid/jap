@@ -17,8 +17,8 @@ package com.fujieid.jap.web.filter;
 
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
-import com.fujieid.jap.http.jakarta.JakartaRequestAdapter;
-import com.fujieid.jap.http.jakarta.JakartaResponseAdapter;
+import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
+import com.fujieid.jap.http.adapter.jakarta.JakartaResponseAdapter;
 import com.fujieid.jap.ids.JapIds;
 import com.fujieid.jap.ids.pipeline.IdsPipeline;
 import com.fujieid.jap.ids.util.TokenUtil;
