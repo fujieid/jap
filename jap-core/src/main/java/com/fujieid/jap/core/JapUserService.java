@@ -39,7 +39,7 @@ public interface JapUserService {
     /**
      * Get user info by username.
      * <p>
-     * It is suitable for the {@code jap-simple} module
+     * It is suitable for {@code jap-simple} and {@code jap-http-api} module
      *
      * @param username username of the business system
      * @return JapUser
@@ -114,14 +114,14 @@ public interface JapUserService {
     }
 
     /**
-     * Save the http authed user information to the database and return JapUser
+     * Save the http authed user information to the database and return JapUser when using 'HTTP BEARER' authentication
      * <p>
      * It is suitable for the {@code jap-http-api} module
-     * @param userinfo user information
+     * @param japUser jap user information.
      * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
      */
-    default JapUser createAndGetHttpApiUser(Object userinfo){
-        return null;
+    default void saveHttpAuthedJapUser(JapUser japUser){
+
     }
 
 }

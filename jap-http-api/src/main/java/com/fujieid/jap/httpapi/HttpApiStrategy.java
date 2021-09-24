@@ -79,7 +79,7 @@ public class HttpApiStrategy extends AbstractJapStrategy {
 
         if (authResponse != null && authResponse.isSuccess()) {
             if (config.getAuthSchema() == AuthSchemaEnum.BASIC || config.getAuthSchema() == AuthSchemaEnum.DIGEST) {
-                japUserService.createAndGetHttpApiUser(japUser);
+                japUserService.saveHttpAuthedJapUser(japUser);
             }
             return JapResponse.success(authResponse.getBody());
         } else {
@@ -259,7 +259,7 @@ public class HttpApiStrategy extends AbstractJapStrategy {
 
         // save jap user to db
         japUser.setToken(token);
-        japUserService.createAndGetHttpApiUser(japUser);
+        japUserService.saveHttpAuthedJapUser(japUser);
         return token;
     }
 
