@@ -9,6 +9,7 @@ import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
+import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.http.JapHttpResponse;
@@ -28,9 +29,16 @@ import com.fujieid.jap.httpapi.util.*;
  */
 public class HttpApiStrategy extends AbstractJapStrategy {
 
+    public HttpApiStrategy(JapUserService japUserService, JapConfig japConfig) {
+        super(japUserService, japConfig);
+    }
 
     public HttpApiStrategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache) {
         super(japUserService, japConfig, japCache);
+    }
+
+    public HttpApiStrategy(JapUserService japUserService, JapConfig japConfig, JapUserStore japUserStore, JapCache japCache) {
+        super(japUserService, japConfig, japUserStore, japCache);
     }
 
     @Override

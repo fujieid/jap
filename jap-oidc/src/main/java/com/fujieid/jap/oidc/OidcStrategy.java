@@ -25,6 +25,7 @@ import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.exception.OidcException;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
+import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.oauth2.OAuthConfig;
@@ -42,25 +43,16 @@ import com.fujieid.jap.oauth2.Oauth2Strategy;
  */
 public class OidcStrategy extends Oauth2Strategy {
 
-    /**
-     * `Strategy` constructor.
-     *
-     * @param japUserService japUserService
-     * @param japConfig      japConfig
-     */
     public OidcStrategy(JapUserService japUserService, JapConfig japConfig) {
         super(japUserService, japConfig);
     }
 
-    /**
-     * `Strategy` constructor.
-     *
-     * @param japUserService japUserService
-     * @param japConfig      japConfig
-     * @param japCache       japCache
-     */
     public OidcStrategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache) {
         super(japUserService, japConfig, japCache);
+    }
+
+    public OidcStrategy(JapUserService japUserService, JapConfig japConfig, JapUserStore japUserStore, JapCache japCache) {
+        super(japUserService, japConfig, japUserStore, japCache);
     }
 
     /**

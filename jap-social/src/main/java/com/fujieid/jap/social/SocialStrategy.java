@@ -30,11 +30,13 @@ import com.fujieid.jap.core.exception.JapSocialException;
 import com.fujieid.jap.core.exception.JapUserException;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
+import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.http.RequestUtil;
 import com.xkcoding.json.JsonUtil;
+import me.zhyd.oauth.cache.AuthDefaultStateCache;
 import me.zhyd.oauth.cache.AuthStateCache;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.config.AuthDefaultSource;
@@ -67,25 +69,19 @@ public class SocialStrategy extends AbstractJapStrategy {
     private static final String BIND_REFERER_PREFIX_CACHE_KEY = "jap:social:bind:referer:";
     private AuthStateCache authStateCache;
 
-    /**
-     * `Strategy` constructor.
-     *
-     * @param japUserService japUserService
-     * @param japConfig      japConfig
-     */
     public SocialStrategy(JapUserService japUserService, JapConfig japConfig) {
         super(japUserService, japConfig);
+        this.authStateCache = AuthDefaultStateCache.INSTANCE;
     }
 
-    /**
-     * `Strategy` constructor.
-     *
-     * @param japUserService japUserService
-     * @param japConfig      japConfig
-     * @param japCache       japCache
-     */
     public SocialStrategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache) {
         super(japUserService, japConfig, japCache);
+        this.authStateCache = AuthDefaultStateCache.INSTANCE;
+    }
+
+    public SocialStrategy(JapUserService japUserService, JapConfig japConfig, JapUserStore japUserStore, JapCache japCache, AuthStateCache authStateCache) {
+        super(japUserService, japConfig, japUserStore, japCache);
+        this.authStateCache = authStateCache;
     }
 
     /**

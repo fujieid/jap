@@ -26,6 +26,7 @@ import com.fujieid.jap.core.exception.JapException;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
 import com.fujieid.jap.core.result.JapErrorCode;
 import com.fujieid.jap.core.result.JapResponse;
+import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.http.JapHttpResponse;
@@ -53,25 +54,16 @@ import java.util.Map;
  */
 public class Oauth2Strategy extends AbstractJapStrategy {
 
-    /**
-     * `Strategy` constructor.
-     *
-     * @param japUserService japUserService
-     * @param japConfig      japConfig
-     */
     public Oauth2Strategy(JapUserService japUserService, JapConfig japConfig) {
         super(japUserService, japConfig);
     }
 
-    /**
-     * `Strategy` constructor.
-     *
-     * @param japUserService japUserService
-     * @param japConfig      japConfig
-     * @param japCache       japCache
-     */
     public Oauth2Strategy(JapUserService japUserService, JapConfig japConfig, JapCache japCache) {
         super(japUserService, japConfig, japCache);
+    }
+
+    public Oauth2Strategy(JapUserService japUserService, JapConfig japConfig, JapUserStore japUserStore, JapCache japCache) {
+        super(japUserService, japConfig, japUserStore, japCache);
     }
 
     /**
