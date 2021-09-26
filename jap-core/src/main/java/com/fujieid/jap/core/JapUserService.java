@@ -117,10 +117,10 @@ public interface JapUserService {
      * Save the http authed user information to the database and return JapUser when using 'HTTP BEARER' authentication
      * <p>
      * It is suitable for the {@code jap-http-api} module
+     *
      * @param japUser jap user information.
-     * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
      */
-    default void saveHttpAuthedJapUser(JapUser japUser){
+    default void saveHttpAuthedJapUser(JapUser japUser) {
 
     }
 
