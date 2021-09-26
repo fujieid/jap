@@ -1,3 +1,15 @@
+## v1.0.6 (2021-10-**)
+
+- feat: 重构发布快照流水线。 (Github PR [#15](https://github.com/fujieid/jap/pull/15))
+- change: 修改 JapUserService 接口中的 createAndGetHttpApiUser 方法名使其更符合语义。 (Github PR [#13](https://github.com/fujieid/jap/pull/13))
+- change: 为 `AbstractJapStrategy` 的子类增加构造函数，支持自定义 `JapUserStore`
+
+----
+
+- feat: fix PR bug and refactory publish snapshot. (Github PR [#15](https://github.com/fujieid/jap/pull/15))
+- change: optimize JapUserService interface to fix jap-http-api module. (Github PR [#13](https://github.com/fujieid/jap/pull/13))
+- change: Add a constructor for subclasses of `AbstractJapStrategy`, support custom `JapUserStore`
+
 ## v1.0.5 (2021-09-23)
 
 - feat: Add `jap-http-api` module. (Gitee Issue [#I43ZS7](https://gitee.com/fujieid/jap/issues/I43ZS7))
