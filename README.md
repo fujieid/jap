@@ -29,7 +29,7 @@
 </p>
 <p align="center">
   <a target="_blank" href='https://gitee.com/fujieid/jap/stargazers'>
-    <img src="https://gitee.com/fujieid/jap/badge/star.svg?theme=white" alt='star'></img>
+    <img src="https://gitee.com/fujieid/jap/badge/star.svg?theme=gvp" alt='star'></img>
   </a>
   <a target="_blank" href='https://github.com/fujieid/jap/stargazers'>
     <img src="https://img.shields.io/github/stars/fujieid/jap?style=social" alt='star'></img>
