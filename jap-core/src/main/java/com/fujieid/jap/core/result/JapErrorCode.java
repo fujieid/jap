@@ -38,7 +38,10 @@ public enum JapErrorCode {
     MISS_ISSUER(1006, "OidcStrategy requires a issuer option."),
     MISS_CREDENTIALS(1007, "Missing credentials"),
     INVALID_GRANT_TYPE(1008, "The grant type is not supported by the authorization server, or the current client is not authorized for the grant type."),
-    ERROR_HTTP_API_CONFIG(1008,"http api config error,please check")
+    ERROR_HTTP_API_CONFIG(1008, "http api config error,please check"),
+    LDAP_NOT_IMPLEMENTED_ENCRYPTION(2001, "LDAP password encryption is not implemented"),
+    LDAP_NOT_IMPLEMENTED_MATCH(2002, "LDAP password matching method is not implemented"),
+    LDAP_ILLEGAL_PASSWORD_ENCRYPTION_ALGORITHM(2003, "Illegal password encryption algorithm"),
     ;
 
     private final int errroCode;

@@ -50,6 +50,7 @@
     <module>jap-ids-web</module>
     <module>jap-http-api</module>
     <module>jap-bom</module>
+    <module>jap-ldap</module>
   </modules>
 
   <properties>
@@ -167,6 +168,11 @@
       <dependency>
         <groupId>com.fujieid</groupId>
         <artifactId>jap-ids-web</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fujieid</groupId>
+        <artifactId>jap-ldap</artifactId>
         <version>${revision}</version>
       </dependency>
       <!-- junit start -->
