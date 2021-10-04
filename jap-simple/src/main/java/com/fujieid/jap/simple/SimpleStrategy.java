@@ -107,7 +107,7 @@ public class SimpleStrategy extends AbstractJapStrategy {
             RequestUtil.setCookie(response,
                 simpleConfig.getRememberMeCookieKey(),
                 this.encodeCookieValue(user, simpleConfig),
-                simpleConfig.getRememberMeCookieExpire(),
+                simpleConfig.getRememberMeCookieExpire().intValue(),
                 "/",
                 cookieDomain
             );
