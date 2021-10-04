@@ -26,5 +26,5 @@ public interface LdapTemplate {
 
     LdapPerson findPerson(String userName);
 
-    boolean login(String userName, String password);
+    LdapPerson login(String userName, String password);
 }
