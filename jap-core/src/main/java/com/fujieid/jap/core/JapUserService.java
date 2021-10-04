@@ -124,4 +124,17 @@ public interface JapUserService {
 
     }
 
+    /**
+     * Save the ldap user information to the database and return JapUser
+     * <p>
+     * It is suitable for the {@code jap-ldap} module
+     *
+     * @param userInfo User information obtained through ldap login, type {@code com.fujieid.jap.ldap.model.LdapPerson}
+     * @return When saving successfully, return {@code JapUser}, otherwise return {@code null}
+     * @since 1.0.6
+     */
+    default JapUser createAndGetLdapUser(Object userInfo) {
+        return null;
+    }
+
 }
