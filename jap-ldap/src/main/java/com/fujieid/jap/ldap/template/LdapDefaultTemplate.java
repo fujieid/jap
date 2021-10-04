@@ -81,9 +81,12 @@ public class LdapDefaultTemplate implements LdapTemplate {
     }
 
     @Override
-    public boolean login(String userName, String password) {
+    public LdapPerson login(String userName, String password) {
         LdapPerson ldapPerson = this.findPerson(userName);
         LdapPasswordMatch ldapPasswordMatch = LdapPasswordMatchFactory.getMatcherByPassword(ldapPerson.getPassword());
-        return ldapPasswordMatch.matches(password, ldapPerson.getPassword());
+        if (ldapPasswordMatch.matches(password, ldapPerson.getPassword())) {
+            return ldapPerson;
+        }
+        return null;
     }
 }

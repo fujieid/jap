@@ -52,6 +52,15 @@ public class LdapConfig extends AuthenticateConfig {
      */
     private String trustStorePassword;
 
+    /**
+     * Get the user name from request through {@code request.getParameter(`usernameField`)}, which defaults to "username"
+     */
+    private String usernameField = "username";
+    /**
+     * Get the password from request through {@code request.getParameter(`passwordField`)}, which defaults to "password"
+     */
+    private String passwordField = "password";
+
     public String getUrl() {
         return url;
     }
@@ -112,6 +121,24 @@ public class LdapConfig extends AuthenticateConfig {
 
     public LdapConfig setTrustStorePassword(String trustStorePassword) {
         this.trustStorePassword = trustStorePassword;
+        return this;
+    }
+
+    public String getUsernameField() {
+        return usernameField;
+    }
+
+    public LdapConfig setUsernameField(String usernameField) {
+        this.usernameField = usernameField;
+        return this;
+    }
+
+    public String getPasswordField() {
+        return passwordField;
+    }
+
+    public LdapConfig setPasswordField(String passwordField) {
+        this.passwordField = passwordField;
         return this;
     }
 }
