@@ -17,6 +17,8 @@ package com.fujieid.jap.simple;
 
 import com.fujieid.jap.core.config.AuthenticateConfig;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @author harrylee (harryleexyz(a)qq.com)
@@ -46,7 +48,7 @@ public class SimpleConfig extends AuthenticateConfig {
     /**
      * Remember me cookie expire, unit: second, default 60*60*24*30[month]
      */
-    private Integer rememberMeCookieExpire = 2592000;
+    private Long rememberMeCookieExpire = TimeUnit.DAYS.toSeconds(30);
 
     /**
      * Remember me cookie domain
@@ -94,11 +96,11 @@ public class SimpleConfig extends AuthenticateConfig {
         return this;
     }
 
-    public Integer getRememberMeCookieExpire() {
+    public Long getRememberMeCookieExpire() {
         return rememberMeCookieExpire;
     }
 
-    public SimpleConfig setRememberMeCookieExpire(Integer rememberMeCookieExpire) {
+    public SimpleConfig setRememberMeCookieExpire(Long rememberMeCookieExpire) {
         this.rememberMeCookieExpire = rememberMeCookieExpire;
         return this;
     }

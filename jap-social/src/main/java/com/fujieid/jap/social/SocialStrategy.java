@@ -324,10 +324,10 @@ public class SocialStrategy extends AbstractJapStrategy {
         try {
             authUserAuthResponse = authRequest.revoke(authToken);
         } catch (Exception e) {
-            throw new JapSocialException("Third party refresh access token of `" + source + "` failed. " + e.getMessage());
+            throw new JapSocialException("Third party revoke access token of `" + source + "` failed. " + e.getMessage());
         }
         if (!authUserAuthResponse.ok() || ObjectUtil.isNull(authUserAuthResponse.getData())) {
-            throw new JapUserException("Third party refresh access token of `" + source + "` failed. " + authUserAuthResponse.getMsg());
+            throw new JapUserException("Third party revoke access token of `" + source + "` failed. " + authUserAuthResponse.getMsg());
         }
 
         return JapResponse.success();
