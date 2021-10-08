@@ -25,7 +25,6 @@ import com.fujieid.jap.ldap.password.LdapPasswordMatch;
 import com.fujieid.jap.ldap.password.LdapPasswordMatchFactory;
 
 import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
@@ -52,7 +51,7 @@ public class LdapDefaultTemplate implements LdapTemplate {
         String filter = String.format(this.ldapConfig.getFilters(), userName);
         try {
             return dirContext.search(this.ldapConfig.getBaseDn(), filter, constraints);
-        } catch (NamingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -74,7 +73,7 @@ public class LdapDefaultTemplate implements LdapTemplate {
                     }
                 }
             }
-        } catch (NamingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
