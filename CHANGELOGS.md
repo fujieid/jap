@@ -1,6 +1,7 @@
 ## v1.0.6 (2021-10-**)
 
 - feat: 重构发布快照流水线。 (Github PR [#15](https://github.com/fujieid/jap/pull/15))
+- feat: 修复文案的错误，统一配置类中的时间类型。 (Github PR [#16](https://github.com/fujieid/jap/pull/16))
 - change: 修改 JapUserService 接口中的 createAndGetHttpApiUser 方法名使其更符合语义。 (Github PR [#13](https://github.com/fujieid/jap/pull/13))
 - change: 为 `AbstractJapStrategy` 的子类增加构造函数，支持自定义 `JapUserStore`
 
