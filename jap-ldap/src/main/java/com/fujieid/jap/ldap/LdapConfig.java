@@ -15,6 +15,7 @@
  */
 package com.fujieid.jap.ldap;
 
+import com.fujieid.jap.core.annotation.NotEmpty;
 import com.fujieid.jap.core.config.AuthenticateConfig;
 
 /**
@@ -26,18 +27,22 @@ public class LdapConfig extends AuthenticateConfig {
     /**
      * LDAP data source URL, such as ldap://localhost:389
      */
+    @NotEmpty(message = "LDAP data source URL cannot be empty.")
     private String url;
     /**
      * LDAP user name, such as: cn=admin,dc=example,dc=org
      */
+    @NotEmpty(message = "LDAP bindDn cannot be empty.")
     private String bindDn;
     /**
-     * LDAP user password
+     * LDAP administrator password
      */
+    @NotEmpty(message = "LDAP administrator password cannot be empty")
     private String credentials;
     /**
      * Basic catalog
      */
+    @NotEmpty(message = "LDAP Basic catalog cannot be empty")
     private String baseDn;
     /**
      * Query conditions, such as: (&(objectClass=organizationalPerson)(uid=%s))
