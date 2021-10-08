@@ -7,30 +7,35 @@ import org.junit.Test;
 
 public class LdapDefaultTemplateTest {
 
-    @Test
-    public void findPerson() {
-        LdapTemplate ldapTemplate = new LdapDefaultTemplate(new LdapDataSource(new LdapConfig()
+    public LdapDataSource getDataSource() {
+        return new LdapDataSource(new LdapConfig()
             .setUrl("ldap://localhost:389")
             .setBindDn("cn=admin,dc=test,dc=com")
             .setCredentials("123456")
             .setBaseDn("dc=test,dc=com")
             .setFilters("(&(objectClass=inetOrgPerson)(uid=%s))")
             .setTrustStore("")
-            .setTrustStorePassword("")));
+            .setTrustStorePassword(""));
+    }
+
+    @Test
+    public void findPerson() {
+        LdapDataSource dataSource = this.getDataSource();
+        if (null == dataSource.openConnection()) {
+            return;
+        }
+        LdapTemplate ldapTemplate = new LdapDefaultTemplate(dataSource);
         LdapPerson person = ldapTemplate.findPerson("100012");
         System.out.println(person);
     }
 
     @Test
     public void login() {
-        LdapTemplate ldapTemplate = new LdapDefaultTemplate(new LdapDataSource(new LdapConfig()
-            .setUrl("ldap://localhost:389")
-            .setBindDn("cn=admin,dc=test,dc=com")
-            .setCredentials("123456")
-            .setBaseDn("dc=test,dc=com")
-            .setFilters("(&(objectClass=inetOrgPerson)(uid=%s))")
-            .setTrustStore("")
-            .setTrustStorePassword("")));
+        LdapDataSource dataSource = this.getDataSource();
+        if (null == dataSource.openConnection()) {
+            return;
+        }
+        LdapTemplate ldapTemplate = new LdapDefaultTemplate(dataSource);
         // 测试通过
         // clear
         System.out.println(ldapTemplate.login("100012", "123456"));
