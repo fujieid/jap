@@ -16,7 +16,7 @@
 package com.fujieid.jap.ids.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * access token
@@ -35,8 +35,8 @@ public class AccessToken implements Serializable {
     private String clientId;
     private Long accessTokenExpiresIn;
     private Long refreshTokenExpiresIn;
-    private LocalDateTime accessTokenExpiration;
-    private LocalDateTime refreshTokenExpiration;
+    private Date accessTokenExpiration;
+    private Date refreshTokenExpiration;
 
     public String getAccessToken() {
         return accessToken;
@@ -119,20 +119,20 @@ public class AccessToken implements Serializable {
         return this;
     }
 
-    public LocalDateTime getAccessTokenExpiration() {
+    public Date getAccessTokenExpiration() {
         return accessTokenExpiration;
     }
 
-    public AccessToken setAccessTokenExpiration(LocalDateTime accessTokenExpiration) {
+    public AccessToken setAccessTokenExpiration(Date accessTokenExpiration) {
         this.accessTokenExpiration = accessTokenExpiration;
         return this;
     }
 
-    public LocalDateTime getRefreshTokenExpiration() {
+    public Date getRefreshTokenExpiration() {
         return refreshTokenExpiration;
     }
 
-    public AccessToken setRefreshTokenExpiration(LocalDateTime refreshTokenExpiration) {
+    public AccessToken setRefreshTokenExpiration(Date refreshTokenExpiration) {
         this.refreshTokenExpiration = refreshTokenExpiration;
         return this;
     }
