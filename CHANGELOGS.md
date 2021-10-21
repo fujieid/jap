@@ -5,7 +5,7 @@
 - change: 修改 JapUserService 接口中的 createAndGetHttpApiUser 方法名使其更符合语义。 (Github PR [#13](https://github.com/fujieid/jap/pull/13))
 - change: 为 `AbstractJapStrategy` 的子类增加构造函数，支持自定义 `JapUserStore`
 - change: 升级 `hutool` 的版本为 5.7.14.
-- 
+- change: [jap-ids] 将 AccessToken 中的 LocalDateTime 改为 Date
 ----
 
 - feat: fix PR bug and refactory publish snapshot. (Github PR [#15](https://github.com/fujieid/jap/pull/15))
@@ -13,6 +13,7 @@
 - change: optimize JapUserService interface to fix jap-http-api module. (Github PR [#13](https://github.com/fujieid/jap/pull/13))
 - change: Add a constructor for subclasses of `AbstractJapStrategy`, support custom `JapUserStore`.
 - change: Upgrade `hutool` to `5.7.14`.
+- change: [jap-ids] Change the LocalDateTime in AccessToken to Date
 
 ## v1.0.5 (2021-09-23)
 
