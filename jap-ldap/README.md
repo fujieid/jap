@@ -1,27 +1,8 @@
-https://datatracker.ietf.org/doc/html/rfc2307
-https://datatracker.ietf.org/doc/rfc2307/
+## JAP LDAP
 
-https://www.openldap.org/faq/data/cache/629.html
-
-http://gurolerdogan.blogspot.com/2010/03/ssha-encryption-with-java.html
-
-https://www.thinbug.com/q/31401353
-
-ext_des：
-- https://hotexamples.com/examples/-/-/randomSalt/php-randomsalt-function-examples.html
-- https://phpbb.itnotetk.com/viewtopic.php?t=452
-
-## 测试 LDAP 的密码匹配器
-
-1. 可以按照下面的方式启动 ldap，然后创建指定用户，创建用户的时候密码加密方式注意切换。然后在 `com.fujieid.jap.ldap.template.LdapDefaultTemplateTest` 中进行在线测试
-2. 直接在 `com.fujieid.jap.ldap.password.LdapPasswordUtilTest` 中参考 `checkPassword` 方法写对应的验证规则
+`jap-ldap` 是为了方便快速的接入 LDAP 协议而开发的组件。
 
 ## 本地启动 ldap + UI 管理后台
-
-.env
-```text
-LDAP_DIR=D://var/ldap
-```
 
 docker-compose.yml
 ```yaml
@@ -47,9 +28,9 @@ services:
       LDAP_CONFIG_PASSWORD: 123456
     volumes:
       # 数据库存储目录
-      - ${LDAP_DIR}/data:/var/lib/ldap
+      - /var/ldap/data:/var/lib/ldap
       # 配置文件目录
-      - ${LDAP_DIR}/conf:/etc/ldap/slapd.d
+      - /var/ldap/conf:/etc/ldap/slapd.d
     restart: always
   # Redis
   ldap-admin:
@@ -59,7 +40,7 @@ services:
     environment:
       # 禁用HTTPS
       PHPLDAPADMIN_HTTPS: "false"
-      # LDAP 的 IP 或者域名
+      # LDAP 的 IP 或者域名，此处为容器名
       PHPLDAPADMIN_LDAP_HOSTS: ldap
     ports:
       - 19999:80
@@ -74,3 +55,26 @@ services:
 
 账号：cn=admin,dc=test,dc=com
 密码：123456
+
+## LdapStrategy 使用方式
+
+参考：[帮助文档](https://justauth.plus/quickstart/jap-ldap/)
+
+## 参考资料
+
+- https://datatracker.ietf.org/doc/html/rfc2307
+- https://datatracker.ietf.org/doc/rfc2307/
+
+
+- https://www.openldap.org/faq/data/cache/629.html
+
+
+- http://gurolerdogan.blogspot.com/2010/03/ssha-encryption-with-java.html
+
+
+- https://www.thinbug.com/q/31401353
+
+
+- ext_des：
+  - https://hotexamples.com/examples/-/-/randomSalt/php-randomsalt-function-examples.html
+  - https://phpbb.itnotetk.com/viewtopic.php?t=452

@@ -76,3 +76,6 @@ JapMfa japMfa = new JapMfa(new JapMfaServiceImpl());
 2. 通过 secretKey 校验 - `boolean verifyBySecretResult = japMfa.verifyBySecret(secretKey, consoleInput);`
 
 校验通过返回 `true`。
+
+
+更多使用方式参考：[帮助文档](https://justauth.plus/quickstart/jap-mfa/)
