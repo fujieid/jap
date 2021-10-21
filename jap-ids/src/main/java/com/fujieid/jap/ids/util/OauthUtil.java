@@ -15,6 +15,7 @@
  */
 package com.fujieid.jap.ids.util;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -29,9 +30,11 @@ import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.model.enums.GrantType;
 import com.fujieid.jap.ids.service.IdsSecretService;
 import com.fujieid.jap.ids.service.Oauth2Service;
+import com.xkcoding.http.util.MapUtil;
 import com.xkcoding.json.util.StringUtil;
 import org.jose4j.base64url.Base64Url;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -257,9 +260,9 @@ public class OauthUtil {
      * @param expiresIn The expiration time of the access token in the client detail
      * @return long
      */
-    public static LocalDateTime getAccessTokenExpiresAt(Long expiresIn) {
+    public static Date getAccessTokenExpiresAt(Long expiresIn) {
         expiresIn = getAccessTokenExpiresIn(expiresIn);
-        return DateUtil.ofEpochSecond(System.currentTimeMillis() + expiresIn * 1000, null);
+        return DateUtil.offsetSecond(new Date(), expiresIn.intValue());
     }
 
     /**
@@ -268,9 +271,9 @@ public class OauthUtil {
      * @param expiresIn The expiration time of the refresh token in the client detail
      * @return long
      */
-    public static LocalDateTime getRefreshTokenExpiresAt(Long expiresIn) {
+    public static Date getRefreshTokenExpiresAt(Long expiresIn) {
         expiresIn = getRefreshTokenExpiresIn(expiresIn);
-        return DateUtil.ofEpochSecond(System.currentTimeMillis() + expiresIn * 1000, null);
+        return DateUtil.offsetSecond(new Date(), expiresIn.intValue());
     }
 
     /**
@@ -279,9 +282,9 @@ public class OauthUtil {
      * @param expiresIn The expiration time of the code in the client detail
      * @return long
      */
-    public static LocalDateTime getCodeExpiresAt(Long expiresIn) {
+    public static Date getCodeExpiresAt(Long expiresIn) {
         expiresIn = getCodeExpiresIn(expiresIn);
-        return DateUtil.ofEpochSecond(System.currentTimeMillis() + expiresIn * 1000, null);
+        return DateUtil.offsetSecond(new Date(), expiresIn.intValue());
     }
 
     /**
@@ -290,9 +293,9 @@ public class OauthUtil {
      * @param expiresIn The expiration time of the id token in the client detail
      * @return long
      */
-    public static LocalDateTime getIdTokenExpiresAt(Long expiresIn) {
+    public static Date getIdTokenExpiresAt(Long expiresIn) {
         expiresIn = getIdTokenExpiresIn(expiresIn);
-        return DateUtil.ofEpochSecond(System.currentTimeMillis() + expiresIn * 1000, null);
+        return DateUtil.offsetSecond(new Date(), expiresIn.intValue());
     }
 
     /**
@@ -384,4 +387,13 @@ public class OauthUtil {
         return Base64Url.encode(RandomUtil.randomString(50), "UTF-8");
     }
 
+    public static <T> T objToBean(Serializable serializable, Class<T> clazz) {
+        if (serializable.getClass() == clazz) {
+            return (T) serializable;
+        }
+        if (serializable instanceof Map) {
+            return BeanUtil.mapToBean((Map) serializable, clazz, false, null);
+        }
+        return null;
+    }
 }

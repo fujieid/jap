@@ -30,6 +30,8 @@ import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.model.enums.GrantType;
 import com.fujieid.jap.ids.util.OauthUtil;
 
+import java.io.Serializable;
+
 /**
  * oauth 2.0 related methods
  *
@@ -89,7 +91,8 @@ public class Oauth2ServiceImpl implements Oauth2Service {
 
     @Override
     public AuthCode getCodeInfo(String code) {
-        return (AuthCode) JapIds.getContext().getCache().get(IdsConsts.OAUTH_CODE_CACHE_KEY + code);
+        Serializable serializable = JapIds.getContext().getCache().get(IdsConsts.OAUTH_CODE_CACHE_KEY + code);
+        return OauthUtil.objToBean(serializable, AuthCode.class);
     }
 
     @Override

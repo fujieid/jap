@@ -27,8 +27,9 @@ import com.fujieid.jap.ids.model.enums.TokenAuthMethod;
 import com.fujieid.jap.ids.service.IdsTokenService;
 import com.xkcoding.json.util.StringUtil;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -189,9 +190,9 @@ public class TokenUtil {
             throw new InvalidTokenException(ErrorResponse.INVALID_TOKEN);
         }
 
-        LocalDateTime nowDateTime = DateUtil.nowDate();
+        Date nowDate = new Date();
 
-        if (token.getAccessTokenExpiration().isBefore(nowDateTime)) {
+        if (token.getAccessTokenExpiration().before(nowDate)) {
             throw new InvalidTokenException(ErrorResponse.EXPIRED_TOKEN);
         }
 
@@ -205,9 +206,9 @@ public class TokenUtil {
             throw new InvalidTokenException(ErrorResponse.INVALID_TOKEN);
         }
 
-        LocalDateTime nowDateTime = DateUtil.nowDate();
+        Date nowDate = new Date();
 
-        if (token.getRefreshTokenExpiration().isBefore(nowDateTime)) {
+        if (token.getRefreshTokenExpiration().before(nowDate)) {
             throw new InvalidTokenException(ErrorResponse.EXPIRED_TOKEN);
         }
     }
@@ -218,7 +219,8 @@ public class TokenUtil {
         }
         accessToken = BearerToken.parse(accessToken);
         String token = IdsConsts.OAUTH_ACCESS_TOKEN_CACHE_KEY + accessToken;
-        return (AccessToken) JapIds.getContext().getCache().get(token);
+        Serializable serializable = JapIds.getContext().getCache().get(token);
+        return OauthUtil.objToBean(serializable, AccessToken.class);
     }
 
     public static AccessToken getByRefreshToken(String refreshToken) {
@@ -226,6 +228,7 @@ public class TokenUtil {
             return null;
         }
         String token = IdsConsts.OAUTH_REFRESH_TOKEN_CACHE_KEY + refreshToken;
-        return (AccessToken) JapIds.getContext().getCache().get(token);
+        Serializable serializable = JapIds.getContext().getCache().get(token);
+        return OauthUtil.objToBean(serializable, AccessToken.class);
     }
 }
