@@ -366,9 +366,9 @@ modularity and flexiblity. Developers could integrate JAP into web applications 
 
 ## Completed
 
-- [login of username-password](https://justauth.plus/quickstart/jap-simple.html)
-- [login of Social](https://justauth.plus/quickstart/jap-social.html)
-- [login of OAuth 2.0](https://justauth.plus/quickstart/jap-oauth2.html)
-- [login of oidc](https://justauth.plus/quickstart/jap-oidc.html)
-- [SSO](https://justauth.plus/quickstart/jap-sso.html)
+- [login of username-password](https://justauth.plus/quickstart/jap-simple/)
+- [login of Social](https://justauth.plus/quickstart/jap-social/)
+- [login of OAuth 2.0](https://justauth.plus/quickstart/jap-oauth2/)
+- [login of oidc](https://justauth.plus/quickstart/jap-oidc/)
+- [SSO](https://justauth.plus/quickstart/jap-sso/)
 
