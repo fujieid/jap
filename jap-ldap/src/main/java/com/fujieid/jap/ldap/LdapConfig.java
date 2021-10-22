@@ -47,7 +47,7 @@ public class LdapConfig extends AuthenticateConfig {
     /**
      * Query conditions, such as: (&(objectClass=organizationalPerson)(uid=%s))
      */
-    private String filters;
+    private String filters = "(&(objectClass=inetOrgPerson)(uid=%s))";
     /**
      * This parameter must be configured when using ldaps, which means a trusted certificate
      */
