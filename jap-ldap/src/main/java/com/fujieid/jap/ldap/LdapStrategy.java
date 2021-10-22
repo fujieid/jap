@@ -27,7 +27,6 @@ import com.fujieid.jap.core.store.JapUserStore;
 import com.fujieid.jap.core.strategy.AbstractJapStrategy;
 import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.http.JapHttpResponse;
-import com.fujieid.jap.ldap.exception.LdapPasswordException;
 import com.fujieid.jap.ldap.model.LdapPerson;
 import com.fujieid.jap.ldap.template.LdapDefaultTemplate;
 import com.fujieid.jap.ldap.template.LdapTemplate;
@@ -68,9 +67,14 @@ public class LdapStrategy extends AbstractJapStrategy {
         String username = request.getParameter(ldapConfig.getUsernameField());
         String password = request.getParameter(ldapConfig.getPasswordField());
         LdapTemplate ldapTemplate = new LdapDefaultTemplate(new LdapDataSource(ldapConfig));
-        LdapPerson ldapPerson = ldapTemplate.login(username, password);
+        LdapPerson ldapPerson = null;
+        try {
+            ldapPerson = ldapTemplate.login(username, password);
+        } catch (JapException e) {
+            return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
+        }
         if (null == ldapPerson) {
-            throw new LdapPasswordException(JapErrorCode.INVALID_PASSWORD);
+            return JapResponse.error(JapErrorCode.INVALID_PASSWORD);
         }
         JapUser japUser = this.japUserService.createAndGetLdapUser(ldapPerson);
         if (null == japUser) {
