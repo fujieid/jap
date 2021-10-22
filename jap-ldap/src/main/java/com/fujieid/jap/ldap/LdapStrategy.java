@@ -78,7 +78,7 @@ public class LdapStrategy extends AbstractJapStrategy {
             return JapResponse.error(e.getErrorCode(), e.getErrorMessage());
         }
         if (null == ldapPerson) {
-            return JapResponse.error(JapErrorCode.INVALID_PASSWORD);
+            return JapResponse.error(JapErrorCode.LOGIN_FAILURE);
         }
         JapUser japUser = this.japUserService.createAndGetLdapUser(ldapPerson);
         if (null == japUser) {

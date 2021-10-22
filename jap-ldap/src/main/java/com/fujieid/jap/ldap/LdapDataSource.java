@@ -53,9 +53,9 @@ public class LdapDataSource {
     protected DirContext initialDirContext(Hashtable<?, ?> environment) {
         try {
             ctx = new InitialDirContext(environment);
-            log.info("connect to ldap " + ldapConfig.getUrl() + " successful.");
+            log.info("connect to ldap [" + ldapConfig.getUrl() + "] successful.");
         } catch (NamingException e) {
-            log.error("connect to ldap " + ldapConfig.getUrl() + " failure.", e);
+            log.error("connect to ldap [" + ldapConfig.getUrl() + "] failure.", e);
         }
         return ctx;
     }
