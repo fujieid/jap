@@ -8,7 +8,6 @@ docker-compose.yml
 ```yaml
 version: '3.3'
 services:
-  # MySQL
   ldap:
     image: osixia/openldap
     container_name: ldap
