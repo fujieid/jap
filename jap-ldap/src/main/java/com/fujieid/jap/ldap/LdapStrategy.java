@@ -32,6 +32,10 @@ import com.fujieid.jap.ldap.template.LdapDefaultTemplate;
 import com.fujieid.jap.ldap.template.LdapTemplate;
 
 /**
+ * The LDAP authentication strategy uses the LDAP protocol to authenticate users.
+ * The following cryptographic algorithms are supported:
+ * clear, k5key, md5, smd5, sha, ssha, sha512, sha256, ext_des, md5crypt, sha256crypt, sha512crypt and crypt
+ *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
  * @since 1.0.6
