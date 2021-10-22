@@ -30,13 +30,11 @@ import com.fujieid.jap.ids.model.enums.ErrorResponse;
 import com.fujieid.jap.ids.model.enums.GrantType;
 import com.fujieid.jap.ids.service.IdsSecretService;
 import com.fujieid.jap.ids.service.Oauth2Service;
-import com.xkcoding.http.util.MapUtil;
 import com.xkcoding.json.util.StringUtil;
 import org.jose4j.base64url.Base64Url;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -388,6 +386,9 @@ public class OauthUtil {
     }
 
     public static <T> T objToBean(Serializable serializable, Class<T> clazz) {
+        if (null == serializable) {
+            return null;
+        }
         if (serializable.getClass() == clazz) {
             return (T) serializable;
         }
