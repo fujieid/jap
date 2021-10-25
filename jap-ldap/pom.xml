@@ -12,6 +12,8 @@
   <artifactId>jap-ldap</artifactId>
   <name>jap-ldap</name>
   <description>
+    jap-ldap is used to support user authentication in ldap, and supports standard password encryption types in ldap,
+    such as: clear, k5key, md5, smd5, sha, ssha, sha512, sha256, ext_des, md5crypt, sha256crypt, sha512crypt and crypt
   </description>
 
   <dependencies>

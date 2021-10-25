@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 /**
- * {@code jap-ldap} supports identity authentication for users in ldap, and supports standard password encryption type in ldap, such as：
- * clear, k5key, md5, smd5, sha, ssha, sha512, sha256, ext_des, md5crypt, sha256crypt, sha512crypt and crypt
+ * {@code jap-ldap} is used to support user authentication in ldap, and supports standard password encryption types in ldap,
+ * such as: clear, k5key, md5, smd5, sha, ssha, sha512, sha256, ext_des, md5crypt, sha256crypt, sha512crypt and crypt
  *
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
  * @version 1.0.0
