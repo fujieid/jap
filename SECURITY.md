@@ -23,7 +23,7 @@ You can submit vulnerabilities in the following ways:
 
 您可以通过以下方式提交漏洞：
 
-Email the security issues you find to the following: support@fujieid.com
+Email the security issues you find to the following: dev@fujieid.com
 
 通过邮件将您所发现的安全问题发送至以下： support@fujieid.com
 
@@ -48,6 +48,6 @@ In order to protect the safety of users and reduce unnecessary impact, we hope t
 
 by Fujie
 
-by 符节科技
+by 符节开源
 
 
