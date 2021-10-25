@@ -16,7 +16,7 @@ services:
       - 389:389
       - 636:636
     environment:
-      # LDAP 组织名称
+      # 是否启用 TLS
       LDAP_TLS: "false"
       # LDAP 组织名称
       LDAP_ORGANISATION: test
