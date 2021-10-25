@@ -24,6 +24,7 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.SearchResult;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -32,13 +33,8 @@ import java.util.HashMap;
  */
 public class LdapUtil {
 
-    public static String getAttrStringValue(String attribute, HashMap<String, Attribute> attributeMap) throws NamingException {
-        if (attributeMap.containsKey(attribute)) {
-            Attribute attr = attributeMap.get(attribute);
-            return "userPassword".equals(attribute) ? (new String((byte[]) attr.get())) : attr.get().toString();
-        } else {
-            return "";
-        }
+    public static String getAttrStringValue(String attribute, Map<String, String> attributeMap) throws NamingException {
+        return attributeMap.getOrDefault(attribute, "");
     }
 
     public static LdapPerson convertToPerson(SearchResult searchResult) {
@@ -51,16 +47,19 @@ public class LdapUtil {
             userInfo.setDn(searchResult.getName());
         }
 
-        Attributes attributes = searchResult.getAttributes();
-        userInfo.setAttributes(attributes);
-
-        NamingEnumeration<? extends Attribute> attrs = attributes.getAll();
-        HashMap<String, Attribute> attributeMap = new HashMap<>(30);
-        while (null != attrs && attrs.hasMoreElements()) {
-            Attribute objAttrs = attrs.nextElement();
-            attributeMap.put(objAttrs.getID(), objAttrs);
-        }
         try {
+
+            Attributes attributes = searchResult.getAttributes();
+
+            NamingEnumeration<? extends Attribute> attrs = attributes.getAll();
+            Map<String, String> attributeMap = new HashMap<>(30);
+            while (null != attrs && attrs.hasMoreElements()) {
+                Attribute objAttrs = attrs.nextElement();
+                attributeMap.put(objAttrs.getID(), "userPassword".equals(objAttrs.getID()) ?
+                    (new String((byte[]) objAttrs.get())) : objAttrs.get().toString());
+            }
+            userInfo.setAttributes(attributeMap);
+
             userInfo.setUid(getAttrStringValue(InetOrgPersonConst.UID, attributeMap));
             userInfo.setUidNumber(getAttrStringValue(InetOrgPersonConst.UID_NUMBER, attributeMap));
             userInfo.setGidNumber(getAttrStringValue(InetOrgPersonConst.GID_NUMBER, attributeMap));

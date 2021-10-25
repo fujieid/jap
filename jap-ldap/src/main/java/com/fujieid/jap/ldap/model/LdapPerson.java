@@ -15,7 +15,7 @@
  */
 package com.fujieid.jap.ldap.model;
 
-import javax.naming.directory.Attributes;
+import java.util.Map;
 
 /**
  * User entity in LDAP
@@ -42,7 +42,7 @@ public class LdapPerson {
     /**
      * Full attributes of the user in LDAP
      */
-    private Attributes attributes;
+    private Map<String, String> attributes;
 
     public String getUid() {
         return uid;
@@ -170,11 +170,11 @@ public class LdapPerson {
         return this;
     }
 
-    public Attributes getAttributes() {
+    public Map<String, String> getAttributes() {
         return attributes;
     }
 
-    public LdapPerson setAttributes(Attributes attributes) {
+    public LdapPerson setAttributes(Map<String, String> attributes) {
         this.attributes = attributes;
         return this;
     }
