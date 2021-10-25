@@ -1,19 +1,24 @@
 ## v1.0.6 (2021-10-**)
 
+- feat: 正式支持 LDAP 用户登录认证
 - feat: 重构发布快照流水线。 (Github PR [#15](https://github.com/fujieid/jap/pull/15))
 - feat: 修复文案的错误，统一配置类中的时间类型。 (Github PR [#16](https://github.com/fujieid/jap/pull/16))
 - change: 修改 JapUserService 接口中的 createAndGetHttpApiUser 方法名使其更符合语义。 (Github PR [#13](https://github.com/fujieid/jap/pull/13))
 - change: 为 `AbstractJapStrategy` 的子类增加构造函数，支持自定义 `JapUserStore`
-- change: 升级 `hutool` 的版本为 5.7.14.
 - change: [jap-ids] 将 AccessToken 中的 LocalDateTime 改为 Date
+- change: 升级 `hutool` 的版本为 5.7.14
+- change: 升级 `JustAuth` 的版本为 1.16.5
+- change: 更新了一些错误的文案
 ----
 
+- feat: Support LDAP user login authentication.
 - feat: fix PR bug and refactory publish snapshot. (Github PR [#15](https://github.com/fujieid/jap/pull/15))
 - feat: fix the copywriting error and unify the time type in the configuration class. (Github PR [#16](https://github.com/fujieid/jap/pull/16))
 - change: optimize JapUserService interface to fix jap-http-api module. (Github PR [#13](https://github.com/fujieid/jap/pull/13))
-- change: Add a constructor for subclasses of `AbstractJapStrategy`, support custom `JapUserStore`.
-- change: Upgrade `hutool` to `5.7.14`.
+- change: Add a constructor for subclasses of `AbstractJapStrategy`, support custom `JapUserStore`
 - change: [jap-ids] Change the LocalDateTime in AccessToken to Date
+- change: Upgrade `hutool` to `5.7.14`
+- change: Upgrade `JustAuth` to `1.16.5`
 
 ## v1.0.5 (2021-09-23)
 
