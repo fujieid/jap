@@ -25,9 +25,5 @@
       <groupId>me.zhyd.oauth</groupId>
       <artifactId>JustAuth</artifactId>
     </dependency>
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-log</artifactId>
-    </dependency>
   </dependencies>
 </project>

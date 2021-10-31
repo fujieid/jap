@@ -15,6 +15,8 @@
  */
 package com.fujieid.jap.core;
 
+import com.fujieid.jap.core.util.JapUtil;
+
 /**
  * JAP constant
  *
@@ -32,4 +34,6 @@ public interface JapConst {
      * default delimiter
      */
     char DEFAULT_DELIMITER = ':';
+
+    String JAP_VERSION = JapUtil.getVersion();
 }

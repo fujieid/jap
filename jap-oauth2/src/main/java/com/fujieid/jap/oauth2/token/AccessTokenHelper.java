@@ -18,12 +18,12 @@ package com.fujieid.jap.oauth2.token;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fujieid.jap.core.exception.JapOauth2Exception;
-import com.fujieid.jap.core.util.JapUtil;
 import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.oauth2.*;
 import com.fujieid.jap.oauth2.pkce.PkceHelper;
 import com.fujieid.jap.oauth2.pkce.PkceParams;
 import com.xkcoding.json.util.Kv;
+import com.xkcoding.json.util.ObjectUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -136,7 +136,7 @@ public class AccessTokenHelper {
             .setIdToken(request.getParameter("id_token"))
             .setTokenType(request.getParameter("token_type"))
             .setScope(request.getParameter("scope"))
-            .setExpiresIn(JapUtil.toInt(request.getParameter("expires_in")));
+            .setExpiresIn(ObjectUtil.toInt(request.getParameter("expires_in")));
     }
 
     /**

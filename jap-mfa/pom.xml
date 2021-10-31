@@ -22,10 +22,6 @@
       <artifactId>hutool-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-log</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.google.zxing</groupId>
       <artifactId>core</artifactId>
     </dependency>

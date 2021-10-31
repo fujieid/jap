@@ -16,6 +16,7 @@
 package com.fujieid.jap.core.result;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.fujieid.jap.core.JapConst;
 
 import java.io.Serializable;
 
@@ -29,6 +30,7 @@ import java.io.Serializable;
 public class JapResponse implements Serializable {
     private int code;
     private String message;
+    private String version = JapConst.JAP_VERSION;
     private Object data;
 
     public static JapResponse success() {
@@ -112,6 +114,15 @@ public class JapResponse implements Serializable {
 
     public JapResponse setData(Object data) {
         this.data = data;
+        return this;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public JapResponse setVersion(String version) {
+        this.version = version;
         return this;
     }
 }

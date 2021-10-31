@@ -15,10 +15,9 @@
  */
 package com.fujieid.jap.core.util;
 
-import com.fujieid.jap.core.JapUser;
-import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.http.JapHttpResponse;
-import com.fujieid.jap.sso.JapSsoUtil;
+
+import java.security.CodeSource;
 
 /**
  * The tool class of Jap only provides static methods common to all modules
@@ -27,13 +26,20 @@ import com.fujieid.jap.sso.JapSsoUtil;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class JapUtil extends com.xkcoding.json.util.ObjectUtil {
+public class JapUtil {
 
-    private static final String REDIRECT_ERROR = "JAP failed to redirect via HttpServletResponse.";
+    public static final String LOGO =
+        "      _           _                 _   _     _____  _           \n" +
+            "     | |         | |     /\\        | | | |   |  __ \\| |          \n" +
+            "     | |_   _ ___| |_   /  \\  _   _| |_| |__ | |__) | |_   _ ___ \n" +
+            " _   | | | | / __| __| / /\\ \\| | | | __| '_ \\|  ___/| | | | / __|\n" +
+            "| |__| | |_| \\__ \\ |_ / ____ \\ |_| | |_| | | | |    | | |_| \\__ \\\n" +
+            " \\____/ \\__,_|___/\\__/_/    \\_\\__,_|\\__|_| |_|_|    |_|\\__,_|___/\n";
+    private static final String INIT_VERSION = "1.0.0";
 
     @Deprecated
     public static void redirect(String url, JapHttpResponse response) {
-        redirect(url, REDIRECT_ERROR, response);
+        redirect(url, "JAP failed to redirect via HttpServletResponse.", response);
     }
 
     @Deprecated
@@ -41,7 +47,58 @@ public class JapUtil extends com.xkcoding.json.util.ObjectUtil {
         response.redirect(url);
     }
 
-    public static String createToken(JapUser japUser, JapHttpRequest request) {
-        return JapSsoUtil.createToken(japUser.getUserId(), japUser.getUsername(), request);
+    public static void printBanner() {
+        String separator = System.getProperty("line.separator");
+        String banner = separator + LOGO +
+            separator + "JustAuthPlus (v" + getVersion() + "), An open source login authentication middleware." +
+            separator + "Dev Doc：https://justauth.plus" +
+            separator + "Gitee：https://gitee.com/fujieid/jap" +
+            separator + "Github：https://github.com/fujieid/jap";
+        System.out.println(banner);
+    }
+
+    /**
+     * 获取当前 jap 的依赖版本
+     *
+     * @return version
+     */
+    public static String getVersion() {
+        try {
+            Class clazz = JapUtil.class;
+            String version = clazz.getPackage().getImplementationVersion();
+            if (version == null || version.length() == 0) {
+                version = clazz.getPackage().getSpecificationVersion();
+            }
+
+            if (version == null || version.length() == 0) {
+                CodeSource codeSource = clazz.getProtectionDomain().getCodeSource();
+                if (codeSource != null) {
+                    String file = codeSource.getLocation().getFile();
+                    if (file != null && file.endsWith(".jar")) {
+                        file = file.substring(0, file.length() - 4);
+                        int i = file.lastIndexOf(47);
+                        if (i >= 0) {
+                            file = file.substring(i + 1);
+                        }
+                        i = file.indexOf("-");
+                        if (i >= 0) {
+                            file = file.substring(i + 1);
+                        }
+                        while (file.length() > 0 && !Character.isDigit(file.charAt(0))) {
+                            i = file.indexOf("-");
+                            if (i < 0) {
+                                break;
+                            }
+                            file = file.substring(i + 1);
+                        }
+                        version = file;
+                    }
+                }
+            }
+
+            return version != null && version.length() != 0 ? version : INIT_VERSION;
+        } catch (Throwable var6) {
+            return INIT_VERSION;
+        }
     }
 }

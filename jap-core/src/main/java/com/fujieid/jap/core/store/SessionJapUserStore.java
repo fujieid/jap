@@ -21,10 +21,10 @@ import com.fujieid.jap.core.JapUser;
 import com.fujieid.jap.core.config.JapConfig;
 import com.fujieid.jap.core.context.JapAuthentication;
 import com.fujieid.jap.core.util.JapTokenHelper;
-import com.fujieid.jap.core.util.JapUtil;
 import com.fujieid.jap.http.JapHttpRequest;
 import com.fujieid.jap.http.JapHttpResponse;
 import com.fujieid.jap.http.JapHttpSession;
+import com.fujieid.jap.sso.JapSsoUtil;
 
 /**
  * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
@@ -53,7 +53,7 @@ public class SessionJapUserStore implements JapUserStore {
 
         JapConfig japConfig = JapAuthentication.getContext().getConfig();
         if (!japConfig.isSso()) {
-            String token = JapUtil.createToken(japUser, request);
+            String token = JapSsoUtil.createToken(japUser.getUserId(), japUser.getUsername(), request);
             JapTokenHelper.saveUserToken(japUser.getUserId(), token);
             japUser.setToken(token);
         }

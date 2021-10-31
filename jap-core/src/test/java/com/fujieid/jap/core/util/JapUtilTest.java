@@ -15,38 +15,18 @@
  */
 package com.fujieid.jap.core.util;
 
-import com.fujieid.jap.core.JapUser;
-import com.fujieid.jap.http.JapHttpRequest;
-import com.fujieid.jap.http.adapter.jakarta.JakartaRequestAdapter;
-import org.junit.Assert;
-import org.junit.Before;
+
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import javax.servlet.http.HttpServletRequest;
-
-import static org.mockito.Mockito.when;
 
 public class JapUtilTest {
-    @Mock
-    public HttpServletRequest httpServletRequestMock;
 
-    public JapHttpRequest request;
-
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-        this.request = new JakartaRequestAdapter(httpServletRequestMock);
+    @Test
+    public void buildBannerText() {
+        JapUtil.printBanner();
     }
 
     @Test
-    public void createToken() {
-        when(httpServletRequestMock.getHeader("x-forwarded-for")).thenReturn("127.0.0.1");
-        when(httpServletRequestMock.getHeader("user-agent")).thenReturn("ua");
-        String token = JapUtil.createToken(new JapUser()
-            .setUserId("11111")
-            .setUsername("username"), request);
-        Assert.assertNotNull(token);
+    public void getVersion() {
+        System.out.println(JapUtil.getVersion());
     }
 }

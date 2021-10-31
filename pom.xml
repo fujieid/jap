@@ -86,7 +86,7 @@
     <googleauth.version>1.5.0</googleauth.version>
     <commons-cli.version>1.4</commons-cli.version>
     <jap-http.version>1.0.0</jap-http.version>
-    <jap-http-jakarta-adapter.version>1.0.2</jap-http-jakarta-adapter.version>
+    <jap-http-jakarta-adapter.version>1.0.3</jap-http-jakarta-adapter.version>
     <!-- Only for jap-mfa -->
     <httpclient.version>4.5.13</httpclient.version>
     <!-- Only for jap-ldap -->
@@ -122,6 +122,10 @@
     <dependency>
       <groupId>com.fujieid.jap.http.adapter</groupId>
       <artifactId>jap-http-jakarta-adapter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-log</artifactId>
     </dependency>
   </dependencies>
 
