@@ -1,6 +1,6 @@
 ## v1.0.6 (2021-11-02)
 
-- feat: 正式支持 LDAP 用户登录认证
+- feat: 正式支持 LDAP 中用户的登录认证
 - fix: 重构发布快照流水线。 (Github PR [#15](https://github.com/fujieid/jap/pull/15))
 - fix: Github PR [#16](https://github.com/fujieid/jap/pull/16)
 - fix: Gitee Issue [#I4FGZ1](https://gitee.com/fujieid/jap/issues/I4FGZ1)
@@ -12,7 +12,7 @@
 - change: 更新了一些错误的文案
 ----
 
-- feat: Support LDAP user login authentication.
+- feat: Support LDAP.
 - fix: Github PR [#15](https://github.com/fujieid/jap/pull/15)
 - fix: Github PR [#16](https://github.com/fujieid/jap/pull/16)
 - fix: Gitee Issue [#I4FGZ1](https://gitee.com/fujieid/jap/issues/I4FGZ1)
