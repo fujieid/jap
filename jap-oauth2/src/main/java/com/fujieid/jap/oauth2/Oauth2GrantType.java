@@ -25,17 +25,27 @@ public enum Oauth2GrantType {
     /**
      * Authorization Code Grant
      */
-    AUTHORIZATION_CODE,
+    AUTHORIZATION_CODE("authorization_code"),
     /**
      * Resource Owner Password Credentials Grant
      */
-    PASSWORD,
+    PASSWORD("password"),
     /**
      * Client Credentials Grant
      */
-    CLIENT_CREDENTIALS,
+    CLIENT_CREDENTIALS("client_credentials"),
     /**
      * Refreshing an Access Token
      */
-    REFRESH_TOKEN
+    REFRESH_TOKEN("refresh_token");
+
+    private final String type;
+
+    Oauth2GrantType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
 }

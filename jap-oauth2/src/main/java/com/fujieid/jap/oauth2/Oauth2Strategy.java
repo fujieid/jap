@@ -244,7 +244,7 @@ public class Oauth2Strategy extends AbstractJapStrategy {
      */
     private String generateAuthorizationCodeGrantUrl(OAuthConfig authConfig) {
         Map<String, Object> params = new HashMap<>(6);
-        params.put("response_type", authConfig.getResponseType());
+        params.put("response_type", authConfig.getResponseType().getType());
         params.put("client_id", authConfig.getClientId());
         if (StrUtil.isNotBlank(authConfig.getCallbackUrl())) {
             params.put("redirect_uri", authConfig.getCallbackUrl());

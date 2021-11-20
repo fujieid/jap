@@ -25,13 +25,23 @@ public enum Oauth2ResponseType {
     /**
      * When authorization code mode or implicit authorization mode is not used, ResponseType needs to be set to {@code none}
      */
-    NONE,
+    NONE("none"),
     /**
      * Authorization Code Grant
      */
-    CODE,
+    CODE("code"),
     /**
      * Implicit Grant
      */
-    TOKEN
+    TOKEN("token");
+
+    private final String type;
+
+    Oauth2ResponseType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
 }
