@@ -1,3 +1,7 @@
+## 1.0.7
+
+- fix: Gitee Issue [#I4GV39](https://gitee.com/fujieid/jap/issues/I4GV39)
+
 ## v1.0.6 (2021-11-02)
 
 - feat: 正式支持 LDAP 用户登录认证
