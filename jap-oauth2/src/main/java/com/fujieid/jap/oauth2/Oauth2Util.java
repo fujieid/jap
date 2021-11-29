@@ -138,7 +138,7 @@ public class Oauth2Util {
 
             if (oAuthConfig.getResponseType() == Oauth2ResponseType.CODE) {
                 if (oAuthConfig.getGrantType() != Oauth2GrantType.AUTHORIZATION_CODE) {
-                    throw new JapOauth2Exception("Invalid grantType `" + oAuthConfig.getGrantType() + "`. " +
+                    throw new JapOauth2Exception("Invalid grantType `" + oAuthConfig.getGrantType().getType() + "`. " +
                         "When using authorization code mode, grantType must be `authorization_code`");
                 }
 
@@ -168,7 +168,7 @@ public class Oauth2Util {
         else {
             if (oAuthConfig.getGrantType() != Oauth2GrantType.PASSWORD && oAuthConfig.getGrantType() != Oauth2GrantType.CLIENT_CREDENTIALS) {
                 throw new JapOauth2Exception("When the response type is none in the oauth2 strategy, a grant type other " +
-                    "than the authorization code must be used: " + oAuthConfig.getGrantType());
+                    "than the authorization code must be used: " + oAuthConfig.getGrantType().getType());
             }
             if (oAuthConfig.getGrantType() == Oauth2GrantType.PASSWORD) {
                 if (!StrUtil.isAllNotEmpty(oAuthConfig.getUsername(), oAuthConfig.getPassword())) {

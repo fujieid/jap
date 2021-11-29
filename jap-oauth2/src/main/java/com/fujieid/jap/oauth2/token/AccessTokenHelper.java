@@ -90,7 +90,7 @@ public class AccessTokenHelper {
 
         String code = request.getParameter("code");
         Map<String, String> params = new HashMap<>(6);
-        params.put("grant_type", Oauth2GrantType.AUTHORIZATION_CODE.name());
+        params.put("grant_type", Oauth2GrantType.AUTHORIZATION_CODE.getType());
         params.put("code", code);
         params.put("client_id", oAuthConfig.getClientId());
         params.put("client_secret", oAuthConfig.getClientSecret());
@@ -148,7 +148,7 @@ public class AccessTokenHelper {
      */
     private static AccessToken getAccessTokenOfPasswordMode(OAuthConfig oAuthConfig) throws JapOauth2Exception {
         Map<String, String> params = new HashMap<>(6);
-        params.put("grant_type", Oauth2GrantType.PASSWORD.name());
+        params.put("grant_type", Oauth2GrantType.PASSWORD.getType());
         params.put("username", oAuthConfig.getUsername());
         params.put("password", oAuthConfig.getPassword());
         params.put("client_id", oAuthConfig.getClientId());
@@ -175,7 +175,7 @@ public class AccessTokenHelper {
     private static AccessToken getAccessTokenOfClientMode(JapHttpRequest request, OAuthConfig oAuthConfig) throws JapOauth2Exception {
         throw new JapOauth2Exception("Oauth2Strategy failed to get AccessToken. Grant type of client_credentials type is not supported.");
 //        Map<String, String> params = Maps.newHashMap();
-//        params.put("grant_type", Oauth2GrantType.client_credentials.name());
+//        params.put("grant_type", Oauth2GrantType.CLIENT_CREDENTIALS.getType());
 //        if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
 //            params.put("scope", String.join(Oauth2Const.SCOPE_SEPARATOR, oAuthConfig.getScopes()));
 //        }
@@ -192,7 +192,7 @@ public class AccessTokenHelper {
 
     private static AccessToken refreshToken(OAuthConfig oAuthConfig, String refreshToken) {
         Map<String, String> params = new HashMap<>(6);
-        params.put("grant_type", oAuthConfig.getGrantType().name());
+        params.put("grant_type", oAuthConfig.getGrantType().getType());
         params.put("refresh_token", refreshToken);
 
         if (ArrayUtil.isNotEmpty(oAuthConfig.getScopes())) {
