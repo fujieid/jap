@@ -76,7 +76,7 @@
     <hutool.version>5.7.14</hutool.version>
     <jakarta.servlet.version>4.0.4</jakarta.servlet.version>
     <justauth.version>1.16.5</justauth.version>
-    <jose4j.version>0.7.6</jose4j.version>
+    <jose4j.version>0.9.3</jose4j.version>
     <slf4j-api.version>1.7.30</slf4j-api.version>
     <jedis.version>3.2.0</jedis.version>
     <kisso.version>3.7.7</kisso.version>
